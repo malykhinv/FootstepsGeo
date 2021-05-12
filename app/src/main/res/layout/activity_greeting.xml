@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/textAppTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical"
+        android:fontFamily="@font/podkova"
+        android:text="@string/app_name"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_xlarge"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageGreetingIllustration"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageGreetingIllustration"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_splash"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:alpha="1"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_greeting_1" />
+
+    <TextView
+        android:id="@+id/textGreeting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:fontFamily="@font/podkova"
+        android:text="@string/greeting_core"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_regular"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageGreetingIllustration" />
+
+    <Button
+        android:id="@+id/buttonSignIn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical_big"
+        android:background="@drawable/button_blue_selector"
+        android:fontFamily="@font/podkova"
+        android:padding="@dimen/padding_big"
+        android:text="@string/sign_in"
+        android:textAllCaps="true"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_regular"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textGreeting" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

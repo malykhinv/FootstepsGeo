@@ -1,0 +1,44 @@
+<resources>
+    <dimen name="margin_fab">16dp</dimen>
+    <dimen name="margin_vertical_large">96dp</dimen>
+    <dimen name="margin_vertical_big">48dp</dimen>
+    <dimen name="margin_vertical">24dp</dimen>
+    <dimen name="margin_vertical_small">12dp</dimen>
+    <dimen name="margin_vertical_xsmall">4dp</dimen>
+    <dimen name="margin_horizontal">24dp</dimen>
+    <dimen name="margin_horizontal_small">12dp</dimen>
+    <dimen name="margin_horizontal_xsmall">8dp</dimen>
+    <dimen name="margin_horizontal_xxsmall">4dp</dimen>
+
+    <dimen name="padding_big">16dp</dimen>
+    <dimen name="padding">8dp</dimen>
+    <dimen name="padding_horizontal">16dp</dimen>
+    <dimen name="padding_horizontal_small">8dp</dimen>
+
+    <dimen name="height_splash">300dp</dimen>
+    <dimen name="height_panel">244dp</dimen>
+    <dimen name="height_panel_peek">96dp</dimen>
+    <dimen name="height_label">24dp</dimen>
+
+    <dimen name="height_mover">8dp</dimen>
+    <dimen name="width_mover">48dp</dimen>
+
+    <dimen name="height_userpic">48dp</dimen>
+    <dimen name="width_userpic">48dp</dimen>
+
+    <dimen name="text_size_xlarge">48sp</dimen>
+    <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_regular">18sp</dimen>
+    <dimen name="text_size_small">16sp</dimen>
+
+    <dimen name="radius_large">24dp</dimen>
+    <dimen name="radius">8dp</dimen>
+    <dimen name="radius_small">4dp</dimen>
+
+    <dimen name="line_weight">1dp</dimen>
+    <dimen name="dash_gap">2dp</dimen>
+    <dimen name="dash_width">6dp</dimen>
+
+    <dimen name="icon_size_small">12dp</dimen>
+    <dimen name="icon_size">48dp</dimen>
+</resources>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/light_gray"
+    android:fitsSystemWindows="true">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="@dimen/margin_vertical_big"
+        android:background="@drawable/semirounded_background"
+        app:layout_constraintBottom_toTopOf="@+id/textCodeDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageButton
+        android:id="@+id/imageButtonLogout"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_marginTop="@dimen/margin_vertical_xsmall"
+        android:layout_marginEnd="@dimen/margin_horizontal_xxsmall"
+        android:adjustViewBounds="false"
+        android:background="@drawable/single_image_button_selector"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:cropToPadding="false"
+        android:focusable="true"
+        android:padding="@dimen/padding_big"
+        android:scaleType="centerInside"
+        android:tint="@color/gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_logout" />
+
+    <TextView
+        android:id="@+id/textAccountNameGreeting"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:fontFamily="@font/podkova"
+        android:text="Hi, Simon the cat"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonLogout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageButtonLogout" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutPersonalCode"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:background="@drawable/personal_code_background"
+        app:layout_constraintBottom_toTopOf="@+id/textCodeSubDescription"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageButton
+            android:id="@+id/imageButtonCopyPersonalCode"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="@dimen/margin_vertical_small"
+            android:layout_marginEnd="@dimen/margin_horizontal_small"
+            android:layout_marginBottom="@dimen/margin_vertical_small"
+            android:adjustViewBounds="false"
+            android:background="@drawable/single_image_button_selector"
+            android:clickable="true"
+            android:contextClickable="false"
+            android:cropToPadding="false"
+            android:padding="12dp"
+            android:scaleType="centerInside"
+            android:tint="@color/orange"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/image_copy" />
+
+        <TextView
+            android:id="@+id/textPersonalCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_horizontal"
+            android:fontFamily="@font/podkova"
+            android:text="P6TFFA09"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <TextView
+        android:id="@+id/textCodeDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
+        android:fontFamily="@font/podkova"
+        android:text="@string/personal_code"
+        android:textAlignment="textStart"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/layoutPersonalCode"
+        app:layout_constraintStart_toStartOf="@+id/layoutPersonalCode" />
+
+    <TextView
+        android:id="@+id/textCodeSubDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical_big"
+        android:fontFamily="@font/podkova"
+        android:text="@string/personal_code_sub_description"
+        android:textAlignment="textStart"
+        android:textColor="@color/gray"
+        android:textSize="@dimen/text_size_regular"
+        android:visibility="visible"
+        app:layout_constraintBottom_toTopOf="@+id/buttonShareCode"
+        app:layout_constraintEnd_toEndOf="@+id/layoutPersonalCode"
+        app:layout_constraintStart_toStartOf="@+id/textCodeDescription" />
+
+    <Button
+        android:id="@+id/buttonShareCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_vertical_big"
+        android:background="@drawable/button_orange_selector"
+        android:text="@string/share_code"
+        android:textSize="@dimen/text_size_regular"
+        app:iconGravity="start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

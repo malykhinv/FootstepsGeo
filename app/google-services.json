@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1063286119131",
+    "project_id": "footstepsgeo-66b85",
+    "storage_bucket": "footstepsgeo-66b85.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1063286119131:android:d70d5b05d3ebd7e43a8afe",
+        "android_client_info": {
+          "package_name": "com.malykhinv.footstepsgeo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1063286119131-uk6655vv1sne9vun60o75gnhh6asagf7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.malykhinv.footstepsgeo",
+            "certificate_hash": "1f709b0511d8d1c401fa76c107957a96362e90d9"
+          }
+        },
+        {
+          "client_id": "1063286119131-nm6v5ror5t6om61ckko1cth4mchhkbpd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIl1mpYVHezowxJDnEgGFRhNDavOxviG4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1063286119131-nm6v5ror5t6om61ckko1cth4mchhkbpd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
