@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1063286119131",
+    "firebase_url": "https://footstepsgeo-66b85-default-rtdb.firebaseio.com",
     "project_id": "footstepsgeo-66b85",
     "storage_bucket": "footstepsgeo-66b85.appspot.com"
   },
@@ -14,11 +15,11 @@
       },
       "oauth_client": [
         {
-          "client_id": "1063286119131-uk6655vv1sne9vun60o75gnhh6asagf7.apps.googleusercontent.com",
+          "client_id": "1063286119131-g102agqarhatqtauq07oqmtuc0p8tffc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.malykhinv.footstepsgeo",
-            "certificate_hash": "1f709b0511d8d1c401fa76c107957a96362e90d9"
+            "certificate_hash": "3499dfe29010129abc90bdac58c5c8e3a2b86dd9"
           }
         },
         {

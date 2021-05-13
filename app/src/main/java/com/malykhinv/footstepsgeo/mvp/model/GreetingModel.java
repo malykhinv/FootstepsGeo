@@ -19,7 +19,6 @@ import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.Objects;
-import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -116,7 +115,7 @@ public class GreetingModel {
     public Intent getSignInIntent() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         signInIntent.putExtra("request_code", RC_SIGN_IN);
-        return googleSignInClient.getSignInIntent();
+        return signInIntent;
     }
 
     public void signIn(int requestCode, Intent data) {
@@ -130,7 +129,9 @@ public class GreetingModel {
         try{
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(Objects.requireNonNull(account).getIdToken());
+            Log.d(TAG, "handleSignInResult: " + account.getId());
         } catch (ApiException e) {
+            Log.w(TAG, "handleSignInResult: ", e);
             if (callback != null) {
                 callback.onErrorWhileSigningIn(e.getMessage());
             }
@@ -140,13 +141,15 @@ public class GreetingModel {
     private void firebaseAuthWithGoogle(String idToken){
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
         auth.signInWithCredential(credential)
-                .addOnCompleteListener((Executor) this, task -> {
+                .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
+                        Log.d(TAG, "firebaseAuthWithGoogle: success");
                         FirebaseUser currentUser = auth.getCurrentUser();
                         if (callback != null) {
                             callback.onSignedIn(currentUser);
                         }
                     } else {
+                        Log.w(TAG, "firebaseAuthWithGoogle: failure", task.getException());
                         if (callback != null) {
                             callback.onErrorWhileSigningIn(Objects.requireNonNull(task.getException()).getMessage());
                         }
