@@ -2,7 +2,7 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
 
-        <item name="colorAccent">@color/orange</item>
+        <item name="colorAccent">@color/green_a700</item>
     </style>
 
 </resources>

@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.malykhinv.footstepsgeo">
+<manifest
+    package="com.malykhinv.footstepsgeo"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="LockedOrientationActivity">
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -15,6 +19,7 @@
         android:fullBackupContent="@xml/backup_descriptor">
         <activity
             android:name=".mvp.view.GreetingActivity"
+            android:noHistory="true"
             android:label="@string/app_name"
             android:theme="@style/NoActionBar"
             android:screenOrientation="portrait"

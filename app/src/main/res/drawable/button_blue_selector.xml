@@ -5,7 +5,7 @@
             <corners android:radius="@dimen/radius"/>
             <padding android:left="@dimen/padding_horizontal"/>
             <padding android:right="@dimen/padding_horizontal"/>
-            <solid android:color="@color/blue"/>
+            <solid android:color="@color/blue_a700"/>
         </shape>
     </item>
     <item android:state_pressed="true">
@@ -13,7 +13,7 @@
             <corners android:radius="@dimen/radius"/>
             <padding android:left="@dimen/padding_horizontal"/>
             <padding android:right="@dimen/padding_horizontal"/>
-            <solid android:color="@color/light_blue"/>
+            <solid android:color="@color/blue_a400"/>
         </shape>
     </item>
 </selector>

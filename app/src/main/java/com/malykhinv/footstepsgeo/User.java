@@ -4,16 +4,16 @@ import java.util.Date;
 
 public class User {
 
-    public final String name;
-    public final String personalCode;
-    public final int imageNumber;
-    public final Long latitude;
-    public final Long longtitude;
-    public final String phoneNumber;
-    public final Date lastLocationTime;
-    public final int batteryLevel;
+    public String name;
+    public String personalCode;
+    public int imageNumber;
+    public Long latitude;
+    public Long longtitude;
+    public String phoneNumber;
+    public Date lastLocationTime;
+    public int batteryLevel;
 
-    public User(String name, String personalCode, int imageNumber, Long latitude, Long longtitude, String phoneNumber, Date lastLocationTime, int batteryLevel){
+    public User(String name, String personalCode, int imageNumber, Long latitude, Long longtitude, String phoneNumber, Date lastLocationTime, int batteryLevel) {
         this.name = name;
         this.personalCode = personalCode;
         this.imageNumber = imageNumber;
@@ -22,5 +22,9 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.lastLocationTime = lastLocationTime;
         this.batteryLevel = batteryLevel;
+    }
+
+    public User() {
+
     }
 }

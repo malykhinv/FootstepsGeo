@@ -1,5 +1,7 @@
 package com.malykhinv.footstepsgeo.mvp.model;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 
 import com.google.firebase.database.DataSnapshot;
@@ -9,61 +11,80 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.malykhinv.footstepsgeo.User;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class MainModel{
-    private final int PERSONAL_CODE_LENGTH = 12;
-    private final int IMAGE_COUNT = 121;
-    private final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
-    FirebaseDatabase database;
-    DatabaseReference usersReference;
-    User user;
+    private static final int PERSONAL_CODE_LENGTH = 6;
+    private static final int IMAGE_COUNT = 121;
+    private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
+    private final String TAG = this.getClass().getName();
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
+    private DatabaseReference usersReference;
+    private User user;
+    private Callback callback;
 
-    public void loadDatabase(FirebaseDatabase db, DatabaseReference reference){
-        database = db;
-        usersReference = reference;
+    public interface Callback {
+        void onErrorWhileLoadingUser(String message);
     }
 
-    public User findUserById(FirebaseDatabase database, DatabaseReference usersReference, String userId){
-        user = new User(null, null, 0, null, null, null, null, 0);
+    public void registerCallback(Callback callback) {
+        this.callback = callback;
+    }
+
+    public void loadDatabase(String path) {
+        usersReference = database.getReference(path);
+        Log.d(TAG, "loadDatabase: " + usersReference.toString());
+    }
+
+    public User findUserById(String userId) {
+        Log.d(TAG, "findUserById: " + userId);
         usersReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    Log.d(TAG, "findUserById: success. " + userId);
                     user = snapshot.getValue(User.class);
-                } else {user = null;
-                    //usersReference.child(userId).setValue("null");
+                } else {
+                    Log.d(TAG, "findUserById: failure");
+                    user = null;
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.d(TAG, "findUserById: failure. " + error.getMessage());
                 user = null;
+                if (callback != null) {
+                    callback.onErrorWhileLoadingUser(error.getMessage());
+                }
             }
         });
 
-        if (user != null){
-            return user;
-        } else return null;
+        return user;
     }
 
-    public void createNewUser(String userId, String userName){
-        String personalCode = setNewPersonalCode();
-        Random random = new Random();
-        int imageNumber = random.nextInt(IMAGE_COUNT);
+    public void writeNewUserIntoDatabase(String userId, String userName) {
+        String personalCode = generateNewPersonalCode();
+        int imageNumber = generateNewImageNumber();
         int batteryLevel = 0;
         User newUser = new User(userName, personalCode, imageNumber, null, null, null, null, batteryLevel);
-        usersReference.child(userId).setValue("newUser");
+        usersReference.child(userId).setValue(newUser);
+        Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
     }
 
-    public String setNewPersonalCode(){
+    public String generateNewPersonalCode() {
         char[] randomCode = new char[PERSONAL_CODE_LENGTH];
         String alphabet09 = ALPHABET09;
         Random random = new Random();
-
         for (int i = 0; i < randomCode.length; i++){
             randomCode[i] = alphabet09.charAt(random.nextInt(alphabet09.length()));
         }
+        Log.d(TAG, "generateNewPersonalCode: " + Arrays.toString(randomCode));
         return new String(randomCode);
     }
 
+    private int generateNewImageNumber() {
+        Random random = new Random();
+        return random.nextInt(IMAGE_COUNT);
+    }
 }

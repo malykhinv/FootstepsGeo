@@ -1,7 +1,9 @@
 package com.malykhinv.footstepsgeo.di;
 
 import android.app.Application;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.location.LocationManager;
 
 import javax.inject.Singleton;
 
@@ -27,5 +29,17 @@ public class AppModule {
     @Singleton
     public Context provideContext() {
         return app.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    public ClipboardManager provideClipboard() {
+        return (ClipboardManager) provideContext().getSystemService(Context.CLIPBOARD_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    public LocationManager providesLocationManager() {
+        return (LocationManager) provideContext().getSystemService(Context.LOCATION_SERVICE);
     }
 }

@@ -1,44 +1,46 @@
 package com.malykhinv.footstepsgeo.mvp.presenter;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
+import android.util.Log;
+
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.MainActivity;
 
-public class MainPresenter {
+public class MainPresenter implements MainModel.Callback {
 
-    private MainActivity view;
+    private static final String DB_PATH = "users";
+    private final String TAG = this.getClass().getName();
+    private final MainActivity view;
     private final MainModel model;
 
-    public MainPresenter(MainModel model){
-        this.model = model;
+    public MainPresenter(MainActivity view) {
+        this.view = view;
+        this.model = new MainModel();
+        model.registerCallback(this);
     }
 
-    public void attachView(MainActivity activity){
-        view = activity;
+
+    // Call from View:
+
+    public void onViewIsReady() {
+        view.loadCurrentGoogleUserInfo();
     }
 
-    public void detachView(){
-        view = null;
-    }
-
-    public void viewIsReady(){
-        loadData();
-    }
-
-    public void loadData(){
-        view.loadCurrentFBUserInfo();
-        //view.loadFriends();
-    }
-
-    public void currentFBUserInfoIsLoaded(FirebaseDatabase database, DatabaseReference usersReference, String userId, String userName){
-        model.loadDatabase(database, usersReference);
-        User user = model.findUserById(database, usersReference, userId);
-        if (user == null){
-            model.createNewUser(userId, userName);
-        } else {
-            view.updateUserData(user);
+    public void onCurrentGoogleUserInfoWasLoaded(String userId, String userName) {
+        Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: " + userName);
+        model.loadDatabase(DB_PATH);
+        User user = model.findUserById(userId);
+        if (user == null) {
+            model.writeNewUserIntoDatabase(userId, userName);
         }
+        view.updateUserData(user);
+    }
+
+
+    // Call from Model:
+
+    @Override
+    public void onErrorWhileLoadingUser(String message) {
+        view.showMessage(message);
     }
 }

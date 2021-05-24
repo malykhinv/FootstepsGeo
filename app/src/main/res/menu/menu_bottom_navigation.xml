@@ -2,19 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuItemUserlist"
+        android:tag="@string/userlist"
         android:icon="@drawable/image_userlist"
-        android:title="Userlist"
-        />
+        android:title="@string/userlist" />
 
     <item
         android:id="@+id/menuItemGlobe"
+        android:tag="@string/globe"
         android:icon="@drawable/image_globe"
-        android:title="Globe"/>
+        android:title="@string/globe" />
 
     <item
         android:id="@+id/menuItemAccount"
+        android:tag="@string/account"
         android:icon="@drawable/image_account"
-        android:title="Account" />
-
-
+        android:title="@string/account" />
 </menu>
