@@ -25,6 +25,7 @@ public class GreetingActivity extends AppCompatActivity {
     private GreetingPresenter presenter;
     private boolean isAboutToClose = false;
     private boolean isOnline = false;
+    private boolean isUndefinedConnectionStatus = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,25 +67,36 @@ public class GreetingActivity extends AppCompatActivity {
     }
 
     public void setConnectionMode(boolean isConnectionEstablished) {
-        if (isOnline != isConnectionEstablished) {
+        if (isOnline != isConnectionEstablished || isUndefinedConnectionStatus) {
+            isUndefinedConnectionStatus = false;
             isOnline = isConnectionEstablished;
-            b.buttonSignIn.setVisibility(View.VISIBLE);
-
             if (isConnectionEstablished) {
-                b.textAppTitle.setText(R.string.app_name);
-                b.textGreeting.setText(R.string.greeting_core);
-                b.textGreeting.setTextColor(this.getColor(R.color.black));
-                b.buttonSignIn.setClickable(true);
-                b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_in_fast));
-                b.buttonSignIn.setVisibility(View.VISIBLE);
+                showOnlineMode();
             } else {
-                b.textAppTitle.setText(R.string.oh_no);
-                b.textGreeting.setText(R.string.you_are_offline);
-                b.textGreeting.setTextColor(this.getColor(R.color.orange));
-                b.buttonSignIn.setClickable(false);
-                b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_out_fast));
-                b.buttonSignIn.setVisibility(View.INVISIBLE);
+                showOfflineMode();
             }
+        }
+    }
+
+    private void showOnlineMode() {
+        b.textAppTitle.setText(R.string.app_name);
+        b.textGreeting.setText(R.string.greeting_core);
+        b.textGreeting.setTextColor(this.getColor(R.color.black));
+        b.buttonSignIn.setClickable(true);
+        if (b.buttonSignIn.getVisibility() == View.INVISIBLE) {
+            b.buttonSignIn.setVisibility(View.VISIBLE);
+            b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_in_fast));
+        }
+    }
+
+    private void showOfflineMode() {
+        b.textAppTitle.setText(R.string.oh_no);
+        b.textGreeting.setText(R.string.you_are_offline);
+        b.textGreeting.setTextColor(this.getColor(R.color.green_a700));
+        b.buttonSignIn.setClickable(false);
+        if (b.buttonSignIn.getVisibility() == View.VISIBLE) {
+            b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_out_fast));
+            b.buttonSignIn.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -113,9 +125,8 @@ public class GreetingActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        if (presenter != null) {
-            presenter.onDestroyView();
-        }
+        presenter.onDestroyView();
+        presenter = null;
         super.onDestroy();
     }
 }

@@ -29,7 +29,6 @@ public class GreetingPresenter implements GreetingModel.Callback {
 
     public void onViewIsReady() {
         Log.d(TAG, "onViewIsReady: ");
-
         view.showIllustration();
         Handler handler = new Handler();
         handler.postDelayed(model::trackConnection, DELAY_LONG);
@@ -37,19 +36,19 @@ public class GreetingPresenter implements GreetingModel.Callback {
 
     public void onSignInButtonWasClicked() {
         Log.d(TAG, "onSignInButtonWasClicked: ");
-
         Intent signInIntent = model.getSignInIntent();
         view.startActivityForResult(signInIntent, signInIntent.getIntExtra("request_code", DEFAULT_REQUEST_CODE));
     }
 
     public void onSignInActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d(TAG, "onSignInActivityResult: " + requestCode + ", " + resultCode);
-
         model.signIn(requestCode, data);
     }
 
     public void onDestroyView() {
+        Log.d(TAG, "onDestroyView: ");
         view = null;
+        model.dispose();
         model = null;
     }
 
@@ -70,26 +69,24 @@ public class GreetingPresenter implements GreetingModel.Callback {
     @Override
     public void onGoogleSignInClientInitialized() {
         Log.d(TAG, "onGoogleSignInClientInitialized: ");
-
         isGoogleSignInClientInitialized = true;
     }
 
     @Override
     public void onSignedIn(FirebaseUser currentUser) {
         Log.d(TAG, "onCurrentUserReceived: " + currentUser);
-
         if (currentUser != null) {
             Intent intent = new Intent(view, MainActivity.class);
             intent.putExtra("userId", currentUser.getUid());
             intent.putExtra("userName", currentUser.getDisplayName());
             view.startActivity(intent);
+            view.finish();
         }
     }
 
     @Override
     public void onErrorWhileSigningIn(String message) {
         Log.d(TAG, "onErrorWhileSigningIn: " + message);
-
         view.showMessage(message);
     }
 }

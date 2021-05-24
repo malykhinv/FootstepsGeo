@@ -36,6 +36,7 @@ public class GreetingModel {
     private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
     private Callback callback;
+    private Disposable disposable;
     private GoogleSignInClient googleSignInClient;
 
     public interface Callback {
@@ -66,25 +67,24 @@ public class GreetingModel {
             @Override
             public void onSubscribe(@NonNull Disposable d) {
                 Log.d(TAG, "onSubscribe: ");
-
+                disposable = d;
                 getConnectionStatus();
             }
 
             @Override
             public void onNext(@NonNull Long tick) {
                 Log.d(TAG, "onNext: ");
-
                 getConnectionStatus();
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-
+                Log.w(TAG, "onError: " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
-
+                Log.d(TAG, "onComplete: ");
             }
         };
 
@@ -94,6 +94,11 @@ public class GreetingModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
         timerObservable.subscribe(timerObserver);
+    }
+
+    public void dispose() {
+        callback = null;
+        disposable.dispose();
     }
 
     private void getConnectionStatus() {
