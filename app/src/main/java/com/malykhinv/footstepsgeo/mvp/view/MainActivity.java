@@ -31,6 +31,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final int INITIAL_MENU_ITEM_INDEX = 1;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private ActivityMainBinding b;
     private MainPresenter presenter;
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             return false;
         });
+        b.menuBottomNavigation.setSelectedItemId(b.menuBottomNavigation.getMenu().getItem(INITIAL_MENU_ITEM_INDEX).getItemId());
     }
 
     private void showFragment(Fragment fragment) {
