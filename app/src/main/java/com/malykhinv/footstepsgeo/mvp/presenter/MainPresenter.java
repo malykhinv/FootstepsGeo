@@ -28,7 +28,6 @@ public class MainPresenter implements MainModel.Callback {
 
     public void onCurrentGoogleUserInfoWasLoaded(String userId, String userName) {
         Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: " + userName);
-        model.loadDatabase(DB_PATH);
         User user = model.findUserById(userId);
         if (user == null) {
             model.writeNewUserIntoDatabase(userId, userName);

@@ -1,4 +1,4 @@
-package com.malykhinv.footstepsgeo.di;
+package com.malykhinv.footstepsgeo.di.modules;
 
 import android.app.Application;
 import android.content.ClipboardManager;

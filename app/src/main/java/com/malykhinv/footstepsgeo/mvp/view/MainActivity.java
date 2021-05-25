@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ActivityMainBinding b;
     private MainPresenter presenter;
 
-
     private UserlistScreenFragment fragmentUserlistScreen;
     private GlobeScreenFragment fragmentGlobeScreen;
     private AccountScreenFragment fragmentAccountScreen;

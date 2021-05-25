@@ -7,9 +7,9 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.malykhinv.footstepsgeo.User;
+import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.Arrays;
 import java.util.Random;
@@ -19,8 +19,7 @@ public class MainModel{
     private static final int IMAGE_COUNT = 121;
     private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
     private final String TAG = this.getClass().getName();
-    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
-    private DatabaseReference usersReference;
+    private final DatabaseReference usersReference = App.getAppComponent().getDbUsersReference();
     private User user;
     private Callback callback;
 
@@ -30,11 +29,6 @@ public class MainModel{
 
     public void registerCallback(Callback callback) {
         this.callback = callback;
-    }
-
-    public void loadDatabase(String path) {
-        usersReference = database.getReference(path);
-        Log.d(TAG, "loadDatabase: " + usersReference.toString());
     }
 
     public User findUserById(String userId) {
