@@ -11,6 +11,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -24,6 +25,7 @@ public class MainModel{
     private Callback callback;
 
     public interface Callback {
+        void onUserWasLoaded(User user);
         void onErrorWhileLoadingUser(String message);
     }
 
@@ -61,7 +63,7 @@ public class MainModel{
         String personalCode = generateNewPersonalCode();
         int imageNumber = generateNewImageNumber();
         int batteryLevel = 0;
-        User newUser = new User(userName, personalCode, imageNumber, null, null, null, null, batteryLevel);
+        User newUser = new User(userId, userName, personalCode, imageNumber, null, null, null, null, batteryLevel);
         usersReference.child(userId).setValue(newUser);
         Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
     }
@@ -80,5 +82,12 @@ public class MainModel{
     private int generateNewImageNumber() {
         Random random = new Random();
         return random.nextInt(IMAGE_COUNT);
+    }
+
+    public ArrayList<String> getFriendList(String userId) {
+        ArrayList<String> friendList = new ArrayList<>();
+        // TODO
+        Log.d(TAG, "getFriendList: " + friendList);
+        return friendList;
     }
 }

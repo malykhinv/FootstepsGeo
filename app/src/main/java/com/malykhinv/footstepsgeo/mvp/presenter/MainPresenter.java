@@ -3,19 +3,19 @@ package com.malykhinv.footstepsgeo.mvp.presenter;
 import android.util.Log;
 
 import com.malykhinv.footstepsgeo.User;
+import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.MainActivity;
 
 public class MainPresenter implements MainModel.Callback {
 
-    private static final String DB_PATH = "users";
     private final String TAG = this.getClass().getName();
     private final MainActivity view;
     private final MainModel model;
 
     public MainPresenter(MainActivity view) {
         this.view = view;
-        this.model = new MainModel();
+        this.model = App.getAppComponent().getMainModel();
         model.registerCallback(this);
     }
 
@@ -37,6 +37,11 @@ public class MainPresenter implements MainModel.Callback {
 
 
     // Call from Model:
+
+    @Override
+    public void onUserWasLoaded(User user) {
+        Log.d(TAG, "onUserWasLoaded: " + user.id);
+    }
 
     @Override
     public void onErrorWhileLoadingUser(String message) {

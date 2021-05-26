@@ -58,6 +58,11 @@ public class GlobeScreenFragment extends Fragment {
         b.mapView.onResume();
 
         presenter = new GlobeScreenPresenter(this);
+        presenter.onViewCreated();
+
+    }
+
+    public void getMap() {
         b.mapView.getMapAsync(presenter);
     }
 

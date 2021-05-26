@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class User {
 
+    public String id;
     public String name;
     public String personalCode;
     public int imageNumber;
@@ -13,7 +14,8 @@ public class User {
     public Date lastLocationTime;
     public int batteryLevel;
 
-    public User(String name, String personalCode, int imageNumber, Long latitude, Long longtitude, String phoneNumber, Date lastLocationTime, int batteryLevel) {
+    public User(String id, String name, String personalCode, int imageNumber, Long latitude, Long longtitude, String phoneNumber, Date lastLocationTime, int batteryLevel) {
+        this.id = id;
         this.name = name;
         this.personalCode = personalCode;
         this.imageNumber = imageNumber;

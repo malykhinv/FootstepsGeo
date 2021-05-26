@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_marginEnd="@dimen/margin_horizontal"
+        android:contentDescription="@string/fab_description"
         app:backgroundTint="@color/green_a700"
         app:fabSize="mini"
         app:layout_dodgeInsetEdges="bottom"

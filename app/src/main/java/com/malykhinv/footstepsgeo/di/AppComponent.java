@@ -7,6 +7,7 @@ import android.location.LocationManager;
 import com.google.firebase.database.DatabaseReference;
 import com.malykhinv.footstepsgeo.di.modules.AppModule;
 import com.malykhinv.footstepsgeo.di.modules.FirebaseModule;
+import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 
 import javax.inject.Singleton;
 
@@ -18,6 +19,7 @@ public interface AppComponent {
     Context getContext();
     ClipboardManager getClipboard();
     LocationManager getLocationManager();
+    MainModel getMainModel();
 
     DatabaseReference getDbUsersReference();
 }

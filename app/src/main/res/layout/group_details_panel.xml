@@ -14,9 +14,9 @@
         android:layout_width="@dimen/width_mover"
         android:layout_height="@dimen/height_mover"
         android:layout_gravity="center|center_horizontal"
-        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:layout_marginTop="@dimen/margin_vertical"
         android:layout_marginBottom="@dimen/margin_vertical_small"
-        android:alpha="0.2"
+        android:alpha="0.1"
         android:background="@drawable/mover_background" />
 
     <androidx.constraintlayout.widget.ConstraintLayout

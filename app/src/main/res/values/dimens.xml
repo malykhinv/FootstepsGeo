@@ -21,12 +21,11 @@
 
     <dimen name="height_splash">300dp</dimen>
     <dimen name="height_panel">240dp</dimen>
-    <dimen name="height_panel_peek">96dp</dimen>
+    <dimen name="height_panel_peek">108dp</dimen>
     <dimen name="height_label">24dp</dimen>
     <dimen name="height_navigation_icon">28dp</dimen>
-
     <dimen name="height_mover">8dp</dimen>
-    <dimen name="width_mover">48dp</dimen>
+    <dimen name="width_mover">128dp</dimen>
 
     <dimen name="height_userpic">48dp</dimen>
     <dimen name="width_userpic">48dp</dimen>

@@ -5,6 +5,8 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.location.LocationManager;
 
+import com.malykhinv.footstepsgeo.mvp.model.MainModel;
+
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -41,5 +43,11 @@ public class AppModule {
     @Singleton
     public LocationManager providesLocationManager() {
         return (LocationManager) provideContext().getSystemService(Context.LOCATION_SERVICE);
+    }
+
+    @Provides
+    @Singleton
+    public MainModel provideMainModel() {
+        return new MainModel();
     }
 }

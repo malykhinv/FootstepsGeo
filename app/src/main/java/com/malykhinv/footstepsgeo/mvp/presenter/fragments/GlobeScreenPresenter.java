@@ -8,26 +8,32 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.malykhinv.footstepsgeo.R;
+import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
-import com.malykhinv.footstepsgeo.mvp.model.fragments.GlobeScreenModel;
+import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
 
 import java.util.ArrayList;
 
-public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenModel.Callback {
+public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Callback {
 
     private Context context = App.getAppComponent().getContext();
     private GlobeScreenFragment view;
-    private GlobeScreenModel model;
+    private MainModel model;
+    private User user;
 
     public GlobeScreenPresenter(GlobeScreenFragment view) {
         this.view = view;
-        this.model = new GlobeScreenModel();
+        this.model = App.getAppComponent().getMainModel();
         model.registerCallback(this);
     }
 
 
     // Call from View:
+
+    public void onViewCreated() {
+        view.getMap();
+    }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
@@ -56,4 +62,15 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenMode
 
 
     // Call from Model:
+
+    @Override
+    public void onUserWasLoaded(User user) {
+        this.user = user;
+        model.getFriendList(user.id);
+    }
+
+    @Override
+    public void onErrorWhileLoadingUser(String message) {
+
+    }
 }
