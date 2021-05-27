@@ -30,18 +30,13 @@ public class MainPresenter implements MainModel.Callback {
         Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: " + userName);
         User user = model.findUserById(userId);
         if (user == null) {
+            Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: Google user not assigned with Firebase users");
             model.writeNewUserIntoDatabase(userId, userName);
         }
-        view.updateUserData(user);
     }
 
 
     // Call from Model:
-
-    @Override
-    public void onUserWasLoaded(User user) {
-        Log.d(TAG, "onUserWasLoaded: " + user.id);
-    }
 
     @Override
     public void onErrorWhileLoadingUser(String message) {

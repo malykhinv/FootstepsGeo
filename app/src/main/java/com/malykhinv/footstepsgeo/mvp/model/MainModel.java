@@ -15,7 +15,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
-public class MainModel{
+public class MainModel {
+
     private static final int PERSONAL_CODE_LENGTH = 6;
     private static final int IMAGE_COUNT = 121;
     private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
@@ -25,7 +26,6 @@ public class MainModel{
     private Callback callback;
 
     public interface Callback {
-        void onUserWasLoaded(User user);
         void onErrorWhileLoadingUser(String message);
     }
 
@@ -63,12 +63,12 @@ public class MainModel{
         String personalCode = generateNewPersonalCode();
         int imageNumber = generateNewImageNumber();
         int batteryLevel = 0;
-        User newUser = new User(userId, userName, personalCode, imageNumber, null, null, null, null, batteryLevel);
+        User newUser = new User(userId, userName, personalCode, imageNumber, null, null, System.currentTimeMillis(), batteryLevel);
         usersReference.child(userId).setValue(newUser);
         Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
     }
 
-    public String generateNewPersonalCode() {
+    private String generateNewPersonalCode() {
         char[] randomCode = new char[PERSONAL_CODE_LENGTH];
         String alphabet09 = ALPHABET09;
         Random random = new Random();
@@ -84,7 +84,7 @@ public class MainModel{
         return random.nextInt(IMAGE_COUNT);
     }
 
-    public ArrayList<String> getFriendList(String userId) {
+    public ArrayList<String> getFriendsList(String userId) {
         ArrayList<String> friendList = new ArrayList<>();
         // TODO
         Log.d(TAG, "getFriendList: " + friendList);
