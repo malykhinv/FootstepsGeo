@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.location.LocationManager;
+import android.os.BatteryManager;
 
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 
@@ -31,6 +32,17 @@ public class AppModule {
     @Singleton
     public Context provideContext() {
         return app.getApplicationContext();
+    }
+
+    @Provides
+    @Singleton
+    public BatteryManager provideBatteryManager() {
+        return (BatteryManager) provideContext().getSystemService(Context.BATTERY_SERVICE);
+    }
+
+    @Provides
+    public int provideBatteryLevel() {
+        return provideBatteryManager().getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY);
     }
 
     @Provides
