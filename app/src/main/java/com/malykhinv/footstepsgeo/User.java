@@ -1,26 +1,24 @@
 package com.malykhinv.footstepsgeo;
 
-import java.util.Date;
-
 public class User {
 
     public String id;
     public String name;
     public String personalCode;
     public int imageNumber;
-    public Long latitude;
-    public Long longtitude;
+    public double latitude;
+    public double longitude;
     public String phoneNumber;
-    public Date lastLocationTime;
+    public long lastLocationTime;
     public int batteryLevel;
 
-    public User(String id, String name, String personalCode, int imageNumber, Long latitude, Long longtitude, String phoneNumber, Date lastLocationTime, int batteryLevel) {
+    public User(String id, String name, String personalCode, int imageNumber, double latitude, double longitude, String phoneNumber, long lastLocationTime, int batteryLevel) {
         this.id = id;
         this.name = name;
         this.personalCode = personalCode;
         this.imageNumber = imageNumber;
         this.latitude = latitude;
-        this.longtitude = longtitude;
+        this.longitude = longitude;
         this.phoneNumber = phoneNumber;
         this.lastLocationTime = lastLocationTime;
         this.batteryLevel = batteryLevel;
