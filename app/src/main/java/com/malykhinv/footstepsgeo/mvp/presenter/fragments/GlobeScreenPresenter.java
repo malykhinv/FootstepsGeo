@@ -12,26 +12,27 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
-import com.malykhinv.footstepsgeo.mvp.model.fragments.GlobeScreenModel;
+import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
 
 import java.util.ArrayList;
 
-public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenModel.Callback {
+public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCallback, MainModel.MapCallback {
 
-    private final String TAG = this.getClass().getName();
     private static final int PERMISSIONS_REQUEST_CODE = 100;
+    private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
-    private GlobeScreenFragment view;
-    private GlobeScreenModel model;
-    private User user;
-    private boolean isCameraFollows = false;
+    private final GlobeScreenFragment view;
+    private final MainModel model;
+    private String currentGoogleUserId;
     private User userToFollow;
+    private boolean isCameraFollows = false;
 
     public GlobeScreenPresenter(GlobeScreenFragment view) {
         this.view = view;
-        this.model = new GlobeScreenModel();
-        model.registerCallback(this);
+        this.model = App.getAppComponent().getMainModel();
+        model.registerDbCallback(this);
+        model.registerMapCallback(this);
     }
 
 
@@ -48,20 +49,18 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenMode
         view.attachMap(googleMap);
         view.setMapStyle();
         view.setMapUiSettings();
-        if (view.areAllPermissionsGranted()) {
-            putUserOnMap();
-        } else {
-            checkPermissions();
-        }
+        model.initializeLocationListener();
     }
 
-    private void putUserOnMap() {
-        Location location = model.getMostAccurateLocation();
-        if (location != null) {
-            view.createCurrentUserPointer(location);
-            view.moveCamera(location);
+    private void placeUserOnMap(User user) {
+        if (user != null) {
+            user.location = model.getMostAccurateLocation();
+            if (user.location != null) {
+                view.createUserMarker(user);
+                view.moveCamera(user.location);
+            }
+            model.trackDeviceLocation();
         }
-        model.trackLocation();
     }
 
     private void checkPermissions() {
@@ -80,7 +79,16 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenMode
             }
         }
         if (view.areAllPermissionsGranted()) {
-            putUserOnMap();
+            User currentUser = model.getCurrentUser();
+            placeUserOnMap(currentUser);
+        }
+    }
+
+    public void onFabWasPressed() {
+        userToFollow = model.getCurrentUser();
+        if (userToFollow != null && userToFollow.location != null) {
+            isCameraFollows = true;
+            view.animateCamera(userToFollow.location);
         }
     }
 
@@ -88,23 +96,53 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, GlobeScreenMode
     // Call from Model:
 
     @Override
-    public void onLocationChanged(Location location) {
-        if (userToFollow != null) {
-            if (userToFollow == user) {
-                updateCurrentUserInfo(location);
-                model.writeUserInfoIntoDatabase(user);
-            }
-            if (isCameraFollows) {
-                view.animateCamera(userToFollow);
+    public void onCurrentUserWasWrittenIntoDatabase(User user) {
+        initializeCurrentUserOnMap(user);
+    }
+
+    @Override
+    public void onUserReceived(User user) {
+        if (user != null) {
+            currentGoogleUserId = model.getCurrentGoogleUserId();
+            if (user.id.equals(currentGoogleUserId)) {
+                initializeCurrentUserOnMap(user);
+            } else {
+                // TODO
             }
         }
     }
 
-    private void updateCurrentUserInfo(Location location) {
-        if (user != null && location != null) {
-            user.location = location;
-            user.lastLocationTime = System.currentTimeMillis();
-            user.batteryLevel = App.getAppComponent().getBatteryLevel();
+    private void initializeCurrentUserOnMap(User user) {
+        model.setCurrentUser(user);
+
+        if (view.areAllPermissionsGranted()) {
+            placeUserOnMap(user);
+        } else {
+            checkPermissions();
+        }
+    }
+
+    @Override
+    public void onNullUserReceived(String userId) {
+        User user = model.createNewUser();
+        if (user != null) {
+            model.writeCurrentUserIntoDatabase(user);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        if (location != null) {
+            view.moveUserMarker(userToFollow);
+
+            model.setCurrentUserLocation(location);
+            model.setCurrentUserLastLocationTime(System.currentTimeMillis());
+            model.setCurrentUserBatteryLevel(App.getAppComponent().getBatteryLevel());
+            model.writeUserInfoIntoDatabase(userToFollow);
+
+            if (userToFollow != null && userToFollow.id.equals(currentGoogleUserId) && isCameraFollows) {
+                view.animateCamera(location);
+            }
         }
     }
 

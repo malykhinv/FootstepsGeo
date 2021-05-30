@@ -28,6 +28,7 @@ import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.GlobeScreenPresenter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -39,17 +40,28 @@ public class GlobeScreenFragment extends Fragment {
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
+    private View view;
     private FragmentGlobeScreenBinding b;
     private GlobeScreenPresenter presenter;
     private GoogleMap googleMap;
-    private Marker markerMe;
+    private HashMap<String, Marker> markers = new HashMap<>();
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         b = FragmentGlobeScreenBinding.inflate(inflater, container, false);
-        return b.getRoot();
+
+        b.fabMyLocation.setOnClickListener(v -> {
+            presenter.onFabWasPressed();
+        });
+
+        if (view == null) {
+            view = b.getRoot();
+        } else {
+            ((ViewGroup) view.getParent()).removeView(view);
+        }
+        return view;
     }
 
     @Override
@@ -113,19 +125,30 @@ public class GlobeScreenFragment extends Fragment {
         googleMap.getUiSettings().setCompassEnabled(false);
     }
 
-    public void createCurrentUserPointer(Location location) {
-        if (location != null) {
-            markerMe = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(location.getLatitude(), location.getLongitude()))
-                    .title("title")
-                    .visible(true)
-            );
+    public void createUserMarker(User user) {
+        if (user != null && user.location != null && user.id != null) {
+            String userId = user.id;
+            Marker userMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(user.location.getLatitude(), user.location.getLongitude()))
+                    .title(user.id)
+                    .visible(true));
+            markers.put(userId, userMarker);
         }
     }
 
-    public void animateCamera(User userToFollow) {
-        if (userToFollow.location != null) {
-            Location location = userToFollow.location;
+
+
+    public void moveUserMarker(User user) {
+        if (user != null && user.id != null & user.location != null) {
+            Marker marker = markers.get(user.id);
+            if (marker != null) {
+                marker.setPosition(new LatLng(user.location.getLatitude(), user.location.getLongitude()));
+            }
+        }
+    }
+
+    public void animateCamera(Location location) {
+        if (location != null) {
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), ZOOM_MIDDLE));
         }
     }
