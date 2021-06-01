@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
 import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
@@ -52,17 +53,6 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
         model.initializeLocationListener();
     }
 
-    private void placeUserOnMap(User user) {
-        if (user != null) {
-            user.location = model.getMostAccurateLocation();
-            if (user.location != null) {
-                view.createUserMarker(user);
-                view.moveCamera(user.location);
-            }
-            model.trackDeviceLocation();
-        }
-    }
-
     private void checkPermissions() {
         ArrayList<String> missingPermissions = view.getMissingPermissions();
         if (missingPermissions.size() > 0) {
@@ -86,9 +76,9 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
 
     public void onFabWasPressed() {
         userToFollow = model.getCurrentUser();
-        if (userToFollow != null && userToFollow.location != null) {
+        if (userToFollow != null && userToFollow.latLng != null) {
             isCameraFollows = true;
-            view.animateCamera(userToFollow.location);
+            view.animateCamera(userToFollow.latLng);
         }
     }
 
@@ -116,9 +106,23 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
         model.setCurrentUser(user);
 
         if (view.areAllPermissionsGranted()) {
-            placeUserOnMap(user);
+            Location location = model.getMostAccurateLocation();
+            if (location != null) {
+                user.latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                placeUserOnMap(user);
+            }
         } else {
             checkPermissions();
+        }
+    }
+
+    private void placeUserOnMap(User user) {
+        if (user != null) {
+            if (user.latLng != null) {
+                view.createUserMarker(user);
+                view.moveCamera(user.latLng);
+            }
+            model.trackDeviceLocation();
         }
     }
 
@@ -133,15 +137,19 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            view.moveUserMarker(userToFollow);
-
-            model.setCurrentUserLocation(location);
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            model.setCurrentUserLocation(latLng);
             model.setCurrentUserLastLocationTime(System.currentTimeMillis());
             model.setCurrentUserBatteryLevel(App.getAppComponent().getBatteryLevel());
-            model.writeUserInfoIntoDatabase(userToFollow);
+
+            User currentUser = model.getCurrentUser();
+            if (currentUser != null) {
+                model.writeUserInfoIntoDatabase(currentUser);
+                view.moveUserMarker(currentUser);
+            }
 
             if (userToFollow != null && userToFollow.id.equals(currentGoogleUserId) && isCameraFollows) {
-                view.animateCamera(location);
+                view.animateCamera(latLng);
             }
         }
     }

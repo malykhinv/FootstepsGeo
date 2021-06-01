@@ -3,7 +3,6 @@ package com.malykhinv.footstepsgeo.mvp.view.fragments;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +51,7 @@ public class GlobeScreenFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         b = FragmentGlobeScreenBinding.inflate(inflater, container, false);
 
-        b.fabMyLocation.setOnClickListener(v -> {
-            presenter.onFabWasPressed();
-        });
+        b.fabMyLocation.setOnClickListener(v -> presenter.onFabWasPressed());
 
         if (view == null) {
             view = b.getRoot();
@@ -65,7 +62,7 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         b.mapView.onCreate(savedInstanceState);
         b.mapView.onResume();
@@ -126,10 +123,10 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void createUserMarker(User user) {
-        if (user != null && user.location != null && user.id != null) {
+        if (user != null && user.latLng != null && user.id != null) {
             String userId = user.id;
             Marker userMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(user.location.getLatitude(), user.location.getLongitude()))
+                    .position(user.latLng)
                     .title(user.id)
                     .visible(true));
             markers.put(userId, userMarker);
@@ -139,23 +136,23 @@ public class GlobeScreenFragment extends Fragment {
 
 
     public void moveUserMarker(User user) {
-        if (user != null && user.id != null & user.location != null) {
+        if (user != null && user.id != null & user.latLng != null) {
             Marker marker = markers.get(user.id);
             if (marker != null) {
-                marker.setPosition(new LatLng(user.location.getLatitude(), user.location.getLongitude()));
+                marker.setPosition(user.latLng);
             }
         }
     }
 
-    public void animateCamera(Location location) {
-        if (location != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), ZOOM_MIDDLE));
+    public void animateCamera(LatLng latLng) {
+        if (latLng != null) {
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_MIDDLE));
         }
     }
 
-    public void moveCamera(Location location) {
-        if (location != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), ZOOM_MIDDLE));
+    public void moveCamera(LatLng latLng) {
+        if (latLng != null) {
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_MIDDLE));
         }
     }
 

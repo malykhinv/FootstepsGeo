@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -231,9 +232,9 @@ public class MainModel {
         return mostAccurateLocation;
     }
 
-    public void setCurrentUserLocation(Location location) {
-        if (currentUser != null) {
-            currentUser.location = location;
+    public void setCurrentUserLocation(LatLng latLng) {
+        if (currentUser != null && latLng != null) {
+            currentUser.latLng = latLng;
         }
     }
 
