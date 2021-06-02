@@ -2,6 +2,8 @@ package com.malykhinv.footstepsgeo;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
+
 public class User {
 
     public String id;
@@ -12,8 +14,9 @@ public class User {
     public String phoneNumber;
     public long lastLocationTime;
     public int batteryLevel;
+    public ArrayList<String> friendsIds;
 
-    public User(String id, String name, String personalCode, int imageNumber, LatLng latLng, String phoneNumber, long lastLocationTime, int batteryLevel) {
+    public User(String id, String name, String personalCode, int imageNumber, LatLng latLng, String phoneNumber, long lastLocationTime, int batteryLevel, ArrayList<String> friendsIds) {
         this.id = id;
         this.name = name;
         this.personalCode = personalCode;
@@ -22,6 +25,7 @@ public class User {
         this.phoneNumber = phoneNumber;
         this.lastLocationTime = lastLocationTime;
         this.batteryLevel = batteryLevel;
+        this.friendsIds = friendsIds;
     }
 
     public User() {
