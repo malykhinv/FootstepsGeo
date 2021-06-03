@@ -165,4 +165,8 @@ public class GlobeScreenFragment extends Fragment {
         super.onDestroyView();
         b = null;
     }
+
+    public boolean isMarkerExists(String id) {
+        return markers.containsKey(id);
+    }
 }

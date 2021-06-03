@@ -18,12 +18,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
-import com.malykhinv.footstepsgeo.mvp.MainCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Observer;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class MainModel {
 
@@ -35,33 +42,50 @@ public class MainModel {
     private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
     private final DatabaseReference usersReference = App.getAppComponent().getDbUsersReference();
+    private final DatabaseReference personalCodesReference = App.getAppComponent().getDbPersonalCodesReference();
     private final LocationManager locationManager = App.getAppComponent().getLocationManager();
     private LocationListener locationListener;
     private String[] currentGoogleUserInfo;
     private User user;
     private User currentUser;
-    private DbCallback dbCallback;
-    private MapCallback mapCallback;
+    private HashMap<String, User> friends;
+    private MainCallback mainCallback;
+    private UserlistCallback userlistCallback;
+    private GlobeCallback globeCallback;
+    private Disposable disposable;
 
 
     // Callbacks:
 
-    public interface DbCallback extends MainCallback {
-        void onUserReceived(User user);
-        void onNullUserReceived(String userId);
+    public interface MainCallback {
+        void onCurrentUserReceived(User user);
+        void onNullCurrentUserReceived();
         void onCurrentUserWasWrittenIntoDatabase(User user);
     }
 
-    public interface MapCallback extends MainCallback {
+    public interface UserlistCallback {
+        void onCurrentUserReceived(User user);
+        void onFriendUserReceived(User user);
+    }
+
+    public interface GlobeCallback {
+        void onCurrentUserReceived(User user);
+        void onCurrentUserWasWrittenIntoDatabase(User user);
+        void onFriendUserReceived(User user);
         void onLocationChanged(Location location);
+        void onError(Exception e);
     }
 
-    public void registerDbCallback(DbCallback dbCallback) {
-        this.dbCallback = dbCallback;
+    public void registerMainCallback(MainCallback mainCallback) {
+        this.mainCallback = mainCallback;
     }
 
-    public void registerMapCallback(MapCallback mapCallback) {
-        this.mapCallback = mapCallback;
+    public void registerUserlistCallback(UserlistCallback userlistCallback) {
+        this.userlistCallback = userlistCallback;
+    }
+
+    public void registerGlobeCallback(GlobeCallback globeCallback) {
+        this.globeCallback = globeCallback;
     }
 
 
@@ -79,57 +103,57 @@ public class MainModel {
         return currentGoogleUserInfo[CURRENT_GOOGLE_USER_USERNAME_INDEX];
     }
 
-    // Firebase:
 
-    public void findUserById(String userId) {
-        Log.d(TAG, "findUserById: " + userId);
-        usersReference.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
+    // Firebase: current user
+
+    public void loadCurrentUserFromDb() {
+        Log.d(TAG, "getCurrentUserFromDb: " + getCurrentGoogleUserId());
+        usersReference.child(getCurrentGoogleUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
-                    Log.d(TAG, "findUserById: success. " + userId);
                     user = snapshot.getValue(User.class);
-                    if (dbCallback != null) {
-                        dbCallback.onUserReceived(user);
+                    if (mainCallback != null) {
+                        mainCallback.onCurrentUserReceived(user);
+                    }
+                    if (userlistCallback != null) {
+                        userlistCallback.onCurrentUserReceived(user);
+                    }
+                    if (globeCallback != null) {
+                        globeCallback.onCurrentUserReceived(user);
                     }
                 } else {
-                    Log.d(TAG, "findUserById: failure");
+                    Log.d(TAG, "getCurrentUserFromDb: failure");
                     user = null;
-                    if (dbCallback != null) {
-                        dbCallback.onNullUserReceived(userId);
+                    if (mainCallback != null) {
+                        mainCallback.onNullCurrentUserReceived();
                     }
                 }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.d(TAG, "findUserById: failure. " + error.getMessage());
-                user = null;
-                if (dbCallback != null) {
-                    dbCallback.onError(error.toException());
-                }
+
             }
         });
     }
 
-    public void setCurrentUser(User currentUser) {
-        this.currentUser = currentUser;
-    }
-
-    public User getCurrentUser() {
-        return currentUser;
-    }
-
-    public User createNewUser() {
+    public void createNewUser() {
         String userId = getCurrentGoogleUserId();
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
         int imageNumber = generateNewImageNumber();
-        int batteryLevel = 0;
+        LatLng latLng = null;
+        String phoneNumber = null;
+        int batteryLevel = App.getAppComponent().getBatteryLevel();
+        ArrayList<String> friendsIds = null;
 
-        User newUser = new User(userId, userName, personalCode, imageNumber, null, null, System.currentTimeMillis(), batteryLevel);
+        User newUser = new User(userId, userName, personalCode, imageNumber, latLng, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
+        usersReference.child(userId).setValue(newUser);
 
         Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
-        return newUser;
+        if (mainCallback != null) {
+            mainCallback.onCurrentUserWasWrittenIntoDatabase(newUser);
+        }
     }
 
     private String generateNewPersonalCode() {
@@ -148,23 +172,144 @@ public class MainModel {
         return random.nextInt(IMAGE_COUNT);
     }
 
-    public void writeCurrentUserIntoDatabase(User user) {
-        if (user != null) {
+    public void writeCurrentUserIntoDb() {
+        if (currentUser != null) {
             Log.d(TAG, "writeUserIntoDatabase: " + user.id);
             usersReference.child(user.id).setValue(user);
-            if (dbCallback != null) {
-                dbCallback.onCurrentUserWasWrittenIntoDatabase(user);
-            }
         }
     }
 
-    public ArrayList<String> getFriendsList(String userId) {
-        ArrayList<String> friendList = new ArrayList<>();
-        // TODO
-        Log.d(TAG, "getFriendList: " + friendList);
-        return friendList;
+    public void updateCurrentUserState(LatLng latLng) {
+        if (currentUser != null) {
+            if (latLng != null) {
+                currentUser.latLng = latLng;
+            }
+            currentUser.lastLocationTime = System.currentTimeMillis();
+            currentUser.batteryLevel = App.getAppComponent().getBatteryLevel();
+        }
     }
 
+    public void setCurrentUser(User currentUser) {
+        this.currentUser = currentUser;
+    }
+
+    public User getCurrentUser() {
+        return currentUser;
+    }
+
+
+    // Firebase: friends
+
+    public void loadIdFromDb(String personalCode) {
+        Log.d(TAG, "loadIdFromDb: " + personalCode);
+        personalCodesReference.child(personalCode).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+                    Log.d(TAG, "loadIdFromDb: success. " + personalCode);
+                    String friendsId = snapshot.getValue(String.class);
+//                    if (userlistCallback != null) {
+//                        userlistCallback.onFriendsIdReceived(friendsId);
+//                    }
+                } else {
+                    Log.d(TAG, "loadIdFromDb: failure");
+                    user = null;
+//                    if (userlistCallback != null) {
+//                        userlistCallback.onNullFriendsIdReceived();
+//                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void loadUserFromDb(String id) {
+        Log.d(TAG, "loadUserFromDb: " + id);
+        usersReference.child(getCurrentGoogleUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists() && snapshot.getValue() != null) {
+
+                    if (friends.containsKey(id)) {
+                        friends.replace(id, snapshot.getValue(User.class));
+                    } else {
+                        friends.put(id, snapshot.getValue(User.class));
+                    }
+
+                    if (userlistCallback != null) {
+                        userlistCallback.onFriendUserReceived(friends.get(id));
+                    }
+                    if (globeCallback != null) {
+                        globeCallback.onFriendUserReceived(friends.get(id));
+                    }
+
+                } else {
+                    Log.d(TAG, "loadUserFromDb: failure");
+                    user = null;
+                    if (mainCallback != null) {
+                        mainCallback.onNullCurrentUserReceived();
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void addFriend(String id) {
+        if (currentUser != null && !id.equals(getCurrentGoogleUserId()) && !currentUser.friendsIds.contains(id)) {
+            currentUser.friendsIds.add(id);
+            writeCurrentUserIntoDb();
+            loadUserFromDb(id);
+        }
+    }
+
+    public void trackFriends() {
+        Observer<Long> friendsObserver = new Observer<Long>() {
+            @Override
+            public void onSubscribe(@io.reactivex.rxjava3.annotations.NonNull Disposable d) {
+                disposable = d;
+            }
+
+            @Override
+            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Long tick) {
+                if (currentUser != null) {
+                    ArrayList<String> friendsIds = currentUser.friendsIds;
+                    if (friendsIds != null) {
+                        for (String id : friendsIds) {
+                            loadUserFromDb(id);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onError(@io.reactivex.rxjava3.annotations.NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        };
+
+        Observable<Long> friendsOnTimer = Observable.timer(2000, TimeUnit.MILLISECONDS)
+                .repeat()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+
+        friendsOnTimer.subscribe(friendsObserver);
+    }
+
+    public void dispose() {
+        disposable.dispose();
+    }
 
     // Maps:
 
@@ -183,8 +328,8 @@ public class MainModel {
                 try {
                     getMostAccurateLocation();
                 } catch (Exception e) {
-                    if (mapCallback != null) {
-                        mapCallback.onError(e);
+                    if (globeCallback != null) {
+                        globeCallback.onError(e);
                     }
                 }
             }
@@ -192,8 +337,8 @@ public class MainModel {
             @Override
             public void onLocationChanged(@NonNull Location location) {
                 Log.d(TAG, "onLocationChanged: " + location.getLatitude() +", " + location.getLatitude());
-                if (mapCallback != null) {
-                    mapCallback.onLocationChanged(location);
+                if (globeCallback != null) {
+                    globeCallback.onLocationChanged(location);
                 }
             }
         };
@@ -230,35 +375,5 @@ public class MainModel {
             Log.d(TAG, "getMostAccurateLocation: " + mostAccurateLocation.getProvider());
         }
         return mostAccurateLocation;
-    }
-
-    public void setCurrentUserLocation(LatLng latLng) {
-        if (currentUser != null && latLng != null) {
-            currentUser.latLng = latLng;
-        }
-    }
-
-    public void setCurrentUserLastLocationTime(long lastLocationTime) {
-        if (currentUser != null) {
-            currentUser.lastLocationTime = lastLocationTime;
-        }
-    }
-
-    public void setCurrentUserBatteryLevel(int batteryLevel) {
-        if (currentUser != null) {
-            currentUser.batteryLevel = batteryLevel;
-        }
-    }
-
-    public void writeUserInfoIntoDatabase(User user) {
-        try {
-            usersReference.child(user.id).setValue(user);
-            Log.d(TAG, "writeUserInfoIntoDatabase: success");
-        } catch (Exception e) {
-            if (dbCallback != null) {
-                dbCallback.onError(e);
-            }
-            Log.w(TAG, "writeUserInfoIntoDatabase: failure" + e.getMessage());
-        }
     }
 }

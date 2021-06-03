@@ -18,7 +18,7 @@ import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
 
 import java.util.ArrayList;
 
-public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCallback, MainModel.MapCallback {
+public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     private final String TAG = this.getClass().getName();
@@ -32,8 +32,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
     public GlobeScreenPresenter(GlobeScreenFragment view) {
         this.view = view;
         this.model = App.getAppComponent().getMainModel();
-        model.registerDbCallback(this);
-        model.registerMapCallback(this);
+        model.registerGlobeCallback(this);
     }
 
 
@@ -54,6 +53,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
     }
 
     private void checkPermissions() {
+        Log.d(TAG, "checkPermissions: ");
         ArrayList<String> missingPermissions = view.getMissingPermissions();
         if (missingPermissions.size() > 0) {
             String[] missingPermissionsAsStringArray = new String[missingPermissions.size()];
@@ -70,7 +70,8 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
         }
         if (view.areAllPermissionsGranted()) {
             User currentUser = model.getCurrentUser();
-            placeUserOnMap(currentUser);
+            initializeCurrentUserOnMap(currentUser);
+            model.trackDeviceLocation();
         }
     }
 
@@ -86,25 +87,16 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
     // Call from Model:
 
     @Override
-    public void onCurrentUserWasWrittenIntoDatabase(User user) {
-        initializeCurrentUserOnMap(user);
-    }
-
-    @Override
-    public void onUserReceived(User user) {
+    public void onCurrentUserReceived(User user) {
         if (user != null) {
             currentGoogleUserId = model.getCurrentGoogleUserId();
             if (user.id.equals(currentGoogleUserId)) {
                 initializeCurrentUserOnMap(user);
-            } else {
-                // TODO
             }
         }
     }
 
     private void initializeCurrentUserOnMap(User user) {
-        model.setCurrentUser(user);
-
         if (view.areAllPermissionsGranted()) {
             Location location = model.getMostAccurateLocation();
             if (location != null) {
@@ -118,19 +110,12 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
 
     private void placeUserOnMap(User user) {
         if (user != null) {
-            if (user.latLng != null) {
+            if (user.latLng != null && !view.isMarkerExists(user.id)) {
                 view.createUserMarker(user);
-                view.moveCamera(user.latLng);
+                if (user.id.equals(model.getCurrentGoogleUserId())) {
+                    view.moveCamera(user.latLng);
+                }
             }
-            model.trackDeviceLocation();
-        }
-    }
-
-    @Override
-    public void onNullUserReceived(String userId) {
-        User user = model.createNewUser();
-        if (user != null) {
-            model.writeCurrentUserIntoDatabase(user);
         }
     }
 
@@ -138,13 +123,10 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
     public void onLocationChanged(Location location) {
         if (location != null) {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            model.setCurrentUserLocation(latLng);
-            model.setCurrentUserLastLocationTime(System.currentTimeMillis());
-            model.setCurrentUserBatteryLevel(App.getAppComponent().getBatteryLevel());
-
+            model.updateCurrentUserState(latLng);
             User currentUser = model.getCurrentUser();
             if (currentUser != null) {
-                model.writeUserInfoIntoDatabase(currentUser);
+                model.writeCurrentUserIntoDb();
                 view.moveUserMarker(currentUser);
             }
 
@@ -152,6 +134,16 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.DbCal
                 view.animateCamera(latLng);
             }
         }
+    }
+
+    @Override
+    public void onCurrentUserWasWrittenIntoDatabase(User user) {
+        initializeCurrentUserOnMap(user);
+    }
+
+    @Override
+    public void onFriendUserReceived(User user) {
+        placeUserOnMap(user);
     }
 
     @Override

@@ -9,17 +9,37 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.malykhinv.footstepsgeo.R;
+import com.malykhinv.footstepsgeo.databinding.FragmentUserlistScreenBinding;
+import com.malykhinv.footstepsgeo.mvp.presenter.fragments.UserlistScreenPresenter;
 
 
 public class UserlistScreenFragment extends Fragment {
+
+    private FragmentUserlistScreenBinding b;
+    private View view;
+    private UserlistScreenPresenter presenter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_userlist_screen, container, false);
-        return rootView;
+        b = FragmentUserlistScreenBinding.inflate(inflater, container, false);
+
+        if (view == null) {
+            view = b.getRoot();
+        } else {
+            ((ViewGroup) view.getParent()).removeView(view);
+        }
+        return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        if (presenter == null) {
+            presenter = new UserlistScreenPresenter(this);
+        }
     }
 }
