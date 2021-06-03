@@ -9,11 +9,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.malykhinv.footstepsgeo.R;
-import com.malykhinv.footstepsgeo.mvp.view.MainActivity;
-
+import com.malykhinv.footstepsgeo.databinding.FragmentAccountScreenBinding;
+import com.malykhinv.footstepsgeo.mvp.presenter.fragments.AccountScreenPresenter;
 
 public class AccountScreenFragment extends Fragment {
+
+    private FragmentAccountScreenBinding b;
+    private View view;
+    private AccountScreenPresenter presenter;
 
     @Nullable
     @Override
@@ -21,15 +24,21 @@ public class AccountScreenFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_account_screen, container, false);
-
-        return rootView;
+        b = FragmentAccountScreenBinding.inflate(inflater, container, false);
+        if (view == null) {
+            view = b.getRoot();
+        } else {
+            ((ViewGroup) view.getParent()).removeView(view);
+        }
+        return view;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity)getActivity()).initAccountScreen();
+        if (presenter == null) {
+            presenter = new AccountScreenPresenter(this);
+        }
     }
 }

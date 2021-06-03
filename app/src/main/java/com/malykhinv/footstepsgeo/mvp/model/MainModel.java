@@ -11,7 +11,6 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -52,6 +51,7 @@ public class MainModel {
     private MainCallback mainCallback;
     private UserlistCallback userlistCallback;
     private GlobeCallback globeCallback;
+    private AccountCallback accountCallback;
     private Disposable disposable;
 
 
@@ -76,6 +76,10 @@ public class MainModel {
         void onError(Exception e);
     }
 
+    public interface AccountCallback {
+        void onCurrentUserReceived(User user);
+    }
+
     public void registerMainCallback(MainCallback mainCallback) {
         this.mainCallback = mainCallback;
     }
@@ -87,6 +91,11 @@ public class MainModel {
     public void registerGlobeCallback(GlobeCallback globeCallback) {
         this.globeCallback = globeCallback;
     }
+
+    public void registerAccountCallback(AccountCallback accountCallback) {
+        this.accountCallback = accountCallback;
+    }
+
 
 
     // Google account info:
@@ -122,6 +131,9 @@ public class MainModel {
                     if (globeCallback != null) {
                         globeCallback.onCurrentUserReceived(user);
                     }
+                    if (accountCallback != null) {
+                        accountCallback.onCurrentUserReceived(user);
+                    }
                 } else {
                     Log.d(TAG, "getCurrentUserFromDb: failure");
                     user = null;
@@ -142,12 +154,12 @@ public class MainModel {
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
         int imageNumber = generateNewImageNumber();
-        LatLng latLng = null;
+        Double[] position = null;
         String phoneNumber = null;
         int batteryLevel = App.getAppComponent().getBatteryLevel();
         ArrayList<String> friendsIds = null;
 
-        User newUser = new User(userId, userName, personalCode, imageNumber, latLng, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
+        User newUser = new User(userId, userName, personalCode, imageNumber, position, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
         usersReference.child(userId).setValue(newUser);
 
         Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
@@ -179,10 +191,10 @@ public class MainModel {
         }
     }
 
-    public void updateCurrentUserState(LatLng latLng) {
+    public void updateCurrentUserState(Double[] position) {
         if (currentUser != null) {
-            if (latLng != null) {
-                currentUser.latLng = latLng;
+            if (position != null) {
+                currentUser.position = position;
             }
             currentUser.lastLocationTime = System.currentTimeMillis();
             currentUser.batteryLevel = App.getAppComponent().getBatteryLevel();

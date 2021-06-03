@@ -12,7 +12,6 @@ import androidx.fragment.app.Fragment;
 import com.malykhinv.footstepsgeo.databinding.FragmentUserlistScreenBinding;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.UserlistScreenPresenter;
 
-
 public class UserlistScreenFragment extends Fragment {
 
     private FragmentUserlistScreenBinding b;

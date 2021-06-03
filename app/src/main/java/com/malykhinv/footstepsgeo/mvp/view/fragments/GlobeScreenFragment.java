@@ -36,6 +36,8 @@ public class GlobeScreenFragment extends Fragment {
 
     private static final List<String> REQUIRED_PERMISSIONS = Stream.of(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
             .collect(Collectors.toList());
+    private static final int POSITION_LAT_INDEX = 0;
+    private static final int POSITION_LNG_INDEX = 1;
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
@@ -123,36 +125,43 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void createUserMarker(User user) {
-        if (user != null && user.latLng != null && user.id != null) {
+        if (user != null && user.position != null && user.id != null) {
             String userId = user.id;
+            Double latitude = user.position[POSITION_LAT_INDEX];
+            Double longitude = user.position[POSITION_LNG_INDEX];
+
             Marker userMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(user.latLng)
+                    .position(new LatLng(latitude, longitude))
                     .title(user.id)
                     .visible(true));
             markers.put(userId, userMarker);
         }
     }
 
-
-
     public void moveUserMarker(User user) {
-        if (user != null && user.id != null & user.latLng != null) {
+        if (user != null && user.id != null & user.position != null) {
             Marker marker = markers.get(user.id);
             if (marker != null) {
-                marker.setPosition(user.latLng);
+                Double latitude = user.position[POSITION_LAT_INDEX];
+                Double longitude = user.position[POSITION_LNG_INDEX];
+                marker.setPosition(new LatLng(latitude, longitude));
             }
         }
     }
 
-    public void animateCamera(LatLng latLng) {
-        if (latLng != null) {
-            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_MIDDLE));
+    public void animateCamera(Double[] position) {
+        if (position != null) {
+            Double latitude = position[POSITION_LAT_INDEX];
+            Double longitude = position[POSITION_LNG_INDEX];
+            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
         }
     }
 
-    public void moveCamera(LatLng latLng) {
-        if (latLng != null) {
-            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, ZOOM_MIDDLE));
+    public void moveCamera(Double[] position) {
+        if (position != null) {
+            Double latitude = position[POSITION_LAT_INDEX];
+            Double longitude = position[POSITION_LNG_INDEX];
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
         }
     }
 

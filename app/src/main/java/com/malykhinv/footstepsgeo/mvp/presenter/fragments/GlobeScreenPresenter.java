@@ -9,7 +9,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.LatLng;
 import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
@@ -77,9 +76,9 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     public void onFabWasPressed() {
         userToFollow = model.getCurrentUser();
-        if (userToFollow != null && userToFollow.latLng != null) {
+        if (userToFollow != null && userToFollow.position != null) {
             isCameraFollows = true;
-            view.animateCamera(userToFollow.latLng);
+            view.animateCamera(userToFollow.position);
         }
     }
 
@@ -100,7 +99,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
         if (view.areAllPermissionsGranted()) {
             Location location = model.getMostAccurateLocation();
             if (location != null) {
-                user.latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                user.position = new Double[] {location.getLatitude(), location.getLongitude()};
                 placeUserOnMap(user);
             }
         } else {
@@ -110,10 +109,10 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     private void placeUserOnMap(User user) {
         if (user != null) {
-            if (user.latLng != null && !view.isMarkerExists(user.id)) {
+            if (user.position != null && !view.isMarkerExists(user.id)) {
                 view.createUserMarker(user);
                 if (user.id.equals(model.getCurrentGoogleUserId())) {
-                    view.moveCamera(user.latLng);
+                    view.moveCamera(user.position);
                 }
             }
         }
@@ -122,8 +121,8 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            model.updateCurrentUserState(latLng);
+            Double[] position = new Double[] {location.getLatitude(), location.getLongitude()};
+            model.updateCurrentUserState(position);
             User currentUser = model.getCurrentUser();
             if (currentUser != null) {
                 model.writeCurrentUserIntoDb();
@@ -131,7 +130,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
             }
 
             if (userToFollow != null && userToFollow.id.equals(currentGoogleUserId) && isCameraFollows) {
-                view.animateCamera(latLng);
+                view.animateCamera(position);
             }
         }
     }
