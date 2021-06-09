@@ -26,9 +26,9 @@ public class MainPresenter implements MainModel.MainCallback {
         view.loadCurrentGoogleUserInfo();
     }
 
-    public void onCurrentGoogleUserInfoWasLoaded(String userId, String userName) {
+    public void onCurrentGoogleUserInfoWasLoaded(String userId, String userName, String imageUrl) {
         Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: " + userName);
-        model.setCurrentGoogleUserInfo(userId, userName);
+        model.setCurrentGoogleUserInfo(userId, userName, imageUrl);
         model.loadCurrentUserFromDb();
     }
 

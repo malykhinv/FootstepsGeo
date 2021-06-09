@@ -35,6 +35,7 @@ public class MainModel {
 
     private static final int CURRENT_GOOGLE_USER_ID_INDEX = 0;
     private static final int CURRENT_GOOGLE_USER_USERNAME_INDEX = 1;
+    private static final int CURRENT_GOOGLE_USER_IMAGEURL_INDEX = 2;
     private static final int PERSONAL_CODE_LENGTH = 6;
     private static final int IMAGE_COUNT = 121;
     private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
@@ -100,8 +101,8 @@ public class MainModel {
 
     // Google account info:
 
-    public void setCurrentGoogleUserInfo(String userId, String userName) {
-        currentGoogleUserInfo = new String[] {userId, userName};
+    public void setCurrentGoogleUserInfo(String userId, String userName, String imageUrl) {
+        currentGoogleUserInfo = new String[] {userId, userName, imageUrl};
     }
 
     public String getCurrentGoogleUserId() {
@@ -110,6 +111,10 @@ public class MainModel {
 
     public String getCurrentGoogleUserName() {
         return currentGoogleUserInfo[CURRENT_GOOGLE_USER_USERNAME_INDEX];
+    }
+
+    public String getCurrentGoogleUserImageUrl() {
+        return currentGoogleUserInfo[CURRENT_GOOGLE_USER_IMAGEURL_INDEX];
     }
 
 
@@ -153,16 +158,17 @@ public class MainModel {
         String userId = getCurrentGoogleUserId();
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
+        String imageUrl = getCurrentGoogleUserImageUrl();
         int imageNumber = generateNewImageNumber();
-        Double[] position = null;
+        ArrayList<Double> position = null;
         String phoneNumber = null;
         int batteryLevel = App.getAppComponent().getBatteryLevel();
         ArrayList<String> friendsIds = null;
 
-        User newUser = new User(userId, userName, personalCode, imageNumber, position, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
+        User newUser = new User(userId, userName, personalCode, imageUrl, imageNumber, position, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
         usersReference.child(userId).setValue(newUser);
 
-        Log.d(TAG, "createNewUser: " + userName + ", " + personalCode);
+        Log.d(TAG, "createNewUser: " + imageUrl + ", " + personalCode);
         if (mainCallback != null) {
             mainCallback.onCurrentUserWasWrittenIntoDatabase(newUser);
         }
@@ -191,7 +197,7 @@ public class MainModel {
         }
     }
 
-    public void updateCurrentUserState(Double[] position) {
+    public void updateCurrentUserState(ArrayList<Double> position) {
         if (currentUser != null) {
             if (position != null) {
                 currentUser.position = position;
@@ -320,7 +326,9 @@ public class MainModel {
     }
 
     public void dispose() {
-        disposable.dispose();
+        if (disposable != null) {
+            disposable.dispose();
+        }
     }
 
     // Maps:

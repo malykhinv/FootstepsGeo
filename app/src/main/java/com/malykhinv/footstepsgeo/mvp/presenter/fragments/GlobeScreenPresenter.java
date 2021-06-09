@@ -16,6 +16,7 @@ import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
@@ -99,7 +100,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
         if (view.areAllPermissionsGranted()) {
             Location location = model.getMostAccurateLocation();
             if (location != null) {
-                user.position = new Double[] {location.getLatitude(), location.getLongitude()};
+                user.position = new ArrayList<>(Arrays.asList(location.getLatitude(), location.getLongitude()));
                 placeUserOnMap(user);
             }
         } else {
@@ -121,7 +122,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            Double[] position = new Double[] {location.getLatitude(), location.getLongitude()};
+            ArrayList<Double> position = new ArrayList<>(Arrays.asList(location.getLatitude(), location.getLongitude()));
             model.updateCurrentUserState(position);
             User currentUser = model.getCurrentUser();
             if (currentUser != null) {

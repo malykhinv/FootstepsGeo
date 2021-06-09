@@ -9,6 +9,8 @@ import com.malykhinv.footstepsgeo.mvp.model.GreetingModel;
 import com.malykhinv.footstepsgeo.mvp.view.GreetingActivity;
 import com.malykhinv.footstepsgeo.mvp.view.MainActivity;
 
+import java.util.Objects;
+
 public class GreetingPresenter implements GreetingModel.Callback {
 
     private static final int DEFAULT_REQUEST_CODE = 0;
@@ -79,6 +81,7 @@ public class GreetingPresenter implements GreetingModel.Callback {
             Intent intent = new Intent(view, MainActivity.class);
             intent.putExtra("userId", currentUser.getUid());
             intent.putExtra("userName", currentUser.getDisplayName());
+            intent.putExtra("imageUrl", Objects.requireNonNull(currentUser.getPhotoUrl()).toString());
             view.startActivity(intent);
             view.finish();
         }
