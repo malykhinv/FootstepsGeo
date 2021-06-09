@@ -12,7 +12,8 @@
     <dimen name="margin_horizontal_xsmall">8dp</dimen>
     <dimen name="margin_horizontal_xxsmall">4dp</dimen>
 
-    <dimen name="padding_big">16dp</dimen>
+    <dimen name="padding_large">16dp</dimen>
+    <dimen name="padding_big">12dp</dimen>
     <dimen name="padding">8dp</dimen>
     <dimen name="padding_small">4dp</dimen>
 
@@ -27,13 +28,12 @@
     <dimen name="height_mover">8dp</dimen>
     <dimen name="width_mover">128dp</dimen>
 
-    <dimen name="height_userpic">48dp</dimen>
-    <dimen name="width_userpic">48dp</dimen>
+    <dimen name="size_userpic">48dp</dimen>
+    <dimen name="size_userpic_small">32dp</dimen>
 
-    <dimen name="text_size_xlarge">48sp</dimen>
+    <dimen name="text_size_xlarge">45sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
-    <dimen name="text_size_regular">18sp</dimen>
-    <dimen name="text_size_small">16sp</dimen>
+    <dimen name="text_size_regular">14sp</dimen>
 
     <dimen name="radius_large">24dp</dimen>
     <dimen name="radius">8dp</dimen>

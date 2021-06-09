@@ -69,9 +69,10 @@ public class GlobeScreenFragment extends Fragment {
         b.mapView.onCreate(savedInstanceState);
         b.mapView.onResume();
 
-        presenter = new GlobeScreenPresenter(this);
-        presenter.onViewCreated();
-
+        if (presenter == null) {
+            presenter = new GlobeScreenPresenter(this);
+            presenter.onViewCreated();
+        }
     }
 
     public boolean areAllPermissionsGranted() {
@@ -116,7 +117,7 @@ public class GlobeScreenFragment extends Fragment {
 
     public void setMapUiSettings() {
         googleMap.setMaxZoomPreference(ZOOM_MAX);
-        googleMap.setPadding((int) context.getResources().getDimension(R.dimen.padding_horizontal), 0, 0, (int) context.getResources().getDimension(R.dimen.padding_big));
+        googleMap.setPadding((int) context.getResources().getDimension(R.dimen.padding_horizontal), 0, 0, (int) context.getResources().getDimension(R.dimen.padding_large));
         googleMap.getUiSettings().setScrollGesturesEnabled(true);
         googleMap.getUiSettings().setRotateGesturesEnabled(false);
         googleMap.getUiSettings().setMapToolbarEnabled(false);
@@ -127,14 +128,16 @@ public class GlobeScreenFragment extends Fragment {
     public void createUserMarker(User user) {
         if (user != null && user.position != null && user.id != null) {
             String userId = user.id;
-            Double latitude = user.position[POSITION_LAT_INDEX];
-            Double longitude = user.position[POSITION_LNG_INDEX];
+            Double latitude = user.position.get(POSITION_LAT_INDEX);
+            Double longitude = user.position.get(POSITION_LNG_INDEX);
 
-            Marker userMarker = googleMap.addMarker(new MarkerOptions()
-                    .position(new LatLng(latitude, longitude))
-                    .title(user.id)
-                    .visible(true));
-            markers.put(userId, userMarker);
+            if (googleMap != null) {
+                Marker userMarker = googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(latitude, longitude))
+                        .title(user.id)
+                        .visible(true));
+                markers.put(userId, userMarker);
+            }
         }
     }
 
@@ -142,25 +145,25 @@ public class GlobeScreenFragment extends Fragment {
         if (user != null && user.id != null & user.position != null) {
             Marker marker = markers.get(user.id);
             if (marker != null) {
-                Double latitude = user.position[POSITION_LAT_INDEX];
-                Double longitude = user.position[POSITION_LNG_INDEX];
+                Double latitude = user.position.get(POSITION_LAT_INDEX);
+                Double longitude = user.position.get(POSITION_LNG_INDEX);
                 marker.setPosition(new LatLng(latitude, longitude));
             }
         }
     }
 
-    public void animateCamera(Double[] position) {
-        if (position != null) {
-            Double latitude = position[POSITION_LAT_INDEX];
-            Double longitude = position[POSITION_LNG_INDEX];
+    public void animateCamera(ArrayList<Double> position) {
+        if (position != null && googleMap != null) {
+            Double latitude = position.get(POSITION_LAT_INDEX);
+            Double longitude = position.get(POSITION_LNG_INDEX);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
         }
     }
 
-    public void moveCamera(Double[] position) {
-        if (position != null) {
-            Double latitude = position[POSITION_LAT_INDEX];
-            Double longitude = position[POSITION_LNG_INDEX];
+    public void moveCamera(ArrayList<Double> position) {
+        if (position != null && googleMap != null) {
+            Double latitude = position.get(POSITION_LAT_INDEX);
+            Double longitude = position.get(POSITION_LNG_INDEX);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
         }
     }
@@ -170,9 +173,11 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        b = null;
+    public void onDestroy() {
+        super.onDestroy();
+        googleMap = null;
+        presenter = null;
+        view = null;
     }
 
     public boolean isMarkerExists(String id) {

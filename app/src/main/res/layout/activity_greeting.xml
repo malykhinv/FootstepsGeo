@@ -55,7 +55,7 @@
         android:layout_marginTop="@dimen/margin_vertical_big"
         android:background="@drawable/button_blue_selector"
         android:fontFamily="@font/podkova"
-        android:padding="@dimen/padding_big"
+        android:padding="@dimen/padding_large"
         android:text="@string/sign_in"
         android:textAllCaps="true"
         android:textColor="@color/white"

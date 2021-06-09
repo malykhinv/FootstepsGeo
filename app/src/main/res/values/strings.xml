@@ -3,6 +3,7 @@
     <string name="greeting_core">You know where your family is</string>
 
     <string name="sign_in">Sign in via Google</string>
+    <string name="sign_out">Sign out</string>
 
     <string name="userlist">Userlist</string>
     <string name="globe">Globe</string>
@@ -17,7 +18,6 @@
     <string name="your_personal_code_copied_to_clipboard">Your personal code copied to clipboard!</string>
     <string name="my_code_in_app_use_it_to_find_me" formatted="true">My code in %1$s app is %2$s. Use it to find me! 🌍</string>
     <string name="share_via">Share via…</string>
-    <string name="hi">Hi,\n</string>
 
     <string name="oh_no">Oh no!</string>
     <string name="you_are_offline">You\'re offline. Check your internet connection.</string>

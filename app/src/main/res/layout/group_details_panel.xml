@@ -26,8 +26,8 @@
 
         <ImageView
             android:id="@+id/imageUserpic"
-            android:layout_width="@dimen/width_userpic"
-            android:layout_height="@dimen/height_userpic"
+            android:layout_width="@dimen/size_userpic"
+            android:layout_height="@dimen/size_userpic"
             android:layout_marginStart="@dimen/margin_horizontal"
             android:layout_marginTop="@dimen/margin_vertical"
             android:background="@drawable/userpic_background"
@@ -79,7 +79,7 @@
                 android:fontFamily="@font/podkova"
                 android:text="0.8 км"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_regular" />
         </LinearLayout>
 
         <LinearLayout
@@ -110,7 +110,7 @@
                 android:fontFamily="@font/podkova"
                 android:text="41%"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_regular" />
         </LinearLayout>
 
         <LinearLayout
@@ -141,7 +141,7 @@
                 android:fontFamily="@font/podkova"
                 android:text="Сейчас"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_size_small" />
+                android:textSize="@dimen/text_size_regular" />
         </LinearLayout>
 
         <LinearLayout

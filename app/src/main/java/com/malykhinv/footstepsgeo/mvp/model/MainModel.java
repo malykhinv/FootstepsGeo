@@ -215,6 +215,14 @@ public class MainModel {
         return currentUser;
     }
 
+    public String getCurrentUserPersonalCode() {
+        return currentUser.personalCode;
+    }
+
+    public void clearCurrentUser() {
+        currentUser = null;
+    }
+
 
     // Firebase: friends
 
