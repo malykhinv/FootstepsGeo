@@ -24,7 +24,7 @@ public class AccountScreenPresenter implements MainModel.AccountCallback{
     }
 
     private void showCurrentUserInfo(User currentUser) {
-        if (currentUser != null) {
+        if (view != null && currentUser != null) {
             if (currentUser.imageUrl != null) {
                 view.showUserpic(currentUser.imageUrl);
             }
