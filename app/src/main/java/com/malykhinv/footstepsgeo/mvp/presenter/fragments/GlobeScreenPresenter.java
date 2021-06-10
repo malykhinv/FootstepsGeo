@@ -1,7 +1,6 @@
 package com.malykhinv.footstepsgeo.mvp.presenter.fragments;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -19,7 +18,6 @@ import java.util.Arrays;
 
 public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
-    private static final int PERMISSIONS_REQUEST_CODE = 100;
     private final Context context = App.getAppComponent().getContext();
     private final GlobeScreenFragment view;
     private final MainModel model;
@@ -52,20 +50,20 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
         ArrayList<String> missingPermissions = view.getMissingPermissions();
         if (missingPermissions.size() > 0) {
             String[] missingPermissionsAsStringArray = new String[missingPermissions.size()];
-            view.askForPermissions(missingPermissions.toArray(missingPermissionsAsStringArray), PERMISSIONS_REQUEST_CODE);
+            view.askForPermissions(missingPermissions.toArray(missingPermissionsAsStringArray));
         }
     }
 
-    public void onRequestPermissionsResult(String[] permissions, int[] grantResults) {
-        for (int i = 0; i < grantResults.length; i++) {
-            if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
-                view.showMessage(String.format(context.getString(R.string.permission_is_needed), permissions[i]));
+    public void onRequestPermissionsResult(Boolean result) {
+        if (!result) {
+                view.showMessage(context.getString(R.string.permission_is_needed));
             }
-        }
-        if (view.areAllPermissionsGranted()) {
-            User currentUser = model.getCurrentUser();
-            initializeCurrentUserOnMap(currentUser);
-            model.trackDeviceLocation();
+        else {
+            if (view.areAllPermissionsGranted()) {
+                User currentUser = model.getCurrentUser();
+                initializeCurrentUserOnMap(currentUser);
+                model.trackDeviceLocation();
+            }
         }
     }
 

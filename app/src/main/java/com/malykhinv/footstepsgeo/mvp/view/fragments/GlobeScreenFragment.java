@@ -25,6 +25,7 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.databinding.FragmentGlobeScreenBinding;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.GlobeScreenPresenter;
+import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ public class GlobeScreenFragment extends Fragment {
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
+
     private View view;
     private FragmentGlobeScreenBinding b;
     private GlobeScreenPresenter presenter;
@@ -94,13 +96,15 @@ public class GlobeScreenFragment extends Fragment {
         return missingPermissions;
     }
 
-    public void askForPermissions(String[] permissions, int requestCode) {
-        requestPermissions(permissions, requestCode);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        presenter.onRequestPermissionsResult(permissions, grantResults);
+    public void askForPermissions(String[] permissions) {
+        RxPermissions rxPermissions = new RxPermissions(this);
+        rxPermissions
+                .requestEachCombined(permissions)
+                .subscribe(permission -> {
+                    if (presenter != null) {
+                        presenter.onRequestPermissionsResult(permission.granted);
+                    }
+            });
     }
 
     public void getMap() {
