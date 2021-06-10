@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
@@ -19,7 +18,6 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -39,7 +37,6 @@ public class MainModel {
     private static final int PERSONAL_CODE_LENGTH = 6;
     private static final int IMAGE_COUNT = 121;
     private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
-    private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
     private final DatabaseReference usersReference = App.getAppComponent().getDbUsersReference();
     private final DatabaseReference personalCodesReference = App.getAppComponent().getDbPersonalCodesReference();
@@ -121,7 +118,6 @@ public class MainModel {
     // Firebase: current user
 
     public void loadCurrentUserFromDb() {
-        Log.d(TAG, "getCurrentUserFromDb: " + getCurrentGoogleUserId());
         usersReference.child(getCurrentGoogleUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -140,7 +136,6 @@ public class MainModel {
                         accountCallback.onCurrentUserReceived(user);
                     }
                 } else {
-                    Log.d(TAG, "getCurrentUserFromDb: failure");
                     user = null;
                     if (mainCallback != null) {
                         mainCallback.onNullCurrentUserReceived();
@@ -168,7 +163,6 @@ public class MainModel {
         User newUser = new User(userId, userName, personalCode, imageUrl, imageNumber, position, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
         usersReference.child(userId).setValue(newUser);
 
-        Log.d(TAG, "createNewUser: " + imageUrl + ", " + personalCode);
         if (mainCallback != null) {
             mainCallback.onCurrentUserWasWrittenIntoDatabase(newUser);
         }
@@ -181,7 +175,6 @@ public class MainModel {
         for (int i = 0; i < randomCode.length; i++){
             randomCode[i] = alphabet09.charAt(random.nextInt(alphabet09.length()));
         }
-        Log.d(TAG, "generateNewPersonalCode: " + Arrays.toString(randomCode));
         return new String(randomCode);
     }
 
@@ -192,7 +185,6 @@ public class MainModel {
 
     public void writeCurrentUserIntoDb() {
         if (currentUser != null) {
-            Log.d(TAG, "writeUserIntoDatabase: " + user.id);
             usersReference.child(user.id).setValue(user);
         }
     }
@@ -227,18 +219,15 @@ public class MainModel {
     // Firebase: friends
 
     public void loadIdFromDb(String personalCode) {
-        Log.d(TAG, "loadIdFromDb: " + personalCode);
         personalCodesReference.child(personalCode).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
-                    Log.d(TAG, "loadIdFromDb: success. " + personalCode);
                     String friendsId = snapshot.getValue(String.class);
 //                    if (userlistCallback != null) {
 //                        userlistCallback.onFriendsIdReceived(friendsId);
 //                    }
                 } else {
-                    Log.d(TAG, "loadIdFromDb: failure");
                     user = null;
 //                    if (userlistCallback != null) {
 //                        userlistCallback.onNullFriendsIdReceived();
@@ -253,7 +242,6 @@ public class MainModel {
     }
 
     public void loadUserFromDb(String id) {
-        Log.d(TAG, "loadUserFromDb: " + id);
         usersReference.child(getCurrentGoogleUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -273,7 +261,6 @@ public class MainModel {
                     }
 
                 } else {
-                    Log.d(TAG, "loadUserFromDb: failure");
                     user = null;
                     if (mainCallback != null) {
                         mainCallback.onNullCurrentUserReceived();
@@ -346,13 +333,11 @@ public class MainModel {
 
             @Override
             public void onProviderEnabled(@NonNull String provider) {
-                Log.d(TAG, "onProviderEnabled: " + provider);
                 getMostAccurateLocation();
             }
 
             @Override
             public void onProviderDisabled(@NonNull String provider) {
-                Log.d(TAG, "onProviderDisabled: " + provider);
                 try {
                     getMostAccurateLocation();
                 } catch (Exception e) {
@@ -364,7 +349,6 @@ public class MainModel {
 
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                Log.d(TAG, "onLocationChanged: " + location.getLatitude() +", " + location.getLatitude());
                 if (globeCallback != null) {
                     globeCallback.onLocationChanged(location);
                 }
@@ -380,7 +364,6 @@ public class MainModel {
         }
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1, 1, locationListener);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1, 1, locationListener);
-        Log.d(TAG, "trackLocation: requested");
     }
 
     public Location getMostAccurateLocation() {
@@ -398,9 +381,6 @@ public class MainModel {
                     mostAccurateLocation = location;
                 }
             }
-        }
-        if (mostAccurateLocation != null) {
-            Log.d(TAG, "getMostAccurateLocation: " + mostAccurateLocation.getProvider());
         }
         return mostAccurateLocation;
     }

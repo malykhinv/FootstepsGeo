@@ -3,7 +3,6 @@ package com.malykhinv.footstepsgeo.mvp.model;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
-import android.util.Log;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -33,7 +32,6 @@ public class GreetingModel {
     private static final int TIMER_DURATION = 500;
     private static final int RC_SIGN_IN = 4469;
     private static final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
     private Callback callback;
     private Disposable disposable;
@@ -66,25 +64,21 @@ public class GreetingModel {
 
             @Override
             public void onSubscribe(@NonNull Disposable d) {
-                Log.d(TAG, "onSubscribe: ");
                 disposable = d;
                 getConnectionStatus();
             }
 
             @Override
             public void onNext(@NonNull Long tick) {
-                Log.d(TAG, "onNext: ");
                 getConnectionStatus();
             }
 
             @Override
             public void onError(@NonNull Throwable e) {
-                Log.w(TAG, "onError: " + e.getMessage());
             }
 
             @Override
             public void onComplete() {
-                Log.d(TAG, "onComplete: ");
             }
         };
 
@@ -134,9 +128,7 @@ public class GreetingModel {
         try{
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(Objects.requireNonNull(account).getIdToken());
-            Log.d(TAG, "handleSignInResult: " + account.getId());
         } catch (ApiException e) {
-            Log.w(TAG, "handleSignInResult: ", e);
             if (callback != null) {
                 callback.onErrorWhileSigningIn(e.getMessage());
             }
@@ -148,13 +140,11 @@ public class GreetingModel {
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-                        Log.d(TAG, "firebaseAuthWithGoogle: success");
                         FirebaseUser currentUser = auth.getCurrentUser();
                         if (callback != null) {
                             callback.onSignedIn(currentUser);
                         }
                     } else {
-                        Log.w(TAG, "firebaseAuthWithGoogle: failure", task.getException());
                         if (callback != null) {
                             callback.onErrorWhileSigningIn(Objects.requireNonNull(task.getException()).getMessage());
                         }

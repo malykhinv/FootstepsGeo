@@ -1,7 +1,5 @@
 package com.malykhinv.footstepsgeo.mvp.presenter;
 
-import android.util.Log;
-
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
@@ -9,7 +7,6 @@ import com.malykhinv.footstepsgeo.mvp.view.MainActivity;
 
 public class MainPresenter implements MainModel.MainCallback {
 
-    private final String TAG = this.getClass().getName();
     private final MainActivity view;
     private final MainModel model;
 
@@ -27,7 +24,6 @@ public class MainPresenter implements MainModel.MainCallback {
     }
 
     public void onCurrentGoogleUserInfoWasLoaded(String userId, String userName, String imageUrl) {
-        Log.d(TAG, "onCurrentGoogleUserInfoWasLoaded: " + userName);
         model.setCurrentGoogleUserInfo(userId, userName, imageUrl);
         model.loadCurrentUserFromDb();
     }
@@ -44,7 +40,6 @@ public class MainPresenter implements MainModel.MainCallback {
 
     @Override
     public void onNullCurrentUserReceived() {
-        Log.d(TAG, "onNullCurrentUserReceived: ");
         model.createNewUser();
     }
 

@@ -3,7 +3,6 @@ package com.malykhinv.footstepsgeo.mvp.presenter.fragments;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -21,7 +20,6 @@ import java.util.Arrays;
 public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
     private static final int PERMISSIONS_REQUEST_CODE = 100;
-    private final String TAG = this.getClass().getName();
     private final Context context = App.getAppComponent().getContext();
     private final GlobeScreenFragment view;
     private final MainModel model;
@@ -39,13 +37,11 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     // Call from View:
 
     public void onViewCreated() {
-        Log.d(TAG, "onViewCreated: ");
         view.getMap();
     }
 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        Log.d(TAG, "onMapReady: " + googleMap);
         view.attachMap(googleMap);
         view.setMapStyle();
         view.setMapUiSettings();
@@ -53,7 +49,6 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     }
 
     private void checkPermissions() {
-        Log.d(TAG, "checkPermissions: ");
         ArrayList<String> missingPermissions = view.getMissingPermissions();
         if (missingPermissions.size() > 0) {
             String[] missingPermissionsAsStringArray = new String[missingPermissions.size()];
@@ -62,7 +57,6 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     }
 
     public void onRequestPermissionsResult(String[] permissions, int[] grantResults) {
-        Log.d(TAG, "onRequestPermissionsResult: ");
         for (int i = 0; i < grantResults.length; i++) {
             if (grantResults[i] == PackageManager.PERMISSION_DENIED) {
                 view.showMessage(String.format(context.getString(R.string.permission_is_needed), permissions[i]));
