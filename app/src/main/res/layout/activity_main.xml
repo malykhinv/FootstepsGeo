@@ -26,7 +26,8 @@
         android:paddingBottom="@dimen/padding_small"
         app:itemIconSize="@dimen/height_navigation_icon"
         app:itemIconTint="@color/item_bottom_navigation_color"
-        app:labelVisibilityMode="unlabeled"
+        app:itemTextColor="@color/item_bottom_navigation_color"
+        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_navigation" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

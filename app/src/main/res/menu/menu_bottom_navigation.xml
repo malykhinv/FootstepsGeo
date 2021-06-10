@@ -2,9 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/menuItemUserlist"
-        android:tag="@string/userlist"
+        android:tag="@string/friends"
         android:icon="@drawable/image_userlist"
-        android:title="@string/userlist" />
+        android:title="@string/friends" />
 
     <item
         android:id="@+id/menuItemGlobe"

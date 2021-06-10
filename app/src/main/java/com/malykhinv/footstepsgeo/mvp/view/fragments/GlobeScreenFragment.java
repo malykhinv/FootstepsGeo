@@ -42,7 +42,6 @@ public class GlobeScreenFragment extends Fragment {
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
-
     private View view;
     private FragmentGlobeScreenBinding b;
     private GlobeScreenPresenter presenter;
@@ -108,7 +107,9 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void getMap() {
-        b.mapView.getMapAsync(presenter);
+        if (googleMap == null) {
+            b.mapView.getMapAsync(presenter);
+        }
     }
 
     public void attachMap(GoogleMap googleMap) {
@@ -179,9 +180,6 @@ public class GlobeScreenFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        googleMap = null;
-        presenter = null;
-        view = null;
     }
 
     public boolean isMarkerExists(String id) {
