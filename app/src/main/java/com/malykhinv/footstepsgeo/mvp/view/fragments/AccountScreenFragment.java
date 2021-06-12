@@ -61,7 +61,7 @@ public class AccountScreenFragment extends Fragment {
 
         if (view == null) {
             view = b.getRoot();
-        } else {
+        } else if (view.getParent() != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
         return view;
@@ -100,7 +100,7 @@ public class AccountScreenFragment extends Fragment {
         }
     }
 
-    public void showUserOptionsPopup(View view) {
+    public void showAccountOptionsPopup(View view) {
         PopupMenu popup = new PopupMenu(this.getContext(), view);
         popup.setOnMenuItemClickListener(v -> {
             if (presenter != null) {
@@ -109,7 +109,7 @@ public class AccountScreenFragment extends Fragment {
             return false;
         });
         MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.menu_user_options, popup.getMenu());
+        inflater.inflate(R.menu.menu_account_options, popup.getMenu());
         popup.show();
     }
 

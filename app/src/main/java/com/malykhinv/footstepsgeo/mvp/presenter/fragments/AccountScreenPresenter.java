@@ -43,7 +43,7 @@ public class AccountScreenPresenter implements MainModel.AccountCallback{
     }
 
     public void onUserpicWasClicked(View view) {
-        this.view.showUserOptionsPopup(view);
+        this.view.showAccountOptionsPopup(view);
     }
 
     public void onShareCodeButtonWasClicked() {

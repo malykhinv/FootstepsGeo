@@ -58,7 +58,7 @@ public class GlobeScreenFragment extends Fragment {
 
         if (view == null) {
             view = b.getRoot();
-        } else {
+        } else if (view.getParent() != null){
             ((ViewGroup) view.getParent()).removeView(view);
         }
         return view;

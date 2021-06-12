@@ -1,7 +1,8 @@
 <resources>
     <dimen name="margin_fab">16dp</dimen>
 
-    <dimen name="margin_vertical_large">96dp</dimen>
+    <dimen name="margin_vertical_xlarge">96dp</dimen>
+    <dimen name="margin_vertical_large">60dp</dimen>
     <dimen name="margin_vertical_big">48dp</dimen>
     <dimen name="margin_vertical">24dp</dimen>
     <dimen name="margin_vertical_small">12dp</dimen>
@@ -33,6 +34,7 @@
 
     <dimen name="text_size_xlarge">45sp</dimen>
     <dimen name="text_size_large">24sp</dimen>
+    <dimen name="text_size_big">18sp</dimen>
     <dimen name="text_size_regular">14sp</dimen>
 
     <dimen name="radius_large">24dp</dimen>
