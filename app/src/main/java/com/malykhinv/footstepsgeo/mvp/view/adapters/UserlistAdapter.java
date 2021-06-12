@@ -4,9 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -31,14 +32,25 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
     @Override
     @NonNull
     public UserlistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("LLL", "onCreateViewHolder: ");
         return new UserlistViewHolder(GroupListItemBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull UserlistAdapter.UserlistViewHolder holder, int index) {
-        Log.d("F0", "onBindViewHolder: " + friendUsers.get(0).name);
         holder.bind(friendUsers.get(index));
+    }
+
+    @Override
+    public void onViewAttachedToWindow(UserlistViewHolder holder) {
+        Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+        holder.itemView.startAnimation(animation);
+        super.onViewAttachedToWindow(holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(UserlistViewHolder holder) {
+        holder.itemView.clearAnimation();
+        super.onViewDetachedFromWindow(holder);
     }
 
     @Override
@@ -122,6 +134,5 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
                         .into(b.imageUser);
             }
         }
-
     }
 }

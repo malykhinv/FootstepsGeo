@@ -56,7 +56,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height_label"
             android:layout_marginStart="@dimen/margin_horizontal_small"
-            android:background="@drawable/user_info_background"
+            android:background="@drawable/tiny_rounded_grey_background"
             android:paddingStart="@dimen/padding_horizontal_small"
             android:paddingEnd="@dimen/padding_horizontal_small"
             app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
@@ -64,11 +64,11 @@
 
             <ImageView
                 android:id="@+id/imageUserInfoDistance"
-                android:layout_width="@dimen/icon_size_small"
-                android:layout_height="@dimen/icon_size_small"
+                android:layout_width="@dimen/icon_size_xsmall"
+                android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_distance"
-                android:backgroundTint="@color/gray_65" />
+                android:backgroundTint="@color/grey_59" />
 
             <TextView
                 android:id="@+id/textUserInfoDistance"
@@ -87,7 +87,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height_label"
             android:layout_marginStart="@dimen/margin_horizontal_small"
-            android:background="@drawable/user_info_background"
+            android:background="@drawable/tiny_rounded_grey_background"
             android:paddingStart="@dimen/padding_horizontal_small"
             android:paddingEnd="@dimen/padding_horizontal_small"
             app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
@@ -95,11 +95,11 @@
 
             <ImageView
                 android:id="@+id/imageUserInfoBattery"
-                android:layout_width="@dimen/icon_size_small"
-                android:layout_height="@dimen/icon_size_small"
+                android:layout_width="@dimen/icon_size_xsmall"
+                android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_battery"
-                android:backgroundTint="@color/gray_65" />
+                android:backgroundTint="@color/grey_59" />
 
             <TextView
                 android:id="@+id/textUserInfoBattery"
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="@dimen/height_label"
             android:layout_marginStart="16dp"
-            android:background="@drawable/user_info_background"
+            android:background="@drawable/tiny_rounded_grey_background"
             android:paddingStart="@dimen/padding_horizontal_small"
             android:paddingEnd="@dimen/padding_horizontal_small"
             app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
@@ -126,11 +126,11 @@
 
             <ImageView
                 android:id="@+id/imageUserInfoTime"
-                android:layout_width="@dimen/icon_size_small"
-                android:layout_height="@dimen/icon_size_small"
+                android:layout_width="@dimen/icon_size_xsmall"
+                android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_time"
-                android:backgroundTint="@color/gray_65" />
+                android:backgroundTint="@color/grey_59" />
 
             <TextView
                 android:id="@+id/textUserInfoTime"

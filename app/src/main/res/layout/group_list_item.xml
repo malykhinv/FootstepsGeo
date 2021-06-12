@@ -2,23 +2,20 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/margin_vertical">
 
     <ImageView
         android:id="@+id/imageUser"
         android:layout_width="@dimen/size_userpic"
         android:layout_height="@dimen/size_userpic"
-        android:layout_marginStart="@dimen/margin_horizontal"
-        android:layout_marginTop="@dimen/margin_vertical"
-        android:layout_marginBottom="@dimen/margin_vertical"
         android:layout_weight="0"
         app:srcCompat="@drawable/userpic_background" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/size_userpic"
-        android:layout_marginStart="@dimen/margin_horizontal_small"
-        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_horizontal_small"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -26,7 +23,6 @@
             android:id="@+id/textName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:fontFamily="@font/podkova"
             android:text="username"
             android:textAlignment="viewStart"
@@ -38,29 +34,35 @@
 
         <TextView
             android:id="@+id/text_user_address"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
             android:layout_marginTop="@dimen/margin_vertical_xsmall"
-            android:layout_weight="0"
             android:fontFamily="@font/podkova"
-            android:text="@string/na"
-            android:textColor="@color/gray_65"
+            android:text="address"
+            android:textColor="@color/grey_59"
             android:textSize="@dimen/text_size_regular" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_divider"
+            android:layout_marginTop="@dimen/margin_vertical"
+            android:background="@color/grey_f6" />
 
     </LinearLayout>
 
     <ImageButton
         android:id="@+id/imageButtonFriendOptions"
-        android:layout_width="@dimen/icon_size"
-        android:layout_height="@dimen/icon_size"
-        android:layout_gravity="center_vertical"
-        android:layout_marginEnd="@dimen/margin_horizontal_small"
-        android:layout_weight="0"
+        android:layout_width="@dimen/icon_size_small"
+        android:layout_height="@dimen/icon_size_small"
+        android:layout_gravity="center_vertical|end"
+        android:layout_marginBottom="@dimen/margin_vertical_small"
         android:background="@android:color/transparent"
-        android:padding="@dimen/padding_big"
-        android:scaleType="fitCenter"
-        app:srcCompat="@drawable/image_menu"
-        app:tint="@color/gray_65" />
+        android:clickable="true"
+        android:contextClickable="false"
+        android:focusable="true"
+        android:scaleType="centerInside"
+        android:src="@drawable/image_menu"
+        app:tint="@color/grey_59" />
 
 </LinearLayout>

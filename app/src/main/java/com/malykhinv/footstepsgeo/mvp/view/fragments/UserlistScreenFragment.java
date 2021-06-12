@@ -64,7 +64,6 @@ public class UserlistScreenFragment extends Fragment {
         friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
         friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
         friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-
         updateUI(friendUsers);
     }
 
@@ -75,6 +74,7 @@ public class UserlistScreenFragment extends Fragment {
     }
 
     public void updateUI(ArrayList<User> friendUsers) {
+        b.textFriendCount.setText(String.valueOf(friendUsers.size()));
         userlistAdapter.clearItems();
         userlistAdapter.setItems(friendUsers);
     }

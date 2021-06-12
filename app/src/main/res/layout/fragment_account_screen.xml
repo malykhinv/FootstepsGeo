@@ -4,7 +4,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f6"
+    android:background="@color/grey_f6"
     android:fitsSystemWindows="true">
 
     <ImageView
@@ -103,7 +103,7 @@
         android:fontFamily="@font/podkova"
         android:text="@string/personal_code_sub_description"
         android:textAlignment="textStart"
-        android:textColor="@color/gray_65"
+        android:textColor="@color/grey_59"
         android:textSize="@dimen/text_size_regular"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="@+id/layoutPersonalCode"
