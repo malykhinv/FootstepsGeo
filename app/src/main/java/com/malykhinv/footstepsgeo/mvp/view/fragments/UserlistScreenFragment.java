@@ -69,7 +69,7 @@ public class UserlistScreenFragment extends Fragment {
 
     private void initializeRecyclerView() {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        userlistAdapter = new UserlistAdapter();
+        userlistAdapter = new UserlistAdapter(presenter);
         b.recyclerView.setAdapter(userlistAdapter);
     }
 

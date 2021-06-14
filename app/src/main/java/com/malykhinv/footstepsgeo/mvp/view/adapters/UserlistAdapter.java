@@ -5,9 +5,12 @@ import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.PopupMenu;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +21,7 @@ import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.databinding.GroupListItemBinding;
 import com.malykhinv.footstepsgeo.di.App;
+import com.malykhinv.footstepsgeo.mvp.presenter.fragments.UserlistScreenPresenter;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,7 +31,12 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
 
     private static final int FRIEND_OPTIONS_COUNT = 2;
     private final Context context = App.getAppComponent().getContext();
+    private final UserlistScreenPresenter presenter;
     public ArrayList<User> friendUsers = new ArrayList<>();
+
+    public UserlistAdapter(UserlistScreenPresenter presenter) {
+        this.presenter = presenter;
+    }
 
     @Override
     @NonNull
@@ -38,6 +47,21 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
     @Override
     public void onBindViewHolder(@NonNull UserlistAdapter.UserlistViewHolder holder, int index) {
         holder.bind(friendUsers.get(index));
+        holder.b.imageButtonFriendOptions.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                PopupMenu popup = new PopupMenu(context, view);
+                popup.setOnMenuItemClickListener(item -> {
+                    if (presenter != null) {
+                        presenter.onFriendOptionWasClicked(item, holder.getAdapterPosition());
+                    }
+                    return false;
+                });
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+                popup.show();
+            }
+        });
     }
 
     @Override
@@ -80,8 +104,8 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
         public void bind(User friendUser) {
             updateUI(friendUser);
 
-            b.imageButtonFriendOptions.setOnClickListener(v -> {
-                // TODO
+            b.imageButtonFriendOptions.setOnClickListener(view -> {
+//                showFriendOptionsPopup(view);
             });
         }
 

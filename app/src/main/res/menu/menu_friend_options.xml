@@ -2,11 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/get_route"
-        android:title="@string/get_route"
-        android:tag="@string/get_route" />
+        android:id="@+id/menuItemUpdateFriendInfo"
+        android:title="@string/update"
+        android:tag="@string/update" />
     <item
-        android:id="@+id/remove"
-        android:title="@string/remove"
-        android:tag="@string/remove"/>
+        android:id="@+id/menuItemGetRoute"
+        android:title="@string/get_route" />
+    <item
+        android:id="@+id/menuItemRemoveFriend"
+        android:title="@string/remove" />
 </menu>

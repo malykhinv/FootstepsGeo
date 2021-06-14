@@ -320,6 +320,10 @@ public class MainModel {
         friendsOnTimer.subscribe(friendsObserver);
     }
 
+    public void removeFriend(String id) {
+        // TODO
+    }
+
     public void dispose() {
         if (disposable != null) {
             disposable.dispose();

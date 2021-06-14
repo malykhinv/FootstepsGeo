@@ -10,6 +10,9 @@
     <string name="account">Account</string>
 
     <string name="friends_you_follow">Friends you follow</string>
+
+    <string name="add_friend">Add friend</string>
+    <string name="update">Update</string>
     <string name="remove">Remove</string>
     <string name="get_route">Get route</string>
     <string name="call">Call</string>

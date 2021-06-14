@@ -4,9 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingBottom="@dimen/margin_vertical_xlarge"
-    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     app:behavior_peekHeight="@dimen/height_panel_peek"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior"
     app:layout_insetEdge="bottom">
 
     <View
@@ -22,7 +21,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/lower_panel_background">
+        android:background="@drawable/lower_panel_background"
+        android:paddingBottom="@dimen/margin_vertical_xlarge">
 
         <ImageView
             android:id="@+id/imageUserpic"
@@ -68,7 +68,7 @@
                 android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_distance"
-                android:backgroundTint="@color/grey_59" />
+                android:backgroundTint="@color/grey_2b" />
 
             <TextView
                 android:id="@+id/textUserInfoDistance"
@@ -99,7 +99,7 @@
                 android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_battery"
-                android:backgroundTint="@color/grey_59" />
+                android:backgroundTint="@color/grey_2b" />
 
             <TextView
                 android:id="@+id/textUserInfoBattery"
@@ -130,7 +130,7 @@
                 android:layout_height="@dimen/icon_size_xsmall"
                 android:layout_gravity="center"
                 android:background="@drawable/image_time"
-                android:backgroundTint="@color/grey_59" />
+                android:backgroundTint="@color/grey_2b" />
 
             <TextView
                 android:id="@+id/textUserInfoTime"

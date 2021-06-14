@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:icon="@drawable/image_add"
+        android:title="@string/add_friend"
+        app:iconTint="@color/grey_2b"
+        app:showAsAction="always" />
+
+</menu>

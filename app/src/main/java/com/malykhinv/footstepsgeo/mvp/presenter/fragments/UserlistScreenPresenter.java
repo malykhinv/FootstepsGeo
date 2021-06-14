@@ -1,5 +1,9 @@
 package com.malykhinv.footstepsgeo.mvp.presenter.fragments;
 
+import android.annotation.SuppressLint;
+import android.view.MenuItem;
+
+import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
