@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".mvp.view.fragments.GlobeScreenFragment">
+    tools:context=".mvp.view.fragments.screens.GlobeScreenFragment">
 
     <com.google.android.gms.maps.MapView
         android:id="@+id/mapView"
@@ -16,8 +16,8 @@
         app:layout_dodgeInsetEdges="bottom" />
 
     <include
-        android:id="@+id/groupDetailsPanel"
-        layout="@layout/group_details_panel"
+        android:id="@+id/groupSlidePanel"
+        layout="@layout/group_slide_panel"
         app:layout_insetEdge="bottom" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

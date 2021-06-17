@@ -1,4 +1,4 @@
-package com.malykhinv.footstepsgeo.mvp.view.fragments;
+package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.annotation.SuppressLint;
 import android.content.ClipData;

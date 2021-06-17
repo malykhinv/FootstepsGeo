@@ -14,7 +14,7 @@
     <dimen name="margin_horizontal_xsmall">8dp</dimen>
     <dimen name="margin_horizontal_xxsmall">4dp</dimen>
 
-    <dimen name="padding_large">16dp</dimen>
+    <dimen name="padding_large">24dp</dimen>
     <dimen name="padding_big">12dp</dimen>
     <dimen name="padding">8dp</dimen>
     <dimen name="padding_small">4dp</dimen>
@@ -22,6 +22,9 @@
     <dimen name="padding_horizontal">16dp</dimen>
     <dimen name="padding_horizontal_small">8dp</dimen>
 
+    <dimen name="height_button">56dp</dimen>
+    <dimen name="height_slide_panel_fragment_container">80dp</dimen>
+    <dimen name="height_slide_panel">230dp</dimen>
     <dimen name="height_appbar">96dp</dimen>
     <dimen name="height_divider">1px</dimen>
     <dimen name="height_splash">300dp</dimen>
@@ -41,7 +44,8 @@
     <dimen name="text_size_regular">14sp</dimen>
 
     <dimen name="radius_xlarge">96dp</dimen>
-    <dimen name="radius_large">24dp</dimen>
+    <dimen name="radius_large">20dp</dimen>
+    <dimen name="radius_big">14dp</dimen>
     <dimen name="radius">8dp</dimen>
     <dimen name="radius_small">4dp</dimen>
 
@@ -49,7 +53,8 @@
     <dimen name="dash_gap">2dp</dimen>
     <dimen name="dash_width">6dp</dimen>
 
-    <dimen name="icon_size_xsmall">12dp</dimen>
-    <dimen name="icon_size_small">24dp</dimen>
+    <dimen name="icon_size_xxsmall">12dp</dimen>
+    <dimen name="icon_size_xsmall">24dp</dimen>
+    <dimen name="icon_size_small">40dp</dimen>
     <dimen name="icon_size">48dp</dimen>
 </resources>

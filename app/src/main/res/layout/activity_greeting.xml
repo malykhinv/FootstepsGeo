@@ -53,7 +53,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_vertical_big"
-        android:background="@drawable/button_blue_selector"
+        android:background="@drawable/button_secondary_selector"
         android:fontFamily="@font/podkova"
         android:padding="@dimen/padding_large"
         android:text="@string/sign_in"

@@ -14,9 +14,9 @@ import androidx.fragment.app.FragmentManager;
 import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.databinding.ActivityMainBinding;
 import com.malykhinv.footstepsgeo.mvp.presenter.MainPresenter;
-import com.malykhinv.footstepsgeo.mvp.view.fragments.AccountScreenFragment;
-import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
-import com.malykhinv.footstepsgeo.mvp.view.fragments.UserlistScreenFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.AccountScreenFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.FriendsScreenFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.GlobeScreenFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
     private final FragmentManager fragmentManager = getSupportFragmentManager();
     private ActivityMainBinding b;
     private MainPresenter presenter;
-    private UserlistScreenFragment fragmentUserlistScreen;
+    private FriendsScreenFragment fragmentUserlistScreen;
     private GlobeScreenFragment fragmentGlobeScreen;
     private AccountScreenFragment fragmentAccountScreen;
     private boolean isAboutToClose = false;
@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initializeFragments() {
-        fragmentUserlistScreen = new UserlistScreenFragment();
+        fragmentUserlistScreen = new FriendsScreenFragment();
         fragmentGlobeScreen = new GlobeScreenFragment();
         fragmentAccountScreen = new AccountScreenFragment();
     }

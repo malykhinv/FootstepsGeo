@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_anchorGravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/imageFriend"
+        android:layout_width="@dimen/size_userpic"
+        android:layout_height="@dimen/size_userpic"
+        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:layout_marginEnd="@dimen/margin_horizontal_small"
+        android:contentDescription="TODO"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textFriendName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
+        android:layout_marginTop="@dimen/margin_vertical_xsmall"
+        android:layout_marginEnd="@dimen/margin_horizontal_xxsmall"
+        android:width="@dimen/size_userpic"
+        android:fontFamily="@font/podkova"
+        android:maxLines="2"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageFriend" />
+</androidx.constraintlayout.widget.ConstraintLayout>

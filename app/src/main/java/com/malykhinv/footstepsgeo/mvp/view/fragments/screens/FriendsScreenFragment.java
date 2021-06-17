@@ -1,4 +1,4 @@
-package com.malykhinv.footstepsgeo.mvp.view.fragments;
+package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,25 +11,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.malykhinv.footstepsgeo.User;
-import com.malykhinv.footstepsgeo.databinding.FragmentUserlistScreenBinding;
-import com.malykhinv.footstepsgeo.mvp.presenter.fragments.UserlistScreenPresenter;
-import com.malykhinv.footstepsgeo.mvp.view.adapters.UserlistAdapter;
+import com.malykhinv.footstepsgeo.databinding.FragmentFriendsScreenBinding;
+import com.malykhinv.footstepsgeo.mvp.presenter.fragments.FriendsScreenPresenter;
+import com.malykhinv.footstepsgeo.mvp.view.adapters.FriendsScrollVerticalAdapter;
 
 import java.util.ArrayList;
 
-public class UserlistScreenFragment extends Fragment {
+public class FriendsScreenFragment extends Fragment {
 
-    private FragmentUserlistScreenBinding b;
+    private FragmentFriendsScreenBinding b;
     private View view;
-    private UserlistScreenPresenter presenter;
-    private UserlistAdapter userlistAdapter;
+    private FriendsScreenPresenter presenter;
+    private FriendsScrollVerticalAdapter userlistAdapter;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        b = FragmentUserlistScreenBinding.inflate(inflater, container, false);
+        b = FragmentFriendsScreenBinding.inflate(inflater, container, false);
 
         if (view == null) {
             view = b.getRoot();
@@ -44,7 +44,7 @@ public class UserlistScreenFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (presenter == null) {
-            presenter = new UserlistScreenPresenter(this);
+            presenter = new FriendsScreenPresenter(this);
         }
 
         initializeRecyclerView();
@@ -69,7 +69,7 @@ public class UserlistScreenFragment extends Fragment {
 
     private void initializeRecyclerView() {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        userlistAdapter = new UserlistAdapter(presenter);
+        userlistAdapter = new FriendsScrollVerticalAdapter(presenter);
         b.recyclerView.setAdapter(userlistAdapter);
     }
 

@@ -14,8 +14,7 @@
         android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginTop="@dimen/margin_vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/image_account" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textAccountNameGreeting"
@@ -52,7 +51,7 @@
             android:layout_marginEnd="@dimen/margin_horizontal"
             android:layout_marginBottom="@dimen/margin_vertical"
             android:adjustViewBounds="false"
-            android:background="@android:color/transparent"
+            android:background="@drawable/button_border_selector"
             android:clickable="true"
             android:contextClickable="false"
             android:cropToPadding="false"
@@ -63,7 +62,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/image_copy"
-            app:tint="@color/green_a700" />
+            app:tint="@color/blue_a400" />
 
         <TextView
             android:id="@+id/textPersonalCode"
@@ -74,6 +73,7 @@
             android:textAlignment="center"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_xlarge"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -83,7 +83,7 @@
         android:id="@+id/textCodeDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
+        android:layout_marginStart="@dimen/margin_horizontal"
         android:layout_marginBottom="@dimen/margin_vertical_small"
         android:fontFamily="@font/podkova"
         android:text="@string/personal_code"
@@ -110,18 +110,17 @@
         app:layout_constraintStart_toStartOf="@+id/textCodeDescription"
         app:layout_constraintTop_toBottomOf="@+id/layoutPersonalCode" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/buttonShareCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_button"
         android:layout_marginBottom="@dimen/margin_vertical_xlarge"
-        android:background="@drawable/button_green_selector"
+        android:background="@drawable/button_primary_selector"
         android:text="@string/share_code"
         android:textSize="@dimen/text_size_regular"
         app:iconGravity="start"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textCodeSubDescription" />
+        app:layout_constraintEnd_toEndOf="@+id/layoutPersonalCode"
+        app:layout_constraintStart_toStartOf="@+id/layoutPersonalCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

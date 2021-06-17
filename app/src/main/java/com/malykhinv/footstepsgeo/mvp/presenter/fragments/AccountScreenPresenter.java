@@ -7,7 +7,7 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.GreetingActivity;
-import com.malykhinv.footstepsgeo.mvp.view.fragments.AccountScreenFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.AccountScreenFragment;
 
 public class AccountScreenPresenter implements MainModel.AccountCallback{
 

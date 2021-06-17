@@ -11,7 +11,7 @@ import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
-import com.malykhinv.footstepsgeo.mvp.view.fragments.GlobeScreenFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.GlobeScreenFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -19,62 +19,58 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
-import com.malykhinv.footstepsgeo.databinding.GroupListItemBinding;
+import com.malykhinv.footstepsgeo.databinding.GroupFriendInfoItemVerticalBinding;
 import com.malykhinv.footstepsgeo.di.App;
-import com.malykhinv.footstepsgeo.mvp.presenter.fragments.UserlistScreenPresenter;
+import com.malykhinv.footstepsgeo.mvp.presenter.fragments.FriendsScreenPresenter;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.UserlistViewHolder> {
+public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsScrollVerticalAdapter.ViewHolder> {
 
-    private static final int FRIEND_OPTIONS_COUNT = 2;
+    private static final int FRIEND_OPTIONS_COUNT = 3;
     private final Context context = App.getAppComponent().getContext();
-    private final UserlistScreenPresenter presenter;
+    private final FriendsScreenPresenter presenter;
     public ArrayList<User> friendUsers = new ArrayList<>();
+    private int lastIndex = -1;
 
-    public UserlistAdapter(UserlistScreenPresenter presenter) {
+    public FriendsScrollVerticalAdapter(FriendsScreenPresenter presenter) {
         this.presenter = presenter;
     }
 
+
+
     @Override
     @NonNull
-    public UserlistViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new UserlistViewHolder(GroupListItemBinding.inflate(LayoutInflater.from(context), parent, false));
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        return new ViewHolder(GroupFriendInfoItemVerticalBinding.inflate(LayoutInflater.from(context), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull UserlistAdapter.UserlistViewHolder holder, int index) {
-        holder.bind(friendUsers.get(index));
-        holder.b.imageButtonFriendOptions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                PopupMenu popup = new PopupMenu(context, view);
-                popup.setOnMenuItemClickListener(item -> {
-                    if (presenter != null) {
-                        presenter.onFriendOptionWasClicked(item, holder.getAdapterPosition());
-                    }
-                    return false;
-                });
-                MenuInflater inflater = popup.getMenuInflater();
-                inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
-                popup.show();
-            }
+    public void onBindViewHolder(@NonNull ViewHolder holder, int index) {
+        holder.updateUI(friendUsers.get(index));
+        setAnimation(holder.itemView, index);
+        holder.b.imageButtonFriendOptions.setOnClickListener(view -> {
+            PopupMenu popup = new PopupMenu(context, view);
+            popup.setOnMenuItemClickListener(item -> {
+                if (presenter != null) {
+                    presenter.onFriendOptionWasClicked(item, holder.getAdapterPosition());
+                }
+                return false;
+            });
+            MenuInflater inflater = popup.getMenuInflater();
+            inflater.inflate(R.menu.menu_friend_options, popup.getMenu());
+            popup.show();
         });
     }
 
-    @Override
-    public void onViewAttachedToWindow(UserlistViewHolder holder) {
-        Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
-        holder.itemView.startAnimation(animation);
-        super.onViewAttachedToWindow(holder);
-    }
-
-    @Override
-    public void onViewDetachedFromWindow(UserlistViewHolder holder) {
-        holder.itemView.clearAnimation();
-        super.onViewDetachedFromWindow(holder);
+    private void setAnimation(View view, int index) {
+         if (index > lastIndex) {
+            Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            view.startAnimation(animation);
+            lastIndex = index;
+         }
     }
 
     @Override
@@ -88,25 +84,17 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
     }
 
     public void clearItems() {
-//        this.friendUsers.clear();
+        this.friendUsers.clear();
         notifyDataSetChanged();
     }
 
-    static class UserlistViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private GroupListItemBinding b;
+        private GroupFriendInfoItemVerticalBinding b;
 
-        public UserlistViewHolder(@NonNull GroupListItemBinding b) {
+        public ViewHolder(@NonNull GroupFriendInfoItemVerticalBinding b) {
             super(b.getRoot());
             this.b = b;
-        }
-
-        public void bind(User friendUser) {
-            updateUI(friendUser);
-
-            b.imageButtonFriendOptions.setOnClickListener(view -> {
-//                showFriendOptionsPopup(view);
-            });
         }
 
         private void updateUI(User friendUser) {
@@ -125,9 +113,9 @@ public class UserlistAdapter extends RecyclerView.Adapter<UserlistAdapter.Userli
             if (position != null) {
                 Address address = getAddress(position);
                 if (address != null) {
-                    b.textUserAddress.setText(address.toString());
+                    b.textAddress.setText(address.toString());
                 } else {
-                    b.textUserAddress.setText(itemView.getContext().getString(R.string.na));
+                    b.textAddress.setText(itemView.getContext().getString(R.string.na));
                 }
             }
         }

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageUserpic"
+        android:layout_width="@dimen/size_userpic"
+        android:layout_height="@dimen/size_userpic"
+        android:background="@drawable/userpic_background"
+        android:contentDescription="TODO"
+        android:padding="@dimen/padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_user_fortuneteller"
+        app:tint="@color/blue_a700" />
+
+    <TextView
+        android:id="@+id/textUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:fontFamily="@font/podkova"
+        android:text="Саймон Котик"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_big"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageUserpic"
+        app:layout_constraintTop_toTopOf="@+id/imageUserpic" />
+
+    <LinearLayout
+        android:id="@+id/layoutDistance"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height_label"
+        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:background="@drawable/tiny_rounded_grey_background"
+        android:paddingStart="@dimen/padding_horizontal_small"
+        android:paddingEnd="@dimen/padding_horizontal_small"
+        app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
+        app:layout_constraintStart_toEndOf="@+id/imageUserpic">
+
+        <ImageView
+            android:id="@+id/imageUserInfoDistance"
+            android:layout_width="@dimen/icon_size_xxsmall"
+            android:layout_height="@dimen/icon_size_xxsmall"
+            android:layout_gravity="center"
+            android:background="@drawable/image_distance"
+            android:backgroundTint="@color/grey_2b"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/textUserInfoDistance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
+            android:fontFamily="@font/podkova"
+            android:text="0.8 км"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_regular" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutBattery"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height_label"
+        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
+        android:background="@drawable/tiny_rounded_grey_background"
+        android:paddingStart="@dimen/padding_horizontal_small"
+        android:paddingEnd="@dimen/padding_horizontal_small"
+        app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
+        app:layout_constraintStart_toEndOf="@+id/layoutDistance">
+
+        <ImageView
+            android:id="@+id/imageUserInfoBattery"
+            android:layout_width="@dimen/icon_size_xxsmall"
+            android:layout_height="@dimen/icon_size_xxsmall"
+            android:layout_gravity="center"
+            android:background="@drawable/image_battery"
+            android:backgroundTint="@color/grey_2b"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/textUserInfoBattery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
+            android:fontFamily="@font/podkova"
+            android:text="41%"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_regular" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layoutTime"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/height_label"
+        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
+        android:background="@drawable/tiny_rounded_grey_background"
+        android:paddingStart="@dimen/padding_horizontal_small"
+        android:paddingEnd="@dimen/padding_horizontal_small"
+        app:layout_constraintBottom_toBottomOf="@+id/imageUserpic"
+        app:layout_constraintStart_toEndOf="@+id/layoutBattery">
+
+        <ImageView
+            android:id="@+id/imageUserInfoTime"
+            android:layout_width="@dimen/icon_size_xxsmall"
+            android:layout_height="@dimen/icon_size_xxsmall"
+            android:layout_gravity="center"
+            android:background="@drawable/image_time"
+            android:backgroundTint="@color/grey_2b"
+            android:contentDescription="TODO" />
+
+        <TextView
+            android:id="@+id/textUserInfoTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
+            android:fontFamily="@font/podkova"
+            android:text="Сейчас"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_regular" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonGetRoute"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_button"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:background="@drawable/button_primary_selector"
+        android:text="@string/get_route"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageUserpic" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,4 @@
-package com.malykhinv.footstepsgeo.mvp.view.fragments;
+package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.Manifest;
 import android.content.Context;
@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +26,8 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.databinding.FragmentGlobeScreenBinding;
 import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.GlobeScreenPresenter;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.FriendsScrollHorizontalFragment;
+import com.malykhinv.footstepsgeo.mvp.view.fragments.UserDetailsFragment;
 import com.tbruyelle.rxpermissions3.RxPermissions;
 
 import java.util.ArrayList;
@@ -42,6 +45,9 @@ public class GlobeScreenFragment extends Fragment {
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
+    private FragmentManager fragmentManager;
+    private FriendsScrollHorizontalFragment friendsScrollHorizontalFragment;
+    private UserDetailsFragment userDetailsFragment;
     private View view;
     private FragmentGlobeScreenBinding b;
     private GlobeScreenPresenter presenter;
@@ -67,6 +73,10 @@ public class GlobeScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        
+        initializeFragments();
+        showFragment(friendsScrollHorizontalFragment);
+
         b.mapView.onCreate(savedInstanceState);
         b.mapView.onResume();
 
@@ -74,6 +84,16 @@ public class GlobeScreenFragment extends Fragment {
             presenter = new GlobeScreenPresenter(this);
             presenter.onViewCreated();
         }
+    }
+
+    private void initializeFragments() {
+        fragmentManager = getChildFragmentManager();
+        friendsScrollHorizontalFragment = new FriendsScrollHorizontalFragment();
+        userDetailsFragment = new UserDetailsFragment();
+    }
+
+    private void showFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().replace(R.id.layoutFragmentContainer, fragment).commit();
     }
 
     public boolean areAllPermissionsGranted() {
