@@ -104,7 +104,7 @@ public class GreetingActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data){
         super.onActivityResult(requestCode, resultCode, data);
         if (presenter != null) {
-            presenter.onSignInActivityResult(requestCode, resultCode, data);
+            presenter.onSignInActivityResult(requestCode, data);
         }
     }
 

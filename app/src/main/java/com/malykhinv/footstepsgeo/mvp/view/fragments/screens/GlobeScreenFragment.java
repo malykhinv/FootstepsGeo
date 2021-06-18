@@ -137,7 +137,11 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void setMapStyle() {
-        googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style));
+        try {
+            googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, R.raw.map_style));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void setMapUiSettings() {
@@ -151,7 +155,7 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void createUserMarker(User user) {
-        if (user != null && user.position != null && user.id != null) {
+        try {
             String userId = user.id;
             Double latitude = user.position.get(POSITION_LAT_INDEX);
             Double longitude = user.position.get(POSITION_LNG_INDEX);
@@ -163,33 +167,41 @@ public class GlobeScreenFragment extends Fragment {
                         .visible(true));
                 markers.put(userId, userMarker);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void moveUserMarker(User user) {
-        if (user != null && user.id != null & user.position != null) {
+        try {
             Marker marker = markers.get(user.id);
             if (marker != null) {
                 Double latitude = user.position.get(POSITION_LAT_INDEX);
                 Double longitude = user.position.get(POSITION_LNG_INDEX);
                 marker.setPosition(new LatLng(latitude, longitude));
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void animateCamera(ArrayList<Double> position) {
-        if (position != null && googleMap != null) {
+        try {
             Double latitude = position.get(POSITION_LAT_INDEX);
             Double longitude = position.get(POSITION_LNG_INDEX);
             googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void moveCamera(ArrayList<Double> position) {
-        if (position != null && googleMap != null) {
+        try {
             Double latitude = position.get(POSITION_LAT_INDEX);
             Double longitude = position.get(POSITION_LNG_INDEX);
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude, longitude), ZOOM_MIDDLE));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

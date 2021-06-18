@@ -41,4 +41,26 @@ public class FriendsScreenPresenter implements MainModel.UserlistCallback {
             view.updateUI(listOfFriends);
         }
     }
+
+    @SuppressLint("NonConstantResourceId")
+    public void onFriendOptionWasClicked(MenuItem item, int index) {
+        switch (item.getItemId()) {
+            case R.id.menuItemUpdateFriendInfo: {
+                if (listOfFriends != null) {
+                    model.loadUserFromDb(listOfFriends.get(index).id);
+                }
+                break;
+            }
+            case R.id.menuItemGetRoute: {
+
+                break;
+            }
+            case R.id.menuItemRemoveFriend: {
+                if (listOfFriends != null) {
+                    model.removeFriend(listOfFriends.get(index).id);
+                }
+                break;
+            }
+        }
+    }
 }

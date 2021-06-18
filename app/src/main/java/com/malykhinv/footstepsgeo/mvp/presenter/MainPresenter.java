@@ -33,8 +33,10 @@ public class MainPresenter implements MainModel.MainCallback {
 
     @Override
     public void onCurrentUserReceived(User user) {
-        if (user != null) {
+        try {
             model.setCurrentUser(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

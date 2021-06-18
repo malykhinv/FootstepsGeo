@@ -184,8 +184,10 @@ public class MainModel {
     }
 
     public void writeCurrentUserIntoDb() {
-        if (currentUser != null) {
+        try {
             usersReference.child(user.id).setValue(user);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

@@ -78,26 +78,32 @@ public class AccountScreenFragment extends Fragment {
 
     @SuppressLint("CheckResult")
     public void showUserpic(String imageUrl) {
-        if (imageUrl != null) {
+        try {
             RequestOptions options = new RequestOptions();
             options.circleCrop();
             Glide.with(this)
                     .load(imageUrl)
                     .apply(options)
                     .into(b.imageUserpic);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void showPersonalCode(String personalCode) {
-        if (personalCode != null) {
+        try {
             b.textPersonalCode.setText(personalCode);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void showUsername(String name) {
-        if (name != null) {
+       try {
             b.textAccountNameGreeting.setText(name);
-        }
+        } catch (Exception e) {
+           e.printStackTrace();
+       }
     }
 
     public void showAccountOptionsPopup(View view) {
@@ -114,20 +120,24 @@ public class AccountScreenFragment extends Fragment {
     }
 
     public void shareCode(String personalCode) {
-        if (personalCode != null) {
+        try {
             String textToShare = getString(R.string.my_code_in_app_use_it_to_find_me, getString(R.string.app_name), personalCode);
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, textToShare);
             startActivity(Intent.createChooser(intent, getString(R.string.share_via)));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     public void copyToClipboard(String textToCopy) {
-        if (textToCopy != null) {
+        try {
             ClipData clip = ClipData.newPlainText("clip", textToCopy);
             clipboardManager.setPrimaryClip(clip);
             showMessage(getString(R.string.your_personal_code_copied_to_clipboard));
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

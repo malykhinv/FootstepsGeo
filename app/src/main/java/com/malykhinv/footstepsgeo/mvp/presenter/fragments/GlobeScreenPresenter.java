@@ -80,11 +80,13 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     @Override
     public void onCurrentUserReceived(User user) {
-        if (user != null) {
+        try {
             currentGoogleUserId = model.getCurrentGoogleUserId();
             if (user.id.equals(currentGoogleUserId)) {
                 initializeCurrentUserOnMap(user);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -101,13 +103,15 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     }
 
     private void placeUserOnMap(User user) {
-        if (user != null) {
+        try {
             if (user.position != null && !view.isMarkerExists(user.id)) {
                 view.createUserMarker(user);
                 if (user.id.equals(model.getCurrentGoogleUserId())) {
                     view.moveCamera(user.position);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

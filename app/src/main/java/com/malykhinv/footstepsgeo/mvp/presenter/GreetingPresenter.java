@@ -38,7 +38,7 @@ public class GreetingPresenter implements GreetingModel.Callback {
         view.startActivityForResult(signInIntent, signInIntent.getIntExtra("request_code", DEFAULT_REQUEST_CODE));
     }
 
-    public void onSignInActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onSignInActivityResult(int requestCode, Intent data) {
         model.signIn(requestCode, data);
     }
 

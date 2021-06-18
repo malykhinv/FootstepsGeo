@@ -88,8 +88,10 @@ public class MainActivity extends AppCompatActivity {
         String userId = intent.getStringExtra("userId");
         String userName = intent.getStringExtra("userName");
         String imageUrl = intent.getStringExtra("imageUrl");
-        if (userId != null){
+        try {
             presenter.onCurrentGoogleUserInfoWasLoaded(userId, userName, imageUrl);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
