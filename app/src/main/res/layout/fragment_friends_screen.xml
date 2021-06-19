@@ -54,6 +54,7 @@
                     android:gravity="center"
                     android:paddingStart="@dimen/padding_horizontal"
                     android:paddingEnd="@dimen/padding_horizontal"
+                    android:text="@string/init_count"
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_regular"

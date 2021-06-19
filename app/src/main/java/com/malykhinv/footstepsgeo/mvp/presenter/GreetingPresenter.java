@@ -27,6 +27,10 @@ public class GreetingPresenter implements GreetingModel.Callback {
 
     // Call from View:
 
+    public void signOut() {
+        model.signOut();
+    }
+
     public void onViewIsReady() {
         view.showIllustration();
         Handler handler = new Handler();
@@ -64,6 +68,7 @@ public class GreetingPresenter implements GreetingModel.Callback {
     @Override
     public void onGoogleSignInClientInitialized() {
         isGoogleSignInClientInitialized = true;
+        view.getExtras();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.malykhinv.footstepsgeo.mvp.presenter.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.MenuItem;
 
 import com.malykhinv.footstepsgeo.R;
@@ -12,8 +13,9 @@ import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.FriendsScreenFragme
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FriendsScreenPresenter implements MainModel.UserlistCallback {
+public class FriendsScreenPresenter implements MainModel.FriendsCallback {
 
+    private final Context context = App.getAppComponent().getContext();
     private final FriendsScreenFragment view;
     private final MainModel model;
     private HashMap<String, User> mapOfFriends;
@@ -25,22 +27,8 @@ public class FriendsScreenPresenter implements MainModel.UserlistCallback {
         model.registerUserlistCallback(this);
     }
 
-    @Override
-    public void onCurrentUserReceived(User user) {
-        if (user != null) {
-            model.dispose();
-            model.trackFriends();
-        }
-    }
 
-    @Override
-    public void onFriendUserReceived(User user) {
-        if (user != null) {
-            mapOfFriends.put(user.id, user);
-            listOfFriends.add(user);
-            view.updateUI(listOfFriends);
-        }
-    }
+    // Call from View:
 
     @SuppressLint("NonConstantResourceId")
     public void onFriendOptionWasClicked(MenuItem item, int index) {
@@ -78,5 +66,37 @@ public class FriendsScreenPresenter implements MainModel.UserlistCallback {
 
     public void onCloseDialogWindowButtonWasClicked() {
         view.closeDialogWindow();
+    }
+
+
+    // Call from Model:
+
+    @Override
+    public void onCurrentUserReceived(User user) {
+        if (user != null) {
+            model.dispose();
+            model.trackFriends();
+        }
+    }
+
+    @Override
+    public void onFriendUserReceived(User user) {
+        if (user != null) {
+            mapOfFriends.put(user.id, user);
+            listOfFriends.add(user);
+            view.updateUI(listOfFriends);
+        }
+    }
+
+    @Override
+    public void onFriendIdReceived(String friendsId) {
+        model.loadUserFromDb(friendsId);
+    }
+
+    @Override
+    public void onNullFriendIdReceived() {
+        view.closeDialogWindow();
+        String message = context.getString(R.string.error_no_user);
+        view.showMessage(message);
     }
 }

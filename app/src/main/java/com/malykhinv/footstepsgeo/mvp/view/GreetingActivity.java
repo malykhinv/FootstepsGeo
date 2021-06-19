@@ -18,6 +18,7 @@ import java.util.Random;
 
 public class GreetingActivity extends AppCompatActivity {
 
+    private final String SIGN_OUT_EXTRA_LABEL = "sign_out";
     private static final int DURATION = 200;
     private static final int USER_ACTION_DELAY = 2000;
     private static final int[] illustrations = new int[] {R.drawable.image_greeting_1, R.drawable.image_greeting_2, R.drawable.image_greeting_3};
@@ -30,11 +31,22 @@ public class GreetingActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (presenter == null) {
             presenter = new GreetingPresenter(this);
         }
         bind();
         presenter.onViewIsReady();
+    }
+
+    public void getExtras() {
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            boolean signOutFlag = extras.getBoolean(SIGN_OUT_EXTRA_LABEL);
+            if (signOutFlag) {
+                presenter.signOut();
+            }
+        }
     }
 
     private void bind() {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -59,22 +60,6 @@ public class FriendsScreenFragment extends Fragment {
         }
 
         initializeRecyclerView();
-
-        // TEMPORARY
-        ArrayList<User> friendUsers = new ArrayList<>();
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("1", "Simon", "USUFHA", "https://img.chainimage.com/images/nature-wallpaper-hd-widescreen-images-desktop-background-227-14.jpg", 0, null, null, 0, 100, null));
-        friendUsers.add(new User("2", "Irusya", "USUFHA", "https://i.redd.it/2s78x6cxtum01.jpg", 0, null, null, 0, 100, null));
-        updateUI(friendUsers);
     }
 
     private void initializeRecyclerView() {
@@ -84,9 +69,13 @@ public class FriendsScreenFragment extends Fragment {
     }
 
     public void updateUI(ArrayList<User> friendUsers) {
-        b.textFriendCount.setText(String.valueOf(friendUsers.size()));
-        userlistAdapter.clearItems();
-        userlistAdapter.setItems(friendUsers);
+        if (friendUsers != null && friendUsers.size() > 0) {
+            b.textFriendCount.setText(String.valueOf(friendUsers.size()));
+            userlistAdapter.clearItems();
+            userlistAdapter.setItems(friendUsers);
+        } else {
+            b.textFriendCount.setText(R.string.init_count);
+        }
     }
 
     public void showAddFriendDialog() {
@@ -110,7 +99,15 @@ public class FriendsScreenFragment extends Fragment {
     }
 
     public void closeDialogWindow() {
-        dialog.dismiss();
-        dialog = null;
+        try {
+            dialog.dismiss();
+            dialog = null;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void showMessage(String message) {
+        Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
     }
 }

@@ -29,8 +29,10 @@
     <string name="oh_no">Oh no!</string>
     <string name="you_are_offline">You\'re offline. Check your internet connection.</string>
     <string name="na">not available</string>
+    <string name="init_count">0</string>
 
     <string name="error_default">An error occurred. Please try again later.</string>
+    <string name="error_no_user">No user with this code was found.</string>
     <string name="permission_is_needed">The permission is needed.</string>
 
     <string name="press_back_again_to_quit">Press back again to quit</string>

@@ -59,6 +59,14 @@ public class GreetingModel {
         }
     }
 
+    public void signOut() {
+        try {
+            googleSignInClient.signOut();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void trackConnection() {
         Observer<Long> timerObserver = new Observer<Long>() {
 

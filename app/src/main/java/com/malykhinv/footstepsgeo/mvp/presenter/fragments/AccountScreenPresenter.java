@@ -11,6 +11,7 @@ import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.AccountScreenFragme
 
 public class AccountScreenPresenter implements MainModel.AccountCallback{
 
+    private final String SIGN_OUT_EXTRA_LABEL = "sign_out";
     private AccountScreenFragment view;
     private MainModel model;
     private User currentUser;
@@ -70,6 +71,7 @@ public class AccountScreenPresenter implements MainModel.AccountCallback{
         model = null;
 
         Intent intent = new Intent(view.getActivity(), GreetingActivity.class);
+        intent.putExtra(SIGN_OUT_EXTRA_LABEL, true);
         view.startActivity(intent);
         view.getActivity().finish();
         view = null;

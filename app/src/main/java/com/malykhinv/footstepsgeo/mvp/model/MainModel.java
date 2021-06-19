@@ -47,7 +47,7 @@ public class MainModel {
     private User currentUser;
     private HashMap<String, User> friends;
     private MainCallback mainCallback;
-    private UserlistCallback userlistCallback;
+    private FriendsCallback friendsCallback;
     private GlobeCallback globeCallback;
     private AccountCallback accountCallback;
     private Disposable disposable;
@@ -61,9 +61,11 @@ public class MainModel {
         void onCurrentUserWasWrittenIntoDatabase(User user);
     }
 
-    public interface UserlistCallback {
+    public interface FriendsCallback {
         void onCurrentUserReceived(User user);
         void onFriendUserReceived(User user);
+        void onFriendIdReceived(String friendsId);
+        void onNullFriendIdReceived();
     }
 
     public interface GlobeCallback {
@@ -82,8 +84,8 @@ public class MainModel {
         this.mainCallback = mainCallback;
     }
 
-    public void registerUserlistCallback(UserlistCallback userlistCallback) {
-        this.userlistCallback = userlistCallback;
+    public void registerUserlistCallback(FriendsCallback friendsCallback) {
+        this.friendsCallback = friendsCallback;
     }
 
     public void registerGlobeCallback(GlobeCallback globeCallback) {
@@ -126,8 +128,8 @@ public class MainModel {
                     if (mainCallback != null) {
                         mainCallback.onCurrentUserReceived(user);
                     }
-                    if (userlistCallback != null) {
-                        userlistCallback.onCurrentUserReceived(user);
+                    if (friendsCallback != null) {
+                        friendsCallback.onCurrentUserReceived(user);
                     }
                     if (globeCallback != null) {
                         globeCallback.onCurrentUserReceived(user);
@@ -226,14 +228,14 @@ public class MainModel {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
                     String friendsId = snapshot.getValue(String.class);
-//                    if (userlistCallback != null) {
-//                        userlistCallback.onFriendsIdReceived(friendsId);
-//                    }
+                    if (friendsCallback != null) {
+                        friendsCallback.onFriendIdReceived(friendsId);
+                    }
                 } else {
                     user = null;
-//                    if (userlistCallback != null) {
-//                        userlistCallback.onNullFriendsIdReceived();
-//                    }
+                    if (friendsCallback != null) {
+                        friendsCallback.onNullFriendIdReceived();
+                    }
                 }
             }
             @Override
@@ -255,8 +257,8 @@ public class MainModel {
                         friends.put(id, snapshot.getValue(User.class));
                     }
 
-                    if (userlistCallback != null) {
-                        userlistCallback.onFriendUserReceived(friends.get(id));
+                    if (friendsCallback != null) {
+                        friendsCallback.onFriendUserReceived(friends.get(id));
                     }
                     if (globeCallback != null) {
                         globeCallback.onFriendUserReceived(friends.get(id));

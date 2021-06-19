@@ -39,8 +39,6 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
         this.presenter = presenter;
     }
 
-
-
     @Override
     @NonNull
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
