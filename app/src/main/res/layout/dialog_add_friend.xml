@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/tiny_rounded_grey_background">
+
+    <ImageButton
+        android:id="@+id/imageButtonCloseDialog"
+        android:layout_width="@dimen/icon_size_small"
+        android:layout_height="@dimen/icon_size_small"
+        android:layout_marginTop="@dimen/margin_vertical_small"
+        android:layout_marginEnd="@dimen/margin_horizontal_small"
+        android:adjustViewBounds="false"
+        android:background="@android:color/transparent"
+        android:clickable="true"
+        android:contextClickable="false"
+        android:cropToPadding="false"
+        android:focusable="true"
+        android:padding="@dimen/padding"
+        android:scaleType="centerInside"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/image_close"
+        app:tint="@color/grey_b9" />
+
+    <TextView
+        android:id="@+id/textAddFriendTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_vertical_big"
+        android:fontFamily="@font/podkova"
+        android:text="@string/add_friend"
+        android:textAlignment="viewStart"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_big"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textAddFriendSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:fontFamily="@font/podkova"
+        android:text="@string/enter_your_friends_personal_code_here"
+        android:textColor="@color/grey_2b"
+        android:textSize="@dimen/text_size_regular"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAddFriendTitle" />
+
+    <EditText
+        android:id="@+id/editTextFriendCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:autofillHints="@string/personal_code_mask"
+        android:ems="10"
+        android:fontFamily="@font/podkova"
+        android:hint="@string/personal_code_mask"
+        android:inputType="textNoSuggestions|text|textCapCharacters"
+        android:maxLength="8"
+        android:textAlignment="center"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textColorHint="@color/grey_b9"
+        android:textSize="@dimen/text_size_large"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textAddFriendSubtitle"
+        tools:ignore="LabelFor" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/buttonSubmit"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/height_button"
+        android:layout_marginStart="@dimen/margin_horizontal"
+        android:layout_marginTop="@dimen/margin_vertical"
+        android:layout_marginEnd="@dimen/margin_horizontal"
+        android:layout_marginBottom="@dimen/margin_vertical_big"
+        android:background="@drawable/button_primary_selector"
+        android:text="@string/submit"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextFriendCode" />
+</androidx.constraintlayout.widget.ConstraintLayout>

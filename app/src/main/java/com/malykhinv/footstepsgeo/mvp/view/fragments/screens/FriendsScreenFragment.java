@@ -1,5 +1,6 @@
 package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,9 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.malykhinv.footstepsgeo.R;
 import com.malykhinv.footstepsgeo.User;
+import com.malykhinv.footstepsgeo.databinding.DialogAddFriendBinding;
 import com.malykhinv.footstepsgeo.databinding.FragmentFriendsScreenBinding;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.FriendsScreenPresenter;
 import com.malykhinv.footstepsgeo.mvp.view.adapters.FriendsScrollVerticalAdapter;
@@ -23,6 +26,7 @@ public class FriendsScreenFragment extends Fragment {
     private View view;
     private FriendsScreenPresenter presenter;
     private FriendsScrollVerticalAdapter userlistAdapter;
+    private AlertDialog dialog;
 
     @Nullable
     @Override
@@ -30,6 +34,13 @@ public class FriendsScreenFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         b = FragmentFriendsScreenBinding.inflate(inflater, container, false);
+
+        b.toolbar.getMenu().getItem(0).setOnMenuItemClickListener(v -> {
+           if (presenter != null) {
+               presenter.onAddFriendMenuItemWasClicked();
+           }
+            return false;
+        });
 
         if (view == null) {
             view = b.getRoot();
@@ -48,7 +59,6 @@ public class FriendsScreenFragment extends Fragment {
         }
 
         initializeRecyclerView();
-
 
         // TEMPORARY
         ArrayList<User> friendUsers = new ArrayList<>();
@@ -77,5 +87,30 @@ public class FriendsScreenFragment extends Fragment {
         b.textFriendCount.setText(String.valueOf(friendUsers.size()));
         userlistAdapter.clearItems();
         userlistAdapter.setItems(friendUsers);
+    }
+
+    public void showAddFriendDialog() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+        View dialogView = LayoutInflater.from(getContext()).inflate(R.layout.dialog_add_friend, (ViewGroup) getView(), false);
+        dialogBuilder.setView(dialogView);
+
+        DialogAddFriendBinding b = DialogAddFriendBinding.bind(dialogView);
+        b.buttonSubmit.setOnClickListener(v -> {
+            if (presenter != null) {
+                presenter.onSubmitCodeButtonWasPressed(b.editTextFriendCode.getText().toString());
+            }
+        });
+        b.imageButtonCloseDialog.setOnClickListener((v -> {
+            if (presenter != null) {
+                presenter.onCloseDialogWindowButtonWasClicked();
+            }
+        }));
+
+        dialog = dialogBuilder.show();
+    }
+
+    public void closeDialogWindow() {
+        dialog.dismiss();
+        dialog = null;
     }
 }

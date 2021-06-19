@@ -63,4 +63,20 @@ public class FriendsScreenPresenter implements MainModel.UserlistCallback {
             }
         }
     }
+
+    public void onAddFriendMenuItemWasClicked() {
+        view.showAddFriendDialog();
+    }
+
+    public void onSubmitCodeButtonWasPressed(String personalCode) {
+        try {
+            model.loadIdFromDb(personalCode);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void onCloseDialogWindowButtonWasClicked() {
+        view.closeDialogWindow();
+    }
 }

@@ -11,14 +11,16 @@
 
     <string name="friends_you_follow">Friends you follow</string>
 
+    <string name="submit">Submit</string>
     <string name="add_friend">Add friend</string>
     <string name="update">Update</string>
     <string name="remove">Remove</string>
     <string name="get_route">Get route</string>
-    <string name="call">Call</string>
 
+    <string name="enter_your_friends_personal_code_here">Enter your friend\'s personal code here!</string>
     <string name="share_code">Share code</string>
     <string name="personal_code">Personal code</string>
+    <string name="personal_code_mask">●●●●●●●●</string>
     <string name="personal_code_sub_description">Share it with others so they can find you</string>
     <string name="your_personal_code_copied_to_clipboard">Your personal code copied to clipboard!</string>
     <string name="my_code_in_app_use_it_to_find_me" formatted="true">My code in %1$s app is %2$s. Use it to find me! 🌍</string>

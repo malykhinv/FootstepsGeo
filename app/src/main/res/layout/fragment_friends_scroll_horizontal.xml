@@ -10,7 +10,7 @@
         android:id="@+id/textFriendScrollTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:layout_marginStart="@dimen/margin_horizontal"
         android:fontFamily="@font/podkova"
         android:text="@string/friends"
         android:textAlignment="viewStart"
