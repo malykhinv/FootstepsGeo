@@ -156,13 +156,9 @@ public class MainModel {
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
         String imageUrl = getCurrentGoogleUserImageUrl();
-        int imageNumber = generateNewImageNumber();
-        ArrayList<Double> position = null;
-        String phoneNumber = null;
         int batteryLevel = App.getAppComponent().getBatteryLevel();
-        ArrayList<String> friendsIds = null;
 
-        User newUser = new User(userId, userName, personalCode, imageUrl, imageNumber, position, phoneNumber, System.currentTimeMillis(), batteryLevel, friendsIds);
+        User newUser = new User(userId, userName, personalCode, imageUrl, System.currentTimeMillis(), batteryLevel);
         usersReference.child(userId).setValue(newUser);
 
         if (mainCallback != null) {
@@ -178,11 +174,6 @@ public class MainModel {
             randomCode[i] = alphabet09.charAt(random.nextInt(alphabet09.length()));
         }
         return new String(randomCode);
-    }
-
-    private int generateNewImageNumber() {
-        Random random = new Random();
-        return random.nextInt(IMAGE_COUNT);
     }
 
     public void writeCurrentUserIntoDb() {
