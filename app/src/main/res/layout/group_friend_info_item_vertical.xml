@@ -39,6 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/margin_vertical_xsmall"
             android:fontFamily="@font/podkova"
+            android:maxLines="2"
             android:textColor="@color/grey_2b"
             android:textSize="@dimen/text_size_regular" />
 
