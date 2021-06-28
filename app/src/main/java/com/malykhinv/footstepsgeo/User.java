@@ -24,15 +24,6 @@ public class User {
         this.friendsIds = friendsIds;
     }
 
-    public User(String id, String name, String personalCode, String imageUrl, long lastLocationTime, int batteryLevel) {
-        this.id = id;
-        this.name = name;
-        this.personalCode = personalCode;
-        this.imageUrl = imageUrl;
-        this.lastLocationTime = lastLocationTime;
-        this.batteryLevel = batteryLevel;
-    }
-
     public User() {
 
     }
