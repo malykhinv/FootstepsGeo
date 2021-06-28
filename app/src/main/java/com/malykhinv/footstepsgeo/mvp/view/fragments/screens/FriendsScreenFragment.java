@@ -19,14 +19,14 @@ import com.malykhinv.footstepsgeo.databinding.FragmentFriendsScreenBinding;
 import com.malykhinv.footstepsgeo.mvp.presenter.fragments.FriendsScreenPresenter;
 import com.malykhinv.footstepsgeo.mvp.view.adapters.FriendsScrollVerticalAdapter;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FriendsScreenFragment extends Fragment {
 
     private FragmentFriendsScreenBinding b;
     private View view;
     private FriendsScreenPresenter presenter;
-    private FriendsScrollVerticalAdapter userlistAdapter;
+    private FriendsScrollVerticalAdapter friendListAdapter;
     private AlertDialog dialog;
 
     @Nullable
@@ -64,15 +64,15 @@ public class FriendsScreenFragment extends Fragment {
 
     private void initializeRecyclerView() {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        userlistAdapter = new FriendsScrollVerticalAdapter(presenter);
-        b.recyclerView.setAdapter(userlistAdapter);
+        friendListAdapter = new FriendsScrollVerticalAdapter(presenter);
+        b.recyclerView.setAdapter(friendListAdapter);
     }
 
-    public void updateUI(ArrayList<User> friendUsers) {
-        if (friendUsers != null && friendUsers.size() > 0) {
-            b.textFriendCount.setText(String.valueOf(friendUsers.size()));
-            userlistAdapter.clearItems();
-            userlistAdapter.setItems(friendUsers);
+    public void updateUI(HashMap<String, User> mapOfFriends) {
+        if (mapOfFriends != null && mapOfFriends.size() > 0) {
+            b.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
+            friendListAdapter.clearItems();
+            friendListAdapter.setItems(mapOfFriends);
         } else {
             b.textFriendCount.setText(R.string.init_count);
         }

@@ -25,14 +25,15 @@ import com.malykhinv.footstepsgeo.mvp.presenter.fragments.FriendsScreenPresenter
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsScrollVerticalAdapter.ViewHolder> {
 
-    private static final int FRIEND_OPTIONS_COUNT = 3;
     private final Context context = App.getAppComponent().getContext();
     private final FriendsScreenPresenter presenter;
-    public ArrayList<User> friendUsers = new ArrayList<>();
+    public ArrayList<User> listOfFriends = new ArrayList<>();
+    public HashMap<String, User> mapOfFriends = new HashMap<>();
     private int lastIndex = -1;
 
     public FriendsScrollVerticalAdapter(FriendsScreenPresenter presenter) {
@@ -47,13 +48,18 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int index) {
-        holder.updateUI(friendUsers.get(index));
+        listOfFriends.clear();
+        listOfFriends.addAll(mapOfFriends.values());
+        holder.updateUI(listOfFriends.get(index));
         setAnimation(holder.itemView, index);
+
         holder.b.imageButtonFriendOptions.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, view);
             popup.setOnMenuItemClickListener(item -> {
                 if (presenter != null) {
-                    presenter.onFriendOptionWasClicked(item, holder.getAdapterPosition());
+                    int adapterPosition = holder.getAdapterPosition();
+                    String userId = listOfFriends.get(index).id;
+                    presenter.onFriendOptionWasClicked(item, adapterPosition, userId);
                 }
                 return false;
             });
@@ -73,16 +79,16 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
     @Override
     public int getItemCount() {
-        return friendUsers.size();
+        return mapOfFriends.size();
     }
 
-    public void setItems(ArrayList<User> friendUsers) {
-        this.friendUsers.addAll(friendUsers);
+    public void setItems(HashMap<String, User> mapOfFriends) {
+        this.mapOfFriends.putAll(mapOfFriends);
         notifyDataSetChanged();
     }
 
     public void clearItems() {
-        this.friendUsers.clear();
+        this.mapOfFriends.clear();
         notifyDataSetChanged();
     }
 

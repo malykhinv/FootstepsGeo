@@ -46,7 +46,8 @@ public class MainModel {
     private String[] currentGoogleUserInfo;
     private User user;
     private User currentUser;
-    private HashMap<String, User> friends;
+    private HashMap<String, User> mapOfFriends = new HashMap<>(Collections.emptyMap());
+    private ArrayList<String> listOfFriendsIds = new ArrayList<>(Collections.emptyList());
     private MainCallback mainCallback;
     private FriendsCallback friendsCallback;
     private GlobeCallback globeCallback;
@@ -187,12 +188,14 @@ public class MainModel {
     }
 
     public void updateCurrentUserState(ArrayList<Double> position) {
-        if (currentUser != null) {
+        try {
             if (position != null) {
                 currentUser.position = position;
             }
             currentUser.lastLocationTime = System.currentTimeMillis();
             currentUser.batteryLevel = App.getAppComponent().getBatteryLevel();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -244,17 +247,17 @@ public class MainModel {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
 
-                    if (friends.containsKey(id)) {
-                        friends.replace(id, snapshot.getValue(User.class));
+                    if (mapOfFriends.containsKey(id)) {
+                        mapOfFriends.replace(id, snapshot.getValue(User.class));
                     } else {
-                        friends.put(id, snapshot.getValue(User.class));
+                        mapOfFriends.put(id, snapshot.getValue(User.class));
                     }
 
                     if (friendsCallback != null) {
-                        friendsCallback.onFriendUserReceived(friends.get(id));
+                        friendsCallback.onFriendUserReceived(mapOfFriends.get(id));
                     }
                     if (globeCallback != null) {
-                        globeCallback.onFriendUserReceived(friends.get(id));
+                        globeCallback.onFriendUserReceived(mapOfFriends.get(id));
                     }
 
                 } else {
@@ -272,8 +275,9 @@ public class MainModel {
     }
 
     public void addFriend(String id) {
-        if (currentUser != null && !id.equals(getCurrentGoogleUserId()) && !currentUser.friendsIds.contains(id)) {
-            currentUser.friendsIds.add(id);
+        if (!id.equals(getCurrentGoogleUserId())) {
+            listOfFriendsIds.add(id);
+            currentUser.friendsIds = listOfFriendsIds;
             writeCurrentUserIntoDb();
             loadUserFromDb(id);
         }
@@ -289,11 +293,13 @@ public class MainModel {
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Long tick) {
                 if (currentUser != null) {
-                    ArrayList<String> friendsIds = currentUser.friendsIds;
-                    if (friendsIds != null) {
-                        for (String id : friendsIds) {
+                    listOfFriendsIds = currentUser.friendsIds;
+                    try {
+                        for (String id : listOfFriendsIds) {
                             loadUserFromDb(id);
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -318,7 +324,14 @@ public class MainModel {
     }
 
     public void removeFriend(String id) {
-        // TODO
+        if (listOfFriendsIds.contains(id)) {
+            listOfFriendsIds.remove(id);
+            currentUser.friendsIds = listOfFriendsIds;
+
+            mapOfFriends.remove(id);
+
+            writeCurrentUserIntoDb();
+        }
     }
 
     public void dispose() {
