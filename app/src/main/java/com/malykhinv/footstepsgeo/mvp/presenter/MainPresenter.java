@@ -32,9 +32,10 @@ public class MainPresenter implements MainModel.MainCallback {
     // Call from Model:
 
     @Override
-    public void onCurrentUserReceived(User user) {
+    public void onCurrentUserReceived(User currentUser) {
         try {
-            model.setCurrentUser(user);
+            model.setCurrentUser(currentUser);
+            model.trackFriends();
         } catch (Exception e) {
             e.printStackTrace();
         }

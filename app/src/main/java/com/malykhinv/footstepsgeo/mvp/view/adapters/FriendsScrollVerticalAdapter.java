@@ -94,6 +94,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        private static final int CORE_ADDRESS_LINE_INDEX = 0;
         private GroupFriendInfoItemVerticalBinding b;
 
         public ViewHolder(@NonNull GroupFriendInfoItemVerticalBinding b) {
@@ -117,7 +118,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
             if (position != null) {
                 Address address = getAddress(position);
                 if (address != null) {
-                    b.textAddress.setText(address.toString());
+                    b.textAddress.setText(address.getAddressLine(CORE_ADDRESS_LINE_INDEX));
                 } else {
                     b.textAddress.setText(itemView.getContext().getString(R.string.na));
                 }

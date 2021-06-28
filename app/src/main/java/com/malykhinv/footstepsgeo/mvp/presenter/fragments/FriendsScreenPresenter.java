@@ -18,8 +18,6 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
     private final Context context = App.getAppComponent().getContext();
     private final FriendsScreenFragment view;
     private final MainModel model;
-    private HashMap<String, User> mapOfFriends;
-    private ArrayList<User> listOfFriends;
 
     public FriendsScreenPresenter(FriendsScreenFragment view) {
         this.view = view;
@@ -31,12 +29,11 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
     // Call from View:
 
     @SuppressLint("NonConstantResourceId")
-    public void onFriendOptionWasClicked(MenuItem item, int index) {
+    public void onFriendOptionWasClicked(MenuItem item, int index, String userId) {
         switch (item.getItemId()) {
             case R.id.menuItemUpdateFriendInfo: {
-                if (listOfFriends != null) {
-                    model.loadUserFromDb(listOfFriends.get(index).id);
-                }
+                    ArrayList<String> listOfFriendsIds = model.getListOfFriendsIds();
+                    model.loadUserFromDb(listOfFriendsIds.get(index));
                 break;
             }
             case R.id.menuItemGetRoute: {
@@ -44,8 +41,13 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
                 break;
             }
             case R.id.menuItemRemoveFriend: {
-                if (listOfFriends != null) {
-                    model.removeFriend(listOfFriends.get(index).id);
+                try {
+                    model.removeFriend(userId);
+
+                    HashMap<String, User> mapOfFriends = model.getMapOfFriends();
+                    view.updateUI(mapOfFriends);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
                 break;
             }
@@ -57,6 +59,7 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
     }
 
     public void onSubmitCodeButtonWasPressed(String personalCode) {
+        view.closeDialogWindow();
         try {
             model.loadIdFromDb(personalCode);
         } catch (Exception e) {
@@ -72,19 +75,18 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
     // Call from Model:
 
     @Override
-    public void onCurrentUserReceived(User user) {
-        if (user != null) {
-            model.dispose();
-            model.trackFriends();
-        }
-    }
-
-    @Override
     public void onFriendUserReceived(User user) {
-        if (user != null) {
+        HashMap<String, User> mapOfFriends = model.getMapOfFriends();
+
+        if (!mapOfFriends.containsKey(user.id)) {
             mapOfFriends.put(user.id, user);
-            listOfFriends.add(user);
-            view.updateUI(listOfFriends);
+            model.setMapOfFriends(mapOfFriends);
+            view.updateUI(mapOfFriends);
+        }
+
+        ArrayList<String> listOfFriendsIds = model.getListOfFriendsIds();
+        if (!listOfFriendsIds.contains(user.id)) {
+            model.addFriend(user.id);
         }
     }
 

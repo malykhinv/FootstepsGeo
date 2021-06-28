@@ -340,6 +340,22 @@ public class MainModel {
         }
     }
 
+    public HashMap<String, User> getMapOfFriends() {
+        return mapOfFriends;
+    }
+
+    public void setMapOfFriends(HashMap<String, User> mapOfFriends) {
+        this.mapOfFriends = mapOfFriends;
+    }
+
+    public ArrayList<String> getListOfFriendsIds() {
+        return listOfFriendsIds;
+    }
+
+    public void setListOfFriendsIds(ArrayList<String> listOfFriendsIds) {
+        this.listOfFriendsIds = listOfFriendsIds;
+    }
+
     // Maps:
 
     public void initializeLocationListener() {
