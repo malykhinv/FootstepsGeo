@@ -18,6 +18,8 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
@@ -35,7 +37,6 @@ public class MainModel {
     private static final int CURRENT_GOOGLE_USER_USERNAME_INDEX = 1;
     private static final int CURRENT_GOOGLE_USER_IMAGEURL_INDEX = 2;
     private static final int PERSONAL_CODE_LENGTH = 6;
-    private static final int IMAGE_COUNT = 121;
     private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
     private final Context context = App.getAppComponent().getContext();
     private final DatabaseReference usersReference = App.getAppComponent().getDbUsersReference();
@@ -62,7 +63,6 @@ public class MainModel {
     }
 
     public interface FriendsCallback {
-        void onCurrentUserReceived(User user);
         void onFriendUserReceived(User user);
         void onFriendIdReceived(String friendsId);
         void onNullFriendIdReceived();
@@ -97,7 +97,6 @@ public class MainModel {
     }
 
 
-
     // Google account info:
 
     public void setCurrentGoogleUserInfo(String userId, String userName, String imageUrl) {
@@ -124,21 +123,18 @@ public class MainModel {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
-                    user = snapshot.getValue(User.class);
+                    currentUser = snapshot.getValue(User.class);
                     if (mainCallback != null) {
-                        mainCallback.onCurrentUserReceived(user);
-                    }
-                    if (friendsCallback != null) {
-                        friendsCallback.onCurrentUserReceived(user);
+                        mainCallback.onCurrentUserReceived(currentUser);
                     }
                     if (globeCallback != null) {
-                        globeCallback.onCurrentUserReceived(user);
+                        globeCallback.onCurrentUserReceived(currentUser);
                     }
                     if (accountCallback != null) {
-                        accountCallback.onCurrentUserReceived(user);
+                        accountCallback.onCurrentUserReceived(currentUser);
                     }
                 } else {
-                    user = null;
+                    currentUser = null;
                     if (mainCallback != null) {
                         mainCallback.onNullCurrentUserReceived();
                     }
@@ -156,10 +152,16 @@ public class MainModel {
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
         String imageUrl = getCurrentGoogleUserImageUrl();
+        ArrayList<Double> position = null;
         int batteryLevel = App.getAppComponent().getBatteryLevel();
+        ArrayList<String> friendsIds = new ArrayList<>(Arrays.asList(""));
 
-        User newUser = new User(userId, userName, personalCode, imageUrl, System.currentTimeMillis(), batteryLevel);
+        // Create an user
+        User newUser = new User(userId, userName, personalCode, imageUrl, position, System.currentTimeMillis(), batteryLevel, friendsIds);
         usersReference.child(userId).setValue(newUser);
+
+        // Create an entry to make it possible to search for users by their personal codes
+        personalCodesReference.child(personalCode).setValue(userId);
 
         if (mainCallback != null) {
             mainCallback.onCurrentUserWasWrittenIntoDatabase(newUser);
@@ -178,7 +180,7 @@ public class MainModel {
 
     public void writeCurrentUserIntoDb() {
         try {
-            usersReference.child(user.id).setValue(user);
+            usersReference.child(user.id).setValue(currentUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
