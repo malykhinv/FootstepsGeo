@@ -18,7 +18,6 @@ import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -44,10 +43,8 @@ public class MainModel {
     private final LocationManager locationManager = App.getAppComponent().getLocationManager();
     private LocationListener locationListener;
     private String[] currentGoogleUserInfo;
-    private User user;
     private User currentUser;
     private HashMap<String, User> mapOfFriends = new HashMap<>(Collections.emptyMap());
-    private ArrayList<String> listOfFriendsIds = new ArrayList<>(Collections.emptyList());
     private MainCallback mainCallback;
     private FriendsCallback friendsCallback;
     private GlobeCallback globeCallback;
@@ -154,11 +151,12 @@ public class MainModel {
         String personalCode = generateNewPersonalCode();
         String imageUrl = getCurrentGoogleUserImageUrl();
         ArrayList<Double> position = null;
+        long millis = System.currentTimeMillis();
         int batteryLevel = App.getAppComponent().getBatteryLevel();
-        ArrayList<String> friendsIds = new ArrayList<>(Arrays.asList(""));
+        ArrayList<String> friendsIds = new ArrayList<>(Collections.singletonList(""));
 
         // Create an user
-        User newUser = new User(userId, userName, personalCode, imageUrl, position, System.currentTimeMillis(), batteryLevel, friendsIds);
+        User newUser = new User(userId, userName, personalCode, imageUrl, position, millis, batteryLevel, friendsIds);
         usersReference.child(userId).setValue(newUser);
 
         // Create an entry to make it possible to search for users by their personal codes
@@ -181,7 +179,7 @@ public class MainModel {
 
     public void writeCurrentUserIntoDb() {
         try {
-            usersReference.child(user.id).setValue(currentUser);
+            usersReference.child(currentUser.id).setValue(currentUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -228,7 +226,6 @@ public class MainModel {
                         friendsCallback.onFriendIdReceived(friendsId);
                     }
                 } else {
-                    user = null;
                     if (friendsCallback != null) {
                         friendsCallback.onNullFriendIdReceived();
                     }
@@ -242,31 +239,44 @@ public class MainModel {
     }
 
     public void loadUserFromDb(String id) {
-        usersReference.child(getCurrentGoogleUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+        usersReference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {
 
-                    if (mapOfFriends.containsKey(id)) {
-                        mapOfFriends.replace(id, snapshot.getValue(User.class));
-                    } else {
-                        mapOfFriends.put(id, snapshot.getValue(User.class));
-                    }
+                    if (!id.equals(getCurrentGoogleUserId())) {
+                        if (mapOfFriends.containsKey(id)) {
+                            mapOfFriends.replace(id, snapshot.getValue(User.class));
+                        } else {
+                            mapOfFriends.put(id, snapshot.getValue(User.class));
 
-                    if (friendsCallback != null) {
-                        friendsCallback.onFriendUserReceived(mapOfFriends.get(id));
-                    }
-                    if (globeCallback != null) {
-                        globeCallback.onFriendUserReceived(mapOfFriends.get(id));
-                    }
+                            updateCurrentUserFriendsIds(mapOfFriends);
+                        }
 
+                        if (friendsCallback != null) {
+                            friendsCallback.onFriendUserReceived(mapOfFriends.get(id));
+                        }
+
+                        if (globeCallback != null) {
+                            globeCallback.onFriendUserReceived(mapOfFriends.get(id));
+                        }
+                    }
                 } else {
-                    user = null;
                     if (mainCallback != null) {
                         mainCallback.onNullCurrentUserReceived();
                     }
                 }
             }
+
+            private void updateCurrentUserFriendsIds(HashMap<String, User> mapOfFriends) {
+                try {
+                    currentUser.friendsIds = new ArrayList<>(mapOfFriends.keySet());
+                    writeCurrentUserIntoDb();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -276,9 +286,11 @@ public class MainModel {
 
     public void addFriend(String id) {
         if (!id.equals(getCurrentGoogleUserId())) {
+            ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
             listOfFriendsIds.add(id);
             currentUser.friendsIds = listOfFriendsIds;
             writeCurrentUserIntoDb();
+
             loadUserFromDb(id);
         }
     }
@@ -293,10 +305,12 @@ public class MainModel {
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Long tick) {
                 if (currentUser != null) {
-                    listOfFriendsIds = currentUser.friendsIds;
+                    ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
                     try {
                         for (String id : listOfFriendsIds) {
-                            loadUserFromDb(id);
+                            if (!id.equals(currentUser.id)) {
+                                loadUserFromDb(id);
+                            }
                         }
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -324,13 +338,14 @@ public class MainModel {
     }
 
     public void removeFriend(String id) {
+        ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
         if (listOfFriendsIds.contains(id)) {
             listOfFriendsIds.remove(id);
             currentUser.friendsIds = listOfFriendsIds;
 
-            mapOfFriends.remove(id);
-
             writeCurrentUserIntoDb();
+
+            mapOfFriends.remove(id);
         }
     }
 
@@ -349,11 +364,7 @@ public class MainModel {
     }
 
     public ArrayList<String> getListOfFriendsIds() {
-        return listOfFriendsIds;
-    }
-
-    public void setListOfFriendsIds(ArrayList<String> listOfFriendsIds) {
-        this.listOfFriendsIds = listOfFriendsIds;
+        return new ArrayList<>(mapOfFriends.keySet());
     }
 
     // Maps:

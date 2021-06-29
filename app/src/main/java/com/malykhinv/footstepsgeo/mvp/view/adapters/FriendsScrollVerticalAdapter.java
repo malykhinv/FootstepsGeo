@@ -32,7 +32,6 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
     private final Context context = App.getAppComponent().getContext();
     private final FriendsScreenPresenter presenter;
-    public ArrayList<User> listOfFriends = new ArrayList<>();
     public HashMap<String, User> mapOfFriends = new HashMap<>();
     private int lastIndex = -1;
 
@@ -48,8 +47,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int index) {
-        listOfFriends.clear();
-        listOfFriends.addAll(mapOfFriends.values());
+        ArrayList<User> listOfFriends = new ArrayList<>(mapOfFriends.values());
         holder.updateUI(listOfFriends.get(index));
         setAnimation(holder.itemView, index);
 
@@ -95,7 +93,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private static final int CORE_ADDRESS_LINE_INDEX = 0;
-        private GroupFriendInfoItemVerticalBinding b;
+        private final GroupFriendInfoItemVerticalBinding b;
 
         public ViewHolder(@NonNull GroupFriendInfoItemVerticalBinding b) {
             super(b.getRoot());

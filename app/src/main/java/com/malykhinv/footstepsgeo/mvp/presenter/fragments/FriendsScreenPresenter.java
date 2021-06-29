@@ -81,13 +81,10 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
         if (!mapOfFriends.containsKey(user.id)) {
             mapOfFriends.put(user.id, user);
             model.setMapOfFriends(mapOfFriends);
-            view.updateUI(mapOfFriends);
-        }
-
-        ArrayList<String> listOfFriendsIds = model.getListOfFriendsIds();
-        if (!listOfFriendsIds.contains(user.id)) {
             model.addFriend(user.id);
         }
+
+        view.updateUI(mapOfFriends);
     }
 
     @Override
