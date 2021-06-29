@@ -37,7 +37,7 @@ public class MainModel {
     private static final int CURRENT_GOOGLE_USER_USERNAME_INDEX = 1;
     private static final int CURRENT_GOOGLE_USER_IMAGEURL_INDEX = 2;
     private static final int PERSONAL_CODE_LENGTH = 6;
-    private static final String ALPHABET09 = "ABCDEFGHIKLMNOPQRSTVXYZ0123456789";
+    private static final String ALPHABET09 = "ABCDEFGHIKLMNPQRSTVXYZ123456789";
     private final Context context = App.getAppComponent().getContext();
     private final DatabaseReference usersReference = App.getAppComponent().getDbUsersReference();
     private final DatabaseReference personalCodesReference = App.getAppComponent().getDbPersonalCodesReference();
