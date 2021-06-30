@@ -95,7 +95,7 @@ public class MainModel {
     }
 
 
-    // Google account info:
+    // Google: account info
 
     public void setCurrentGoogleUserInfo(String userId, String userName, String imageUrl) {
         currentGoogleUserInfo = new String[] {userId, userName, imageUrl};
@@ -153,7 +153,7 @@ public class MainModel {
         ArrayList<Double> position = null;
         long millis = System.currentTimeMillis();
         int batteryLevel = App.getAppComponent().getBatteryLevel();
-        ArrayList<String> friendsIds = new ArrayList<>(Collections.singletonList(""));
+        ArrayList<String> friendsIds = null;
 
         // Create an user
         User newUser = new User(userId, userName, personalCode, imageUrl, position, millis, batteryLevel, friendsIds);
@@ -238,7 +238,7 @@ public class MainModel {
         });
     }
 
-    public void loadUserFromDb(String id) {
+    public void loadFriendFromDb(String id) {
         usersReference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -284,14 +284,16 @@ public class MainModel {
         });
     }
 
-    public void addFriend(String id) {
-        if (!id.equals(getCurrentGoogleUserId())) {
-            ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
-            listOfFriendsIds.add(id);
-            currentUser.friendsIds = listOfFriendsIds;
-            writeCurrentUserIntoDb();
-
-            loadUserFromDb(id);
+    public void loadAllFriendsFromDb() {
+        try {
+            ArrayList<String> listOfFriendsIds = currentUser.friendsIds;
+            for (String id : listOfFriendsIds) {
+                if (!id.equals(currentUser.id)) {
+                    loadFriendFromDb(id);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -304,18 +306,7 @@ public class MainModel {
 
             @Override
             public void onNext(@io.reactivex.rxjava3.annotations.NonNull Long tick) {
-                if (currentUser != null) {
-                    ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
-                    try {
-                        for (String id : listOfFriendsIds) {
-                            if (!id.equals(currentUser.id)) {
-                                loadUserFromDb(id);
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+                loadAllFriendsFromDb();
             }
 
             @Override
@@ -335,6 +326,17 @@ public class MainModel {
                 .observeOn(AndroidSchedulers.mainThread());
 
         friendsOnTimer.subscribe(friendsObserver);
+    }
+
+    public void addFriend(String id) {
+        if (!id.equals(getCurrentGoogleUserId())) {
+            ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
+            listOfFriendsIds.add(id);
+            currentUser.friendsIds = listOfFriendsIds;
+            writeCurrentUserIntoDb();
+
+            loadFriendFromDb(id);
+        }
     }
 
     public void removeFriend(String id) {
@@ -366,6 +368,7 @@ public class MainModel {
     public ArrayList<String> getListOfFriendsIds() {
         return new ArrayList<>(mapOfFriends.keySet());
     }
+
 
     // Maps:
 

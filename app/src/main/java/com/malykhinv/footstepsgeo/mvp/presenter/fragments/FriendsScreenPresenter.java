@@ -28,12 +28,22 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
 
     // Call from View:
 
+    public void onViewCreated() {
+        view.initializeRecyclerView();
+        model.loadAllFriendsFromDb();
+
+        HashMap<String, User> mapOfFriends = model.getMapOfFriends();
+        if (mapOfFriends == null || mapOfFriends.size() == 0) {
+            view.hideUserLoadingProgress();
+        }
+    }
+
     @SuppressLint("NonConstantResourceId")
     public void onFriendOptionWasClicked(MenuItem item, int index, String userId) {
         switch (item.getItemId()) {
             case R.id.menuItemUpdateFriendInfo: {
                     ArrayList<String> listOfFriendsIds = model.getListOfFriendsIds();
-                    model.loadUserFromDb(listOfFriendsIds.get(index));
+                    model.loadFriendFromDb(listOfFriendsIds.get(index));
                 break;
             }
             case R.id.menuItemGetRoute: {
@@ -60,6 +70,7 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
 
     public void onSubmitCodeButtonWasPressed(String personalCode) {
         view.closeDialogWindow();
+        view.showUserLoadingProgress();
         try {
             model.loadIdFromDb(personalCode);
         } catch (Exception e) {
@@ -85,16 +96,18 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
         }
 
         view.updateUI(mapOfFriends);
+        view.hideUserLoadingProgress();
     }
 
     @Override
     public void onFriendIdReceived(String friendsId) {
-        model.loadUserFromDb(friendsId);
+        model.loadFriendFromDb(friendsId);
     }
 
     @Override
     public void onNullFriendIdReceived() {
         view.closeDialogWindow();
+        view.hideUserLoadingProgress();
         String message = context.getString(R.string.error_no_user);
         view.showMessage(message);
     }

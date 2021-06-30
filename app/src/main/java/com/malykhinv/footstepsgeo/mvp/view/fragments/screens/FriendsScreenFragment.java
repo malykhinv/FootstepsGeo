@@ -59,17 +59,18 @@ public class FriendsScreenFragment extends Fragment {
             presenter = new FriendsScreenPresenter(this);
         }
 
+        presenter.onViewCreated();
         initializeRecyclerView();
     }
 
-    private void initializeRecyclerView() {
+    public void initializeRecyclerView() {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         friendListAdapter = new FriendsScrollVerticalAdapter(presenter);
         b.recyclerView.setAdapter(friendListAdapter);
     }
 
     public void updateUI(HashMap<String, User> mapOfFriends) {
-        if (mapOfFriends != null && mapOfFriends.size() > 0) {
+        if (mapOfFriends != null) {
             b.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
             friendListAdapter.clearItems();
             friendListAdapter.setItems(mapOfFriends);
@@ -105,6 +106,16 @@ public class FriendsScreenFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void showUserLoadingProgress() {
+        b.textFriendCount.setVisibility(View.GONE);
+        b.progressBarFriendLoading.setVisibility(View.VISIBLE);
+    }
+
+    public void hideUserLoadingProgress() {
+        b.progressBarFriendLoading.setVisibility(View.GONE);
+        b.textFriendCount.setVisibility(View.VISIBLE);
     }
 
     public void showMessage(String message) {

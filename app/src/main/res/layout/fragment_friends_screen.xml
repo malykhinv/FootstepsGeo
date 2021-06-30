@@ -45,7 +45,7 @@
 
                 <TextView
                     android:id="@+id/textFriendCount"
-                    android:layout_width="wrap_content"
+                    android:layout_width="@dimen/width_friends_count"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="@dimen/margin_horizontal_small"
@@ -58,7 +58,24 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="@dimen/text_size_regular"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <ProgressBar
+                    android:id="@+id/progressBarFriendLoading"
+                    style="?android:attr/progressBarStyle"
+                    android:layout_width="@dimen/width_friends_count"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/margin_horizontal_small"
+                    android:background="@drawable/tiny_rounded_yellow_background"
+                    android:indeterminate="true"
+                    android:indeterminateBehavior="cycle"
+                    android:indeterminateTint="@color/black"
+                    android:paddingStart="@dimen/padding_horizontal"
+                    android:paddingTop="@dimen/padding"
+                    android:paddingEnd="@dimen/padding_horizontal"
+                    android:paddingBottom="@dimen/padding"
+                    android:visibility="visible" />
 
             </LinearLayout>
 
