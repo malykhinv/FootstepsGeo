@@ -55,9 +55,8 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
             PopupMenu popup = new PopupMenu(context, view);
             popup.setOnMenuItemClickListener(item -> {
                 if (presenter != null) {
-                    int adapterPosition = holder.getAdapterPosition();
                     String userId = listOfFriends.get(index).id;
-                    presenter.onFriendOptionWasClicked(item, adapterPosition, userId);
+                    presenter.onFriendOptionWasClicked(item, userId);
                 }
                 return false;
             });

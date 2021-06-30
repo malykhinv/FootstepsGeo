@@ -9,11 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.malykhinv.footstepsgeo.User;
 import com.malykhinv.footstepsgeo.databinding.FragmentFriendsScrollHorizontalBinding;
 import com.malykhinv.footstepsgeo.mvp.view.adapters.FriendsScrollHorizontalAdapter;
-
-import java.util.ArrayList;
 
 public class FriendsScrollHorizontalFragment extends Fragment {
 
@@ -22,7 +19,7 @@ public class FriendsScrollHorizontalFragment extends Fragment {
     private FriendsScrollHorizontalAdapter userlistAdapter;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@io.reactivex.rxjava3.annotations.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         b = FragmentFriendsScrollHorizontalBinding.inflate(inflater, container, false);
 
@@ -45,10 +42,5 @@ public class FriendsScrollHorizontalFragment extends Fragment {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         userlistAdapter = new FriendsScrollHorizontalAdapter();
         b.recyclerView.setAdapter(userlistAdapter);
-    }
-
-    public void updateUI(ArrayList<User> friendUsers) {
-        userlistAdapter.clearItems();
-        userlistAdapter.setItems(friendUsers);
     }
 }

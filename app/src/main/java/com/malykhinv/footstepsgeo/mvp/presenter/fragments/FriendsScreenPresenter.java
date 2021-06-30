@@ -10,7 +10,6 @@ import com.malykhinv.footstepsgeo.di.App;
 import com.malykhinv.footstepsgeo.mvp.model.MainModel;
 import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.FriendsScreenFragment;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FriendsScreenPresenter implements MainModel.FriendsCallback {
@@ -39,11 +38,10 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
     }
 
     @SuppressLint("NonConstantResourceId")
-    public void onFriendOptionWasClicked(MenuItem item, int index, String userId) {
+    public void onFriendOptionWasClicked(MenuItem item, String userId) {
         switch (item.getItemId()) {
             case R.id.menuItemUpdateFriendInfo: {
-                    ArrayList<String> listOfFriendsIds = model.getListOfFriendsIds();
-                    model.loadFriendFromDb(listOfFriendsIds.get(index));
+                    model.loadFriendFromDb(userId);
                 break;
             }
             case R.id.menuItemGetRoute: {
@@ -52,16 +50,20 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
             }
             case R.id.menuItemRemoveFriend: {
                 try {
-                    model.removeFriend(userId);
-
-                    HashMap<String, User> mapOfFriends = model.getMapOfFriends();
-                    view.updateUI(mapOfFriends);
+                    removeFriend(userId);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 break;
             }
         }
+    }
+
+    private void removeFriend(String userId) {
+        model.removeFriend(userId);
+
+        HashMap<String, User> mapOfFriends = model.getMapOfFriends();
+        view.updateUI(mapOfFriends);
     }
 
     public void onAddFriendMenuItemWasClicked() {
