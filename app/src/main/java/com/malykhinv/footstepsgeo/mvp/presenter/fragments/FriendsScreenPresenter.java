@@ -49,21 +49,10 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
                 break;
             }
             case R.id.menuItemRemoveFriend: {
-                try {
-                    removeFriend(userId);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                model.removeFriend(userId);
                 break;
             }
         }
-    }
-
-    private void removeFriend(String userId) {
-        model.removeFriend(userId);
-
-        HashMap<String, User> mapOfFriends = model.getMapOfFriends();
-        view.updateUI(mapOfFriends);
     }
 
     public void onAddFriendMenuItemWasClicked() {
@@ -112,5 +101,10 @@ public class FriendsScreenPresenter implements MainModel.FriendsCallback {
         view.hideUserLoadingProgress();
         String message = context.getString(R.string.error_no_user);
         view.showMessage(message);
+    }
+
+    @Override
+    public void onFriendWasRemoved(HashMap<String, User> mapOfFriends) {
+        view.updateUI(mapOfFriends);
     }
 }

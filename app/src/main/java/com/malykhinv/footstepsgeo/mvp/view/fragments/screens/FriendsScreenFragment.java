@@ -2,6 +2,7 @@ package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,7 +35,9 @@ public class FriendsScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        b = FragmentFriendsScreenBinding.inflate(inflater, container, false);
+        if (b == null) {
+            b = FragmentFriendsScreenBinding.inflate(inflater, container, false);
+        }
 
         b.toolbar.getMenu().getItem(0).setOnMenuItemClickListener(v -> {
            if (presenter != null) {
@@ -60,19 +63,21 @@ public class FriendsScreenFragment extends Fragment {
         }
 
         presenter.onViewCreated();
-        initializeRecyclerView();
     }
 
     public void initializeRecyclerView() {
         b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        friendListAdapter = new FriendsScrollVerticalAdapter(presenter);
-        b.recyclerView.setAdapter(friendListAdapter);
+        if (friendListAdapter == null) {
+            friendListAdapter = new FriendsScrollVerticalAdapter(presenter);
+            b.recyclerView.setAdapter(friendListAdapter);
+        }
     }
 
     public void updateUI(HashMap<String, User> mapOfFriends) {
+        friendListAdapter.clearItems();
         if (mapOfFriends != null) {
+            Log.d("size", "updateUI: " + mapOfFriends.size());
             b.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
-            friendListAdapter.clearItems();
             friendListAdapter.setItems(mapOfFriends);
         } else {
             b.textFriendCount.setText(R.string.init_count);

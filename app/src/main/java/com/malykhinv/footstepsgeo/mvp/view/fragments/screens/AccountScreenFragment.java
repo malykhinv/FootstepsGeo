@@ -39,7 +39,9 @@ public class AccountScreenFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        b = FragmentAccountScreenBinding.inflate(inflater, container, false);
+        if (b == null) {
+            b = FragmentAccountScreenBinding.inflate(inflater, container, false);
+        }
 
         b.buttonShareCode.setOnClickListener(v -> {
             if (presenter != null) {

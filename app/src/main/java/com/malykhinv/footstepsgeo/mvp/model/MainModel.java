@@ -64,6 +64,7 @@ public class MainModel {
         void onFriendUserReceived(User user);
         void onFriendIdReceived(String friendsId);
         void onNullFriendIdReceived();
+        void onFriendWasRemoved(HashMap<String, User> mapOfFriends);
     }
 
     public interface GlobeCallback {
@@ -342,12 +343,16 @@ public class MainModel {
     public void removeFriend(String id) {
         ArrayList<String> listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
         if (listOfFriendsIds.contains(id)) {
-            listOfFriendsIds.remove(id);
+            mapOfFriends.remove(id);
+
+            listOfFriendsIds = new ArrayList<>(mapOfFriends.keySet());
             currentUser.friendsIds = listOfFriendsIds;
 
             writeCurrentUserIntoDb();
 
-            mapOfFriends.remove(id);
+            if (friendsCallback != null) {
+                friendsCallback.onFriendWasRemoved(mapOfFriends);
+            }
         }
     }
 

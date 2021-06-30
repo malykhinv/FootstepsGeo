@@ -58,7 +58,9 @@ public class GlobeScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        b = FragmentGlobeScreenBinding.inflate(inflater, container, false);
+        if (b == null) {
+            b = FragmentGlobeScreenBinding.inflate(inflater, container, false);
+        }
 
         b.fabMyLocation.setOnClickListener(v -> presenter.onFabWasPressed());
 
