@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int INITIAL_MENU_ITEM_INDEX = 1;
     private static final int USER_ACTION_DELAY = 2000;
     private final FragmentManager fragmentManager = getSupportFragmentManager();
-    private ActivityMainBinding b;
+    private ActivityMainBinding binding;
     private MainPresenter presenter;
     private FriendsScreenFragment fragmentUserlistScreen;
     private GlobeScreenFragment fragmentGlobeScreen;
@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void bind() {
-        b = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = b.getRoot();
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
     }
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("NonConstantResourceId")
     private void initializeBottomNavigation() {
-        b.menuBottomNavigation.setOnNavigationItemSelectedListener(item -> {
+        binding.menuBottomNavigation.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.menuItemUserlist: {
                     showFragment(fragmentUserlistScreen);
@@ -76,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showInitialFragment() {
-        b.menuBottomNavigation.setSelectedItemId(b.menuBottomNavigation.getMenu().getItem(INITIAL_MENU_ITEM_INDEX).getItemId());
+        binding.menuBottomNavigation.setSelectedItemId(binding.menuBottomNavigation.getMenu().getItem(INITIAL_MENU_ITEM_INDEX).getItemId());
     }
 
     private void showFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().replace(b.layoutFragmentContainer.getId(), fragment).commit();
+        fragmentManager.beginTransaction().replace(binding.layoutFragmentContainer.getId(), fragment).commit();
     }
 
     public void loadCurrentGoogleUserInfo() {
@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        int initialMenuItemId = b.menuBottomNavigation.getMenu().getItem(INITIAL_MENU_ITEM_INDEX).getItemId();
-        if (b.menuBottomNavigation.getSelectedItemId() != initialMenuItemId) {
+        int initialMenuItemId = binding.menuBottomNavigation.getMenu().getItem(INITIAL_MENU_ITEM_INDEX).getItemId();
+        if (binding.menuBottomNavigation.getSelectedItemId() != initialMenuItemId) {
             showInitialFragment();
         } else {
             if (isAboutToClose) finish();
@@ -122,6 +122,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentGlobeScreen = null;
         fragmentAccountScreen = null;
         presenter = null;
-        b = null;
+        binding = null;
     }
 }

@@ -15,16 +15,16 @@ import com.malykhinv.footstepsgeo.mvp.view.adapters.FriendsScrollHorizontalAdapt
 public class FriendsScrollHorizontalFragment extends Fragment {
 
     private View view;
-    private FragmentFriendsScrollHorizontalBinding b;
+    private FragmentFriendsScrollHorizontalBinding binding;
     private FriendsScrollHorizontalAdapter userlistAdapter;
 
     @Override
     public View onCreateView(@io.reactivex.rxjava3.annotations.NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        b = FragmentFriendsScrollHorizontalBinding.inflate(inflater, container, false);
+        binding = FragmentFriendsScrollHorizontalBinding.inflate(inflater, container, false);
 
         if (view == null) {
-            view = b.getRoot();
+            view = binding.getRoot();
         } else if (view.getParent() != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
@@ -39,8 +39,8 @@ public class FriendsScrollHorizontalFragment extends Fragment {
     }
 
     private void initializeRecyclerView() {
-        b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext(), LinearLayoutManager.HORIZONTAL, false));
         userlistAdapter = new FriendsScrollHorizontalAdapter();
-        b.recyclerView.setAdapter(userlistAdapter);
+        binding.recyclerView.setAdapter(userlistAdapter);
     }
 }

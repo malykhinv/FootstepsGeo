@@ -51,7 +51,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
         holder.updateUI(listOfFriends.get(index));
         setAnimation(holder.itemView, index);
 
-        holder.b.imageButtonFriendOptions.setOnClickListener(view -> {
+        holder.binding.imageButtonFriendOptions.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, view);
             popup.setOnMenuItemClickListener(item -> {
                 if (presenter != null) {
@@ -92,11 +92,11 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private static final int CORE_ADDRESS_LINE_INDEX = 0;
-        private final GroupFriendInfoItemVerticalBinding b;
+        private final GroupFriendInfoItemVerticalBinding binding;
 
-        public ViewHolder(@NonNull GroupFriendInfoItemVerticalBinding b) {
-            super(b.getRoot());
-            this.b = b;
+        public ViewHolder(@NonNull GroupFriendInfoItemVerticalBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         private void updateUI(User friendUser) {
@@ -107,7 +107,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
 
         private void updateFriendUserName(String name) {
             if (name != null) {
-                b.textName.setText(name);
+                binding.textName.setText(name);
             }
         }
 
@@ -115,9 +115,9 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
             if (position != null) {
                 Address address = getAddress(position);
                 if (address != null) {
-                    b.textAddress.setText(address.getAddressLine(CORE_ADDRESS_LINE_INDEX));
+                    binding.textAddress.setText(address.getAddressLine(CORE_ADDRESS_LINE_INDEX));
                 } else {
-                    b.textAddress.setText(itemView.getContext().getString(R.string.na));
+                    binding.textAddress.setText(itemView.getContext().getString(R.string.na));
                 }
             }
         }
@@ -145,7 +145,7 @@ public class FriendsScrollVerticalAdapter extends RecyclerView.Adapter<FriendsSc
                 Glide.with(itemView)
                         .load(imageUrl)
                         .apply(options)
-                        .into(b.imageUser);
+                        .into(binding.imageUser);
             }
         }
     }

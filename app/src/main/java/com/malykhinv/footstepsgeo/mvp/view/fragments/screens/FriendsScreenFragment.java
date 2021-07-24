@@ -24,7 +24,7 @@ import java.util.HashMap;
 
 public class FriendsScreenFragment extends Fragment {
 
-    private FragmentFriendsScreenBinding b;
+    private FragmentFriendsScreenBinding binding;
     private View view;
     private FriendsScreenPresenter presenter;
     private FriendsScrollVerticalAdapter friendListAdapter;
@@ -35,11 +35,11 @@ public class FriendsScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (b == null) {
-            b = FragmentFriendsScreenBinding.inflate(inflater, container, false);
+        if (binding == null) {
+            binding = FragmentFriendsScreenBinding.inflate(inflater, container, false);
         }
 
-        b.toolbar.getMenu().getItem(0).setOnMenuItemClickListener(v -> {
+        binding.toolbar.getMenu().getItem(0).setOnMenuItemClickListener(v -> {
            if (presenter != null) {
                presenter.onAddFriendMenuItemWasClicked();
            }
@@ -47,7 +47,7 @@ public class FriendsScreenFragment extends Fragment {
         });
 
         if (view == null) {
-            view = b.getRoot();
+            view = binding.getRoot();
         } else if (view.getParent() != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
@@ -66,10 +66,10 @@ public class FriendsScreenFragment extends Fragment {
     }
 
     public void initializeRecyclerView() {
-        b.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         if (friendListAdapter == null) {
             friendListAdapter = new FriendsScrollVerticalAdapter(presenter);
-            b.recyclerView.setAdapter(friendListAdapter);
+            binding.recyclerView.setAdapter(friendListAdapter);
         }
     }
 
@@ -77,10 +77,10 @@ public class FriendsScreenFragment extends Fragment {
         friendListAdapter.clearItems();
         if (mapOfFriends != null) {
             Log.d("size", "updateUI: " + mapOfFriends.size());
-            b.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
+            binding.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
             friendListAdapter.setItems(mapOfFriends);
         } else {
-            b.textFriendCount.setText(R.string.init_count);
+            binding.textFriendCount.setText(R.string.init_count);
         }
     }
 
@@ -114,13 +114,13 @@ public class FriendsScreenFragment extends Fragment {
     }
 
     public void showUserLoadingProgress() {
-        b.textFriendCount.setVisibility(View.GONE);
-        b.progressBarFriendLoading.setVisibility(View.VISIBLE);
+        binding.textFriendCount.setVisibility(View.GONE);
+        binding.progressBarFriendLoading.setVisibility(View.VISIBLE);
     }
 
     public void hideUserLoadingProgress() {
-        b.progressBarFriendLoading.setVisibility(View.GONE);
-        b.textFriendCount.setVisibility(View.VISIBLE);
+        binding.progressBarFriendLoading.setVisibility(View.GONE);
+        binding.textFriendCount.setVisibility(View.VISIBLE);
     }
 
     public void showMessage(String message) {

@@ -22,7 +22,7 @@ public class GreetingActivity extends AppCompatActivity {
     private static final int DURATION = 200;
     private static final int USER_ACTION_DELAY = 2000;
     private static final int[] illustrations = new int[] {R.drawable.image_greeting_1, R.drawable.image_greeting_2, R.drawable.image_greeting_3};
-    private ActivityGreetingBinding b;
+    private ActivityGreetingBinding binding;
     private GreetingPresenter presenter;
     private boolean isAboutToClose = false;
     private boolean isOnline = false;
@@ -50,11 +50,11 @@ public class GreetingActivity extends AppCompatActivity {
     }
 
     private void bind() {
-        b = ActivityGreetingBinding.inflate(getLayoutInflater());
-        View view = b.getRoot();
+        binding = ActivityGreetingBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
 
-        b.buttonSignIn.setOnClickListener(v -> {
+        binding.buttonSignIn.setOnClickListener(v -> {
             if (presenter != null) {
                 presenter.onSignInButtonWasClicked();
             }
@@ -69,13 +69,13 @@ public class GreetingActivity extends AppCompatActivity {
     private void setRandomIllustration(){
         Random random = new Random();
         int randomIndex = random.nextInt(illustrations.length);
-        b.imageGreetingIllustration.setImageResource(illustrations[randomIndex]);
+        binding.imageGreetingIllustration.setImageResource(illustrations[randomIndex]);
     }
 
     private void animateIllustration(){
         Animation floating = AnimationUtils.loadAnimation(this, R.anim.animation_floating_slow);
-        b.imageGreetingIllustration.startAnimation(floating);
-        b.imageGreetingIllustration.animate().alpha(1).setDuration(DURATION);
+        binding.imageGreetingIllustration.startAnimation(floating);
+        binding.imageGreetingIllustration.animate().alpha(1).setDuration(DURATION);
     }
 
     public void setConnectionMode(boolean isConnectionEstablished) {
@@ -91,24 +91,24 @@ public class GreetingActivity extends AppCompatActivity {
     }
 
     private void showOnlineMode() {
-        b.textAppTitle.setText(R.string.app_name);
-        b.textGreeting.setText(R.string.greeting_core);
-        b.textGreeting.setTextColor(this.getColor(R.color.black));
-        b.buttonSignIn.setClickable(true);
-        if (b.buttonSignIn.getVisibility() == View.INVISIBLE) {
-            b.buttonSignIn.setVisibility(View.VISIBLE);
-            b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_in_fast));
+        binding.textAppTitle.setText(R.string.app_name);
+        binding.textGreeting.setText(R.string.greeting_core);
+        binding.textGreeting.setTextColor(this.getColor(R.color.black));
+        binding.buttonSignIn.setClickable(true);
+        if (binding.buttonSignIn.getVisibility() == View.INVISIBLE) {
+            binding.buttonSignIn.setVisibility(View.VISIBLE);
+            binding.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_in_fast));
         }
     }
 
     private void showOfflineMode() {
-        b.textAppTitle.setText(R.string.oh_no);
-        b.textGreeting.setText(R.string.you_are_offline);
-        b.textGreeting.setTextColor(this.getColor(R.color.green_a700));
-        b.buttonSignIn.setClickable(false);
-        if (b.buttonSignIn.getVisibility() == View.VISIBLE) {
-            b.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_out_fast));
-            b.buttonSignIn.setVisibility(View.INVISIBLE);
+        binding.textAppTitle.setText(R.string.oh_no);
+        binding.textGreeting.setText(R.string.you_are_offline);
+        binding.textGreeting.setTextColor(this.getColor(R.color.green_a700));
+        binding.buttonSignIn.setClickable(false);
+        if (binding.buttonSignIn.getVisibility() == View.VISIBLE) {
+            binding.buttonSignIn.startAnimation(AnimationUtils.loadAnimation(this, R.anim.animation_fade_out_fast));
+            binding.buttonSignIn.setVisibility(View.INVISIBLE);
         }
     }
 

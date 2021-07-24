@@ -28,7 +28,7 @@ public class AccountScreenFragment extends Fragment {
 
     private final ClipboardManager clipboardManager = App.getAppComponent().getClipboard();
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private FragmentAccountScreenBinding b;
+    private FragmentAccountScreenBinding binding;
     private View view;
     private AccountScreenPresenter presenter;
 
@@ -39,30 +39,30 @@ public class AccountScreenFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
-        if (b == null) {
-            b = FragmentAccountScreenBinding.inflate(inflater, container, false);
+        if (binding == null) {
+            binding = FragmentAccountScreenBinding.inflate(inflater, container, false);
         }
 
-        b.buttonShareCode.setOnClickListener(v -> {
+        binding.buttonShareCode.setOnClickListener(v -> {
             if (presenter != null) {
                 presenter.onShareCodeButtonWasClicked();
             }
         });
 
-        b.imageUserpic.setOnClickListener(v -> {
+        binding.imageUserpic.setOnClickListener(v -> {
             if (presenter != null) {
                 presenter.onUserpicWasClicked(v);
             }
         });
 
-        b.imageButtonCopyPersonalCode.setOnClickListener(v -> {
+        binding.imageButtonCopyPersonalCode.setOnClickListener(v -> {
             if (presenter != null) {
                 presenter.onCopyPersonalCodeButtonWasClicked();
             }
         });
 
         if (view == null) {
-            view = b.getRoot();
+            view = binding.getRoot();
         } else if (view.getParent() != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
@@ -86,7 +86,7 @@ public class AccountScreenFragment extends Fragment {
             Glide.with(this)
                     .load(imageUrl)
                     .apply(options)
-                    .into(b.imageUserpic);
+                    .into(binding.imageUserpic);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,7 +94,7 @@ public class AccountScreenFragment extends Fragment {
 
     public void showPersonalCode(String personalCode) {
         try {
-            b.textPersonalCode.setText(personalCode);
+            binding.textPersonalCode.setText(personalCode);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,7 +102,7 @@ public class AccountScreenFragment extends Fragment {
 
     public void showUsername(String name) {
        try {
-            b.textAccountNameGreeting.setText(name);
+            binding.textAccountNameGreeting.setText(name);
         } catch (Exception e) {
            e.printStackTrace();
        }

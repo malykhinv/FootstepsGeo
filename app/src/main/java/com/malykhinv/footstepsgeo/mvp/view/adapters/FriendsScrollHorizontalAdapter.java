@@ -63,11 +63,11 @@ public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<Friends
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private GroupFriendInfoItemHorizontalBinding b;
+        private GroupFriendInfoItemHorizontalBinding binding;
 
-        public ViewHolder(@NonNull GroupFriendInfoItemHorizontalBinding b) {
-            super(b.getRoot());
-            this.b = b;
+        public ViewHolder(@NonNull GroupFriendInfoItemHorizontalBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
 
         public void updateUI(User friendUser) {
@@ -77,7 +77,7 @@ public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<Friends
 
         private void updateFriendUserName(String name) {
             if (name != null) {
-                b.textFriendName.setText(name);
+                binding.textFriendName.setText(name);
             }
         }
 
@@ -89,7 +89,7 @@ public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<Friends
                 Glide.with(itemView)
                         .load(imageUrl)
                         .apply(options)
-                        .into(b.imageFriend);
+                        .into(binding.imageFriend);
             }
         }
     }

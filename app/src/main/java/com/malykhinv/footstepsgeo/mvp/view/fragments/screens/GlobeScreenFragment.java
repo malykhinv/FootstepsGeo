@@ -1,8 +1,12 @@
 package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +19,10 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -49,7 +57,7 @@ public class GlobeScreenFragment extends Fragment {
     private FriendsScrollHorizontalFragment friendsScrollHorizontalFragment;
     private UserDetailsFragment userDetailsFragment;
     private View view;
-    private FragmentGlobeScreenBinding b;
+    private FragmentGlobeScreenBinding binding;
     private GlobeScreenPresenter presenter;
     private GoogleMap googleMap;
     private HashMap<String, Marker> markers = new HashMap<>();
@@ -58,14 +66,14 @@ public class GlobeScreenFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        if (b == null) {
-            b = FragmentGlobeScreenBinding.inflate(inflater, container, false);
+        if (binding == null) {
+            binding = FragmentGlobeScreenBinding.inflate(inflater, container, false);
         }
 
-        b.fabMyLocation.setOnClickListener(v -> presenter.onFabWasPressed());
+        binding.fabMyLocation.setOnClickListener(v -> presenter.onFabWasPressed());
 
         if (view == null) {
-            view = b.getRoot();
+            view = binding.getRoot();
         } else if (view.getParent() != null){
             ((ViewGroup) view.getParent()).removeView(view);
         }
@@ -79,8 +87,8 @@ public class GlobeScreenFragment extends Fragment {
         initializeFragments();
         showFragment(friendsScrollHorizontalFragment);
 
-        b.mapView.onCreate(savedInstanceState);
-        b.mapView.onResume();
+        binding.mapView.onCreate(savedInstanceState);
+        binding.mapView.onResume();
 
         if (presenter == null) {
             presenter = new GlobeScreenPresenter(this);
@@ -130,7 +138,7 @@ public class GlobeScreenFragment extends Fragment {
 
     public void getMap() {
         if (googleMap == null) {
-            b.mapView.getMapAsync(presenter);
+            binding.mapView.getMapAsync(presenter);
         }
     }
 
@@ -156,7 +164,27 @@ public class GlobeScreenFragment extends Fragment {
         googleMap.getUiSettings().setCompassEnabled(false);
     }
 
+    @SuppressLint("CheckResult")
     public void createUserMarker(User user) {
+
+        RequestOptions options = new RequestOptions();
+        options.circleCrop();
+
+        Glide.with(this)
+                .asBitmap()
+                .apply(options)
+                .load(user.imageUrl)
+                .into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+
+                    }
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) { }
+                });
+
+
+
         try {
             String userId = user.id;
             Double latitude = user.position.get(POSITION_LAT_INDEX);
@@ -172,6 +200,10 @@ public class GlobeScreenFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean isMarkerExists(String id) {
+        return markers.containsKey(id);
     }
 
     public void moveUserMarker(User user) {
@@ -207,6 +239,10 @@ public class GlobeScreenFragment extends Fragment {
         }
     }
 
+    private int dpToPx(int dp) {
+        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
+    }
+
     public void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -214,9 +250,5 @@ public class GlobeScreenFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    public boolean isMarkerExists(String id) {
-        return markers.containsKey(id);
     }
 }
