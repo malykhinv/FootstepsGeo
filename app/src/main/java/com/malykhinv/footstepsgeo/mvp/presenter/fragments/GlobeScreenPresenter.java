@@ -15,6 +15,7 @@ import com.malykhinv.footstepsgeo.mvp.view.fragments.screens.GlobeScreenFragment
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
@@ -35,7 +36,10 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     // Call from View:
 
     public void onViewCreated() {
+        view.initializeFragments();
         view.getMap();
+
+        model.loadAllFriendsFromDb();
     }
 
     @Override
@@ -140,6 +144,16 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     @Override
     public void onFriendUserReceived(User user) {
         placeUserOnMap(user);
+
+        HashMap<String, User> mapOfFriends = model.getMapOfFriends();
+
+        if (!mapOfFriends.containsKey(user.id)) {
+            mapOfFriends.put(user.id, user);
+            model.setMapOfFriends(mapOfFriends);
+            model.addFriend(user.id);
+        }
+
+        view.friendsScrollHorizontalFragment.updateUI(mapOfFriends);
     }
 
     @Override

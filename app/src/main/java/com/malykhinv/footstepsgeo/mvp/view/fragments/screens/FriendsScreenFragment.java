@@ -2,7 +2,6 @@ package com.malykhinv.footstepsgeo.mvp.view.fragments.screens;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,7 +75,6 @@ public class FriendsScreenFragment extends Fragment {
     public void updateUI(HashMap<String, User> mapOfFriends) {
         friendListAdapter.clearItems();
         if (mapOfFriends != null) {
-            Log.d("size", "updateUI: " + mapOfFriends.size());
             binding.textFriendCount.setText(String.valueOf(mapOfFriends.size()));
             friendListAdapter.setItems(mapOfFriends);
         } else {

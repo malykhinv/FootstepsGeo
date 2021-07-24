@@ -151,13 +151,11 @@ public class MainModel {
         String userName = getCurrentGoogleUserName();
         String personalCode = generateNewPersonalCode();
         String imageUrl = getCurrentGoogleUserImageUrl();
-        ArrayList<Double> position = null;
         long millis = System.currentTimeMillis();
         int batteryLevel = App.getAppComponent().getBatteryLevel();
-        ArrayList<String> friendsIds = null;
 
         // Create an user
-        User newUser = new User(userId, userName, personalCode, imageUrl, position, millis, batteryLevel, friendsIds);
+        User newUser = new User(userId, userName, personalCode, imageUrl, null, millis, batteryLevel, null);
         usersReference.child(userId).setValue(newUser);
 
         // Create an entry to make it possible to search for users by their personal codes
@@ -218,7 +216,7 @@ public class MainModel {
     // Firebase: friends
 
     public void loadIdFromDb(String personalCode) {
-        personalCodesReference.child(personalCode).addListenerForSingleValueEvent(new ValueEventListener() {
+        personalCodesReference.child(personalCode.toUpperCase()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists() && snapshot.getValue() != null) {

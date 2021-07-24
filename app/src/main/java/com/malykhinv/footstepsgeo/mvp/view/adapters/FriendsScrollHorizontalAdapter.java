@@ -19,11 +19,12 @@ import com.malykhinv.footstepsgeo.databinding.GroupFriendInfoItemHorizontalBindi
 import com.malykhinv.footstepsgeo.di.App;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<FriendsScrollHorizontalAdapter.ViewHolder> {
 
     private final Context context = App.getAppComponent().getContext();
-    public ArrayList<User> friendUsers = new ArrayList<>();
+    public HashMap<String, User> mapOfFriends = new HashMap<>();
     private int lastIndex = -1;
 
     @NonNull
@@ -34,7 +35,8 @@ public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<Friends
 
     @Override
     public void onBindViewHolder(@NonNull FriendsScrollHorizontalAdapter.ViewHolder holder, int index) {
-        holder.updateUI(friendUsers.get(index));
+        ArrayList<User> listOfFriends = new ArrayList<>(mapOfFriends.values());
+        holder.updateUI(listOfFriends.get(index));
         setAnimation(holder.itemView, index);
     }
 
@@ -48,22 +50,22 @@ public class FriendsScrollHorizontalAdapter extends RecyclerView.Adapter<Friends
 
     @Override
     public int getItemCount() {
-        return friendUsers.size();
+        return mapOfFriends.size();
     }
 
-    public void setItems(ArrayList<User> friendUsers) {
-        this.friendUsers.addAll(friendUsers);
+    public void setItems(HashMap<String, User> mapOfFriends) {
+        this.mapOfFriends.putAll(mapOfFriends);
         notifyDataSetChanged();
     }
 
     public void clearItems() {
-        this.friendUsers.clear();
+        this.mapOfFriends.clear();
         notifyDataSetChanged();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private GroupFriendInfoItemHorizontalBinding binding;
+        private final GroupFriendInfoItemHorizontalBinding binding;
 
         public ViewHolder(@NonNull GroupFriendInfoItemHorizontalBinding binding) {
             super(binding.getRoot());

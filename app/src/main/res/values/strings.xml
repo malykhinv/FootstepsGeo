@@ -17,6 +17,7 @@
     <string name="remove">Remove</string>
     <string name="get_route">Get route</string>
 
+    <string name="there_are_no_friends">There are no friends yet. Add them first.</string>
     <string name="enter_your_friends_personal_code_here">Enter your friend\'s personal code here!</string>
     <string name="share_code">Share code</string>
     <string name="personal_code">Personal code</string>

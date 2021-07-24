@@ -54,13 +54,14 @@ public class GlobeScreenFragment extends Fragment {
     private static final float ZOOM_MAX = 25;
     private final Context context = App.getAppComponent().getContext();
     private FragmentManager fragmentManager;
-    private FriendsScrollHorizontalFragment friendsScrollHorizontalFragment;
-    private UserDetailsFragment userDetailsFragment;
     private View view;
     private FragmentGlobeScreenBinding binding;
-    private GlobeScreenPresenter presenter;
     private GoogleMap googleMap;
     private HashMap<String, Marker> markers = new HashMap<>();
+    private boolean isFollowing = false;
+    private GlobeScreenPresenter presenter;
+    public FriendsScrollHorizontalFragment friendsScrollHorizontalFragment;
+    public UserDetailsFragment userDetailsFragment;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -74,7 +75,7 @@ public class GlobeScreenFragment extends Fragment {
 
         if (view == null) {
             view = binding.getRoot();
-        } else if (view.getParent() != null){
+        } else if (view.getParent() != null) {
             ((ViewGroup) view.getParent()).removeView(view);
         }
         return view;
@@ -83,28 +84,41 @@ public class GlobeScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
-        initializeFragments();
-        showFragment(friendsScrollHorizontalFragment);
-
-        binding.mapView.onCreate(savedInstanceState);
-        binding.mapView.onResume();
 
         if (presenter == null) {
             presenter = new GlobeScreenPresenter(this);
-            presenter.onViewCreated();
+            binding.mapView.onCreate(savedInstanceState);
+        }
+
+        binding.mapView.onResume();
+        presenter.onViewCreated();
+    }
+
+
+    // Fragments
+
+    public void initializeFragments() {
+        fragmentManager = getChildFragmentManager();
+        if (friendsScrollHorizontalFragment == null) {
+            friendsScrollHorizontalFragment = new FriendsScrollHorizontalFragment();
+        }
+        if (userDetailsFragment == null) {
+            userDetailsFragment = new UserDetailsFragment();
+        }
+
+        if (isFollowing) {
+            showFragment(userDetailsFragment);
+        } else {
+            showFragment(friendsScrollHorizontalFragment);
         }
     }
 
-    private void initializeFragments() {
-        fragmentManager = getChildFragmentManager();
-        friendsScrollHorizontalFragment = new FriendsScrollHorizontalFragment();
-        userDetailsFragment = new UserDetailsFragment();
+    public void showFragment(Fragment fragment) {
+        fragmentManager.beginTransaction().replace(binding.groupSlidePanel.layoutFragmentContainer.getId(), fragment).commit();
     }
 
-    private void showFragment(Fragment fragment) {
-        fragmentManager.beginTransaction().replace(R.id.layoutFragmentContainer, fragment).commit();
-    }
+
+    // Permissions
 
     public boolean areAllPermissionsGranted() {
         for (String permission : REQUIRED_PERMISSIONS) {
@@ -135,6 +149,9 @@ public class GlobeScreenFragment extends Fragment {
                     }
             });
     }
+
+
+    // Map
 
     public void getMap() {
         if (googleMap == null) {
