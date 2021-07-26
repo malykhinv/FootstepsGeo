@@ -1,6 +1,7 @@
 package com.malykhinv.footstepsgeo.mvp.presenter.fragments;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.location.Location;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,7 @@ import java.util.HashMap;
 
 public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.GlobeCallback {
 
+    private static final long TIME_STATUS_OFFLINE_MILLIS = 1200000; // Each user who has not had a location update in the last 20 minutes gets an 'offline' status
     private final Context context = App.getAppComponent().getContext();
     private final GlobeScreenFragment view;
     private final MainModel model;
@@ -79,6 +81,10 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
         }
     }
 
+    public void onUserImageWasLoaded(User user, Bitmap userImage) {
+        view.showMarker(user, userImage);
+    }
+
 
     // Call from Model:
 
@@ -88,6 +94,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
             currentGoogleUserId = model.getCurrentGoogleUserId();
             if (user.id.equals(currentGoogleUserId)) {
                 initializeCurrentUserOnMap(user);
+                model.trackDeviceLocation();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,15 +114,9 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     }
 
     private void placeUserOnMap(User user) {
-        try {
-            if (user.position != null && !view.isMarkerExists(user.id)) {
-                view.createUserMarker(user);
-                if (user.id.equals(model.getCurrentGoogleUserId())) {
-                    view.moveCamera(user.position);
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        view.loadUserImage(user);
+        if (user.id.equals(model.getCurrentGoogleUserId())) {
+            view.moveCamera(user.position);
         }
     }
 
@@ -143,8 +144,14 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     @Override
     public void onFriendUserReceived(User user) {
-        placeUserOnMap(user);
+        updateMapOfFriends(user);
+        setMarkerMode(user);
+        putMarkerOnActualPosition(user);
 
+        view.friendsScrollHorizontalFragment.updateUI(model.getMapOfFriends());
+    }
+
+    private void updateMapOfFriends(User user) {
         HashMap<String, User> mapOfFriends = model.getMapOfFriends();
 
         if (!mapOfFriends.containsKey(user.id)) {
@@ -152,8 +159,30 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
             model.setMapOfFriends(mapOfFriends);
             model.addFriend(user.id);
         }
+    }
 
-        view.friendsScrollHorizontalFragment.updateUI(mapOfFriends);
+    private void setMarkerMode(User user) {
+        if (view.isMarkerExists(user.id)) {
+            if (isOffline(user.lastLocationTime)) {
+                view.setMarkerTransparent(user.id);
+            } else {
+                view.setMarkerOpaque(user.id);
+            }
+        }
+    }
+
+    private boolean isOffline(long lastLocationTime) {
+        return System.currentTimeMillis() - lastLocationTime > TIME_STATUS_OFFLINE_MILLIS;
+    }
+
+    private void putMarkerOnActualPosition(User user) {
+        if (user.position != null) {
+            if (!view.isMarkerExists(user.id)) {
+                placeUserOnMap(user);
+            } else if (view.isMarkerExists(user.id)) {
+                view.moveUserMarker(user);
+            }
+        }
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -25,6 +24,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -52,6 +52,8 @@ public class GlobeScreenFragment extends Fragment {
     private static final int POSITION_LNG_INDEX = 1;
     private static final int ZOOM_MIDDLE = 15;
     private static final float ZOOM_MAX = 25;
+    private static final float TRANSPARENCY_LEVEL_OPAQUE = 1.0f;
+    private static final float TRANSPARENCY_LEVEL_TRANSPARENT = 0.5f;
     private final Context context = App.getAppComponent().getContext();
     private FragmentManager fragmentManager;
     private View view;
@@ -182,40 +184,43 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     @SuppressLint("CheckResult")
-    public void createUserMarker(User user) {
-
-        RequestOptions options = new RequestOptions();
-        options.circleCrop();
-
-        Glide.with(this)
-                .asBitmap()
-                .apply(options)
-                .load(user.imageUrl)
-                .into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-
-                    }
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) { }
-                });
-
-
-
+    public void loadUserImage(User user) {
         try {
-            String userId = user.id;
-            Double latitude = user.position.get(POSITION_LAT_INDEX);
-            Double longitude = user.position.get(POSITION_LNG_INDEX);
+            RequestOptions options = new RequestOptions();
+            options.circleCrop();
 
-            if (googleMap != null) {
-                Marker userMarker = googleMap.addMarker(new MarkerOptions()
-                        .position(new LatLng(latitude, longitude))
-                        .title(user.id)
-                        .visible(true));
-                markers.put(userId, userMarker);
-            }
+            Glide.with(this)
+                    .asBitmap()
+                    .apply(options)
+                    .load(user.imageUrl)
+                    .into(new CustomTarget<Bitmap>() {
+                        @Override
+                        public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                            presenter.onUserImageWasLoaded(user, resource);
+                        }
+                        @Override
+                        public void onLoadCleared(@Nullable Drawable placeholder) { }
+                    });
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    public void showMarker(User user, Bitmap userImage) {
+        String userId = user.id;
+        Double latitude = user.position.get(POSITION_LAT_INDEX);
+        Double longitude = user.position.get(POSITION_LNG_INDEX);
+
+        Bitmap scaledUserImage = Bitmap.createScaledBitmap(userImage, (int) getResources().getDimension(R.dimen.size_userpic_small), (int) getResources().getDimension(R.dimen.size_userpic_small), false);
+
+        if (googleMap != null) {
+            Marker userMarker = googleMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(latitude, longitude))
+                    .icon(BitmapDescriptorFactory.fromBitmap(scaledUserImage))
+                    .anchor(0.5f, 1)
+                    .title(user.name)
+                    .visible(true));
+            markers.put(userId, userMarker);
         }
     }
 
@@ -224,15 +229,11 @@ public class GlobeScreenFragment extends Fragment {
     }
 
     public void moveUserMarker(User user) {
-        try {
-            Marker marker = markers.get(user.id);
-            if (marker != null) {
-                Double latitude = user.position.get(POSITION_LAT_INDEX);
-                Double longitude = user.position.get(POSITION_LNG_INDEX);
-                marker.setPosition(new LatLng(latitude, longitude));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+        Marker marker = markers.get(user.id);
+        if (marker != null) {
+            Double latitude = user.position.get(POSITION_LAT_INDEX);
+            Double longitude = user.position.get(POSITION_LNG_INDEX);
+            marker.setPosition(new LatLng(latitude, longitude));
         }
     }
 
@@ -256,10 +257,6 @@ public class GlobeScreenFragment extends Fragment {
         }
     }
 
-    private int dpToPx(int dp) {
-        return (int) (dp * Resources.getSystem().getDisplayMetrics().density);
-    }
-
     public void showMessage(String message) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
     }
@@ -267,5 +264,19 @@ public class GlobeScreenFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    public void setMarkerTransparent(String id) {
+        Marker marker = markers.get(id);
+        if (marker != null) {
+            marker.setAlpha(TRANSPARENCY_LEVEL_TRANSPARENT);
+        }
+    }
+
+    public void setMarkerOpaque(String id) {
+        Marker marker = markers.get(id);
+        if (marker != null) {
+            marker.setAlpha(TRANSPARENCY_LEVEL_OPAQUE);
+        }
     }
 }
