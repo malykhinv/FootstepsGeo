@@ -53,14 +53,16 @@ public class FriendsScrollHorizontalFragment extends Fragment {
     }
 
     public void updateUI(HashMap<String, User> mapOfFriends) {
-        friendListAdapter.clearItems();
+        if (friendListAdapter != null) {
+            friendListAdapter.clearItems();
 
-        if (mapOfFriends != null) {
-            if (mapOfFriends.size() > 0) {
-                setNoFriendsTextVisible(false);
-                friendListAdapter.setItems(mapOfFriends);
-            } else {
-                setNoFriendsTextVisible(true);
+            if (mapOfFriends != null) {
+                if (mapOfFriends.size() > 0) {
+                    setNoFriendsTextVisible(false);
+                    friendListAdapter.setItems(mapOfFriends);
+                } else {
+                    setNoFriendsTextVisible(true);
+                }
             }
         }
     }

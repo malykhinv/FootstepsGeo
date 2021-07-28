@@ -107,12 +107,6 @@ public class GlobeScreenFragment extends Fragment {
         if (userDetailsFragment == null) {
             userDetailsFragment = new UserDetailsFragment();
         }
-
-        if (isFollowing) {
-            showFragment(userDetailsFragment);
-        } else {
-            showFragment(friendsScrollHorizontalFragment);
-        }
     }
 
     public void showFragment(Fragment fragment) {
@@ -163,6 +157,13 @@ public class GlobeScreenFragment extends Fragment {
 
     public void attachMap(GoogleMap googleMap) {
         this.googleMap = googleMap;
+    }
+
+    public void setOnMarkersClickListeners() {
+        googleMap.setOnMarkerClickListener(marker -> {
+            presenter.onMarkerWasClicked((String) marker.getTag());
+            return false;
+        });
     }
 
     public void setMapStyle() {
@@ -220,6 +221,8 @@ public class GlobeScreenFragment extends Fragment {
                     .anchor(0.5f, 1)
                     .title(user.name)
                     .visible(true));
+            assert userMarker != null;
+            userMarker.setTag(userId);
             markers.put(userId, userMarker);
         }
     }
@@ -257,15 +260,6 @@ public class GlobeScreenFragment extends Fragment {
         }
     }
 
-    public void showMessage(String message) {
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-    }
-
     public void setMarkerTransparent(String id) {
         Marker marker = markers.get(id);
         if (marker != null) {
@@ -278,5 +272,15 @@ public class GlobeScreenFragment extends Fragment {
         if (marker != null) {
             marker.setAlpha(TRANSPARENCY_LEVEL_OPAQUE);
         }
+    }
+
+
+    public void showMessage(String message) {
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }

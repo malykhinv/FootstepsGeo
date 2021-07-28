@@ -39,6 +39,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     public void onViewCreated() {
         view.initializeFragments();
+        view.showFragment(view.friendsScrollHorizontalFragment);
         view.getMap();
 
         model.loadAllFriendsFromDb();
@@ -47,6 +48,7 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         view.attachMap(googleMap);
+        view.setOnMarkersClickListeners();
         view.setMapStyle();
         view.setMapUiSettings();
         model.initializeLocationListener();
@@ -83,6 +85,16 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
 
     public void onUserImageWasLoaded(User user, Bitmap userImage) {
         view.showMarker(user, userImage);
+    }
+
+    public void onMarkerWasClicked(String userId) {
+        User currentUser = model.getCurrentUser();
+        User user = model.getMapOfFriends().get(userId);
+        if (view.userDetailsFragment != null && user != null) {
+            view.userDetailsFragment.currentUser = currentUser;
+            view.userDetailsFragment.user = user;
+            view.showFragment(view.userDetailsFragment);
+        }
     }
 
 
@@ -148,7 +160,9 @@ public class GlobeScreenPresenter implements OnMapReadyCallback, MainModel.Globe
         setMarkerMode(user);
         putMarkerOnActualPosition(user);
 
-        view.friendsScrollHorizontalFragment.updateUI(model.getMapOfFriends());
+        if (view.friendsScrollHorizontalFragment != null) {
+            view.friendsScrollHorizontalFragment.updateUI(model.getMapOfFriends());
+        }
     }
 
     private void updateMapOfFriends(User user) {
