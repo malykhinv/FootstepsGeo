@@ -38,4 +38,13 @@
 
     <string name="press_back_again_to_quit">Press back again to quit</string>
     <string name="fab_description">Show me</string>
+    
+    <string name="time_now">Just now</string>
+    <string name="time_ome_minute_ago">One minute ago</string>
+    <string name="time_few_minutes_ago" formatted="true">%1$s minutes ago</string>
+    <string name="time_hours_minutes" formatted="true">%1$s:%2$s</string>
+
+    <string name="percent">%</string>
+    <string name="km">km</string>
+    <string name="m">m</string>
 </resources>
