@@ -10,21 +10,16 @@
         android:id="@+id/imageUserpic"
         android:layout_width="@dimen/size_userpic"
         android:layout_height="@dimen/size_userpic"
-        android:background="@drawable/userpic_background"
-        android:contentDescription="TODO"
         android:padding="@dimen/padding"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/image_user_fortuneteller"
-        app:tint="@color/blue_a700" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textUsername"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
         android:fontFamily="@font/podkova"
-        android:text="Саймон Котик"
         android:textAlignment="viewStart"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_big"
@@ -36,7 +31,7 @@
         android:id="@+id/layoutDistance"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/height_label"
-        android:layout_marginStart="@dimen/margin_horizontal_small"
+        android:layout_marginStart="@dimen/margin_horizontal_xsmall"
         android:background="@drawable/tiny_rounded_grey_background"
         android:paddingStart="@dimen/padding_horizontal_small"
         android:paddingEnd="@dimen/padding_horizontal_small"
@@ -59,7 +54,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
             android:fontFamily="@font/podkova"
-            android:text="0.8 км"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_regular" />
     </LinearLayout>
@@ -91,7 +85,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
             android:fontFamily="@font/podkova"
-            android:text="41%"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_regular" />
     </LinearLayout>
@@ -123,7 +116,6 @@
             android:layout_gravity="center"
             android:layout_marginStart="@dimen/margin_horizontal_xxsmall"
             android:fontFamily="@font/podkova"
-            android:text="Сейчас"
             android:textColor="@color/black"
             android:textSize="@dimen/text_size_regular" />
     </LinearLayout>
